@@ -1,0 +1,18 @@
+.pc_hotNews{
+    width:950px;
+    height: 304px;
+    margin:30px auto;
+    display: flex;
+}
+.hotContent{
+    width:655px;
+    background: pink
+}
+.hotTopic{
+    background:yellowgreen;
+    width:265px;
+    margin-left:30px
+}
+.hotTopic img{
+    width:265px;
+}
