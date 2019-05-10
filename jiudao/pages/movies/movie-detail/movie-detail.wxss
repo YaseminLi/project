@@ -1,0 +1,136 @@
+@import '../stars/stars-template.wxss';
+
+.head-img {
+  width: 100%;
+  height: 320rpx;
+  filter: blur(10px);
+}
+
+.head-img-hover {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  height: 320rpx;
+  top: 0;
+  left: 0;
+}
+
+.main-title {
+  font-size: 19px;
+  color: #fff;
+  font-weight: bold;
+  margin-top: 50rpx;
+  margin-left: 40rpx;
+  letter-spacing: 2px;
+}
+
+.sub-title {
+  font-size: 28rpx;
+  color: #fff;
+  margin-left: 40rpx;
+  margin-top: 30rpx;
+}
+
+.like {
+  margin-left: 40rpx;
+  margin-top: 30rpx;
+}
+
+.highlight-font {
+  color: #f21146;
+  font-size: 22rpx;
+  margin-right: 10rpx;
+}
+
+.plain-font {
+  color: #666;
+  font-size: 22rpx;
+  margin-right: 30rpx;
+}
+
+.movie-img {
+  height: 238rpx;
+  width: 175rpx;
+  position: absolute;
+  top: 150rpx;
+  right: 30rpx;
+}
+
+.summary {
+  padding: 40rpx 0 40rpx 40rpx;
+  border-bottom: 1px solid rgb(219, 218, 218);
+}
+
+
+.original-title {
+  margin-bottom: 40rpx;
+  color: #1f3463;
+  font-size: 24rpx;
+  font-weight: bold;
+}
+
+.flex-row {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 10rpx;
+}
+
+.mark {
+  margin-right: 30rpx;
+  white-space: nowrap;
+  color: #999;
+}
+.synopsis {
+  padding: 40rpx 0 40rpx 40rpx;
+  border-bottom: 1px solid  rgb(219, 218, 218);
+  display: flex;
+  flex-direction: column;
+}
+
+.synopsis-font {
+  color: #999;
+}
+
+.synopsis-content {
+  margin-top: 20rpx;
+  margin-right: 40rpx;
+  line-height: 40rpx;
+  letter-spacing: 1px;
+  text-indent: 2em;
+}
+
+.cast {
+  padding: 30rpx;
+  border-bottom: 1px solid #999;
+  display: flex;
+  flex-direction: column;
+}
+
+.cast-font {
+  color: #999;
+  margin-bottom: 40rpx;
+}
+
+.cast-imgs{
+  /* white-space: nowrap; */
+  display: flex;
+  flex-direction: row;
+}
+
+.cast-container {
+  display: inline-flex;
+  flex-direction: column;
+  margin-bottom: 50rpx;
+  margin-right: 40rpx;
+  width: 170rpx;
+  text-align: center;
+}
+
+.cast-img {
+  width: 170rpx;
+  height: 210rpx;
+}
+
+.cast-name {
+  margin: 10rpx auto 0;
+}

@@ -1,0 +1,12 @@
+<view class='top'>
+  <v-date/>
+  <view class='icon'>
+  <v-like isLike="{{classic.like_status}}" count="{{classic.fav_nums}}" />
+  <image class="share" src='/images/icon/fenxiang.png' />
+  </view>
+  
+</view>
+<v-image content="{{classic.content}}"/>
+<view class='controlor'>
+  <v-controlor title="{{classic.title}}"/>
+</view>

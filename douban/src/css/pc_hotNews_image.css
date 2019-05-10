@@ -12,17 +12,15 @@
     color:#666699;
     font-size:12px
 }
-.hotContent_container{
-    display: flex;
-    justify-content:space-between;
-}
 .itemContainer{
     width:360px;
     display: flex;
     flex-wrap: wrap;
 }
 .item{
+    width:170px;
 margin:0 10px 10px 0;
+display: inline-block;
 }
 .item img{
     width:170px;

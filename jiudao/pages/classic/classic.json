@@ -1,0 +1,11 @@
+{
+  "usingComponents": {
+    "v-like":"/components/like/index",
+    "v-date":"/components/date/index",
+    "v-image": "/components/image/index",
+    "v-controlor": "/components/controlor/index"
+  },
+  "navigationBarTitleText": "林间有风",
+  "navigationBarBackgroundColor": "#ffffff",
+  "navigationBarTextStyle": "black"
+}
