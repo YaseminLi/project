@@ -2,7 +2,7 @@
   "usingComponents": {
     "v-like":"/components/like/index",
     "v-date":"/components/date/index",
-    "v-image": "/components/image/index",
+    "v-classic": "/components/classic/index",
     "v-controlor": "/components/controlor/index"
   },
   "navigationBarTitleText": "林间有风",

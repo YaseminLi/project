@@ -6,7 +6,10 @@ Component({
   properties: {
     content:{
       type:String
-    }
+    },
+    image: {
+      type: String
+    },
   },
 
   /**

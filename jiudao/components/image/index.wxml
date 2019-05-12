@@ -1,5 +1,0 @@
-<view class='container'>
-  <image class="post" src="images/image.png" />
-  <image class="movie" src="images/dianying.png" />
-  <text class="content">{{content}}</text>
-</view>
