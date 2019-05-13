@@ -4,7 +4,9 @@ let classicModel = new ClassicModel ();
 let likeModel=new LikeModel();
 Page({
   data: {
-    classic:''
+    classic:'',
+    latest:true,
+    first:false
   },
   onLoad: function (options) {
     var that =this;
@@ -20,5 +22,13 @@ Page({
   onLike:function(event){
     let behavior=event.detail.behavior;
     likeModel.like(behavior, this.data.classic.id, this.data.classic.type);
+  },
+  onNext: function (event) {
+    let tap = event.detail.left;
+   console.log(tap);
+  },
+  onPrevious: function (event) {
+    let tap = event.detail.right;
+    console.log(tap);
   }
 })

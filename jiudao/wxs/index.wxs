@@ -1,0 +1,5 @@
+var index = function (index) {
+  var index = index < 10 ? "0" + index : index;
+  return index
+}
+module.exports={val:index}

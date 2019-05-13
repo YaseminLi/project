@@ -1,5 +1,0 @@
-<view class="container">
-  <image src="images/last.png" />
-  <text>{{title}}</text>
-  <image src="images/next.png" />
-</view>

@@ -1,8 +1,0 @@
-<view class='container'>
-  <text class='NO'>No.</text>
-  <text class='index'>17</text>
-  <view class='date'>
-    <text class='march'>三月</text>
-    <text class='year'>2018</text>
-  </view>
-</view>
