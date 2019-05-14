@@ -1,7 +1,7 @@
 {
   "pages": [
-    "pages/my/my",
     "pages/classic/classic",
+    "pages/my/my",
     "pages/welcome/welcome",
     "pages/posts/posts",
     "pages/posts/post-details/post-details",

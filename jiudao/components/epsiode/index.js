@@ -12,16 +12,19 @@ Component({
    * 组件的初始数据
    */
   data: {
-    year: Number,
-    month: ["0","一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"]
+    year:"",
+    months: ["0","一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"],
+    month:""
   },
 
-  ready: function() {
+ ready: function() {
+    console.log(this.data)
     let year = this.properties.pubdate.substring(0, 4);
     let month = Number(this.properties.pubdate.substring(5, 7));
+    console.log(month);
     this.setData({
       year: year,
-      month: this.data.month[month]
+      month: this.data.months[month]
     });
   }
 })

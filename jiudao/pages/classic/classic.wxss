@@ -17,6 +17,7 @@
 }
 .header .like{
   margin-top:24rpx;
+  margin-right:20rpx;
 }
 .share{
   width: 30rpx;

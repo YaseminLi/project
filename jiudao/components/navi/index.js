@@ -14,18 +14,18 @@ Component({
     disRightSrc: 'images/triangle.dis@right.png',
     rightSrc: 'images/triangle@right.png',
   },
-  method: {
+  methods: {
     onLeft: function(event) {
       //if判断是来禁用最新/最后一期的切换功能
-      if(!this.properties.latest){
-        this.triggerEvent('left', myEventDetail, myEventOption);
+      if (!this.properties.latest) {
+        this.triggerEvent('left', {}, {});
       }
-      
-      
-      
     },
-    onRight:function(event){
-
+    onRight: function(event) {
+      //if判断是来禁用最新/最后一期的切换功能
+      if (!this.properties.first) {
+        this.triggerEvent('right', {}, {});
+      }
     }
   }
 

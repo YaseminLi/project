@@ -7,8 +7,8 @@
 
   <!-- <image class="share" src='/images/icon/fenxiang.png' /> -->
 
-  <!-- <v-classic content="{{classic.content}}" image="{{classic.image}}" /> -->
-  <v-music content="{{classic.content}}" />
-  <v-essay content="{{classic.content}}" />
+  <v-classic wx:if="{{classic.type==100}}"content="{{classic.content}}" image="{{classic.image}}" />
+  <v-music wx:if="{{classic.type==200}}"content="{{classic.content}}" />
+  <v-essay wx:if="{{classic.type==300}}"content="{{classic.content}}" />
   <v-navi title="{{classic.title}}" first="{{first}}" latest="{{latest}}" class='navi' bind:left="onNext" bind:right="onPrevious" />
 </view>
