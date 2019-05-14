@@ -10,7 +10,7 @@ class LikeModel extends Http{
     })
   }
   //post建好后要完善
-  getLikeStatus(artId, category,sCallback){
+  getClassicLikeStatus(artId, category,sCallback){
     this.request({
       url: `classic/${category}/${artId}/favor`,
       success:(res)=>(
