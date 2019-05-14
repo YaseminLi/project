@@ -4,9 +4,7 @@
 
     <v-like isLike="{{likeStatus}}" count="{{likeCount}}" bind:like="onLike" class="like" />
   </view>
-
   <!-- <image class="share" src='/images/icon/fenxiang.png' /> -->
-
   <v-classic hidden="{{classic.type!=100}}"content="{{classic.content}}" image="{{classic.image}}" />
   <v-music hidden="{{classic.type!=200}}"content="{{classic.content}}" />
   <v-essay hidden="{{classic.type!=300}}"content="{{classic.content}}" />
