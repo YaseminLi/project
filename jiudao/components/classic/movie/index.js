@@ -1,11 +1,4 @@
-// components/image/index.js
+const classicBehavior = require("../class-beh.js");
 Component({
-  properties: {
-    content:{
-      type:String
-    },
-    image: {
-      type: String
-    },
-  },
+  behaviors: [classicBehavior],
 })

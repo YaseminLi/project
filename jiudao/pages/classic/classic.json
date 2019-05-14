@@ -4,7 +4,8 @@
     "v-epsiode":"/components/epsiode/index",
     "v-classic": "/components/classic/movie/index",
     "v-navi": "/components/navi/index",
-    "v-music": "/components/classic/music/index"
+    "v-music": "/components/classic/music/index",
+    "v-essay": "/components/classic/essay/index"
   },
   "navigationBarTitleText": "林间有风",
   "navigationBarBackgroundColor": "#ffffff",
