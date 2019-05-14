@@ -1,4 +1,4 @@
-const myBehavior = require('../class-beh.js');
+const myBehavior = require('../classic-beh.js');
 Component({
   behaviors: [myBehavior],
 })

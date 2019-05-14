@@ -6,6 +6,9 @@ module.exports = Behavior({
     },
     image: {
       type: String
+    },
+    hidden: {
+      type: Boolean
     }
   }
 })

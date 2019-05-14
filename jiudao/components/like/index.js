@@ -33,6 +33,9 @@ Component({
       const myEventDetail = {behavior:behavior};
       const myEventOption = {}; // 触发事件的选项
       this.triggerEvent('like', myEventDetail, myEventOption);
+    },
+    onPlay:function(){
+      console.log('playmusic')
     }
   }
 })
