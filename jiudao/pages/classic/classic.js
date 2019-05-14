@@ -11,7 +11,10 @@ Page({
   onLoad: function (options) {
     let index=this.data.classic.index;
     classicModel.getLatest(index,(res)=>{
-      this.setData({classic:res});
+      this.setData({
+        classic:res
+        //...res
+        });
     });
   },
   onLike:function(event){
