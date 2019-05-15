@@ -18,10 +18,8 @@ Component({
   },
 
  ready: function() {
-    console.log(this.data)
     let year = this.properties.pubdate.substring(0, 4);
     let month = Number(this.properties.pubdate.substring(5, 7));
-    console.log(month);
     this.setData({
       year: year,
       month: this.data.months[month]

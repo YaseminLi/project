@@ -1,5 +1,12 @@
 @import "../common.wxss";
-.classic-container .player{
+.classic-container .classic-img{
+  width: 422rpx;
+  height: 422rpx;
+  margin-top: 50rpx;
+  border-radius: 50%
+
+}
+.classic-container .player-img{
   position: absolute;
   width:120rpx;
   height: 120rpx;

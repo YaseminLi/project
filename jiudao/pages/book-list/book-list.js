@@ -1,4 +1,4 @@
-// pages/my/my.js
+// pages/book-list/book-list.js
 Page({
 
   /**
@@ -14,11 +14,7 @@ Page({
   onLoad: function (options) {
 
   },
-  onMyBookList:function(event){
-    wx.navigateTo({
-      url: '../book-list/book-list',
-    })
-  },
+
   /**
    * 生命周期函数--监听页面初次渲染完成
    */

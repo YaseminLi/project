@@ -6,7 +6,7 @@
   </view>
   <!-- <image class="share" src='/images/icon/fenxiang.png' /> -->
   <v-classic hidden="{{classic.type!=100}}"content="{{classic.content}}" image="{{classic.image}}" />
-  <v-music hidden="{{classic.type!=200}}"content="{{classic.content}}" />
-  <v-essay hidden="{{classic.type!=300}}"content="{{classic.content}}" />
+  <v-music hidden="{{classic.type!=200}}"content="{{classic.content}}" musicUrl="{{classic.url}}" imageUrl="{{classic.image}}" title="{{classic.title}}" image="{{classic.image}}"/>
+  <v-essay hidden="{{classic.type!=300}}"content="{{classic.content}}"image="{{classic.image}}" />
   <v-navi title="{{classic.title}}" first="{{first}}" latest="{{latest}}" class='navi' bind:left="onNext" bind:right="onPrevious" />
 </view>

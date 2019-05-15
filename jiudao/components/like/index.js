@@ -1,8 +1,5 @@
 // components/like/index.js
 Component({
-  /**
-   * 组件的属性列表
-   */
   properties: {
     isLike: {
       type: Boolean,
@@ -21,7 +18,7 @@ Component({
 
   },
   methods: {
-    onLike: function(event) {
+    onLike(event) {
       let count = this.properties.count;
       let isLike = this.properties.isLike;
       count = isLike ? count - 1 : count + 1;
@@ -33,9 +30,7 @@ Component({
       const myEventDetail = {behavior:behavior};
       const myEventOption = {}; // 触发事件的选项
       this.triggerEvent('like', myEventDetail, myEventOption);
-    },
-    onPlay:function(){
-      console.log('playmusic')
     }
+   
   }
 })

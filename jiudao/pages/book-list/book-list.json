@@ -1,0 +1,8 @@
+{
+  "usingComponents": {
+    "v-book-like": "/components/book-like/index"
+  },
+  "navigationBarBackgroundColor": "white",
+  "navigationBarTextStyle": "black",
+  "navigationBarTitleText": "林白"
+}
