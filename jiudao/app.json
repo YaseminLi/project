@@ -1,15 +1,18 @@
 {
   "pages": [
-    "pages/my/my",
-    "pages/book-list/book-list",
     "pages/classic/classic",
+    "pages/book/book",
+    "pages/book-detail/book-detail",
+   
+    "pages/my/my",
+    "pages/my-book/my-book",
+    
     "pages/welcome/welcome",
     "pages/posts/posts",
     "pages/posts/post-details/post-details",
     "pages/movies/movies",
     "pages/movies/movie-detail/movie-detail",
-    "pages/movies/more-movies/more-movies",
-    "pages/book/book"
+    "pages/movies/more-movies/more-movies"
   ],
   "window": {
     "navigationBarBackgroundColor": "#333"
@@ -19,8 +22,9 @@
     "audio"
   ],
   "tabBar": {
-    "borderStyle": "white",
-    "selectedColor": "#333333",
+    "selectedColor": "#000000",
+    "color": "#777777",
+    "backgroundColor": "#ffffff",
     "list": [
       {
         "pagePath": "pages/classic/classic",
@@ -29,16 +33,22 @@
         "selectedIconPath": "/images/tab/classic@highlight.png"
       },
       {
+        "pagePath": "pages/book/book",
+        "text": "书单",
+        "iconPath": "images/tab/book.png",
+        "selectedIconPath": "/images/tab/book@highlight.png"
+      },
+      {
         "pagePath": "pages/posts/posts",
         "text": "阅读",
         "iconPath": "images/tab/yuedu.png",
-        "selectedIconPath": "/images/tab/yuedu_hl.png"
+        "selectedIconPath": "/images/tab/yuedu@highlight.png"
       },
       {
         "pagePath": "pages/movies/movies",
         "text": "电影",
         "iconPath": "images/tab/dianying.png",
-        "selectedIconPath": "/images/tab/dianying_hl.png"
+        "selectedIconPath": "/images/tab/dianying@highlight.png"
       },
       {
         "pagePath": "pages/my/my",

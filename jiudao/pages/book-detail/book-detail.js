@@ -1,4 +1,4 @@
-// pages/book/book.js
+// pages/book-detail/book-detail.js
 Page({
 
   /**
@@ -14,11 +14,7 @@ Page({
   onLoad: function (options) {
 
   },
-onBookDetail:function(event){
-wx.navigateTo({
-  url: '/pages/book-detail/book-detail',
-})
-},
+
   /**
    * 生命周期函数--监听页面初次渲染完成
    */

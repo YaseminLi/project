@@ -1,12 +1,16 @@
 <view class='class-container'>
   <view class='header'>
     <v-epsiode index="{{classic.index}}" pubdate="{{classic.pubdate}}" class="epsiode" />
+    <view class='button'>
+      <v-like isLike="{{likeStatus}}" count="{{likeCount}}" bind:like="onLike" class="like" />
+      <image class="share" src='/images/icon/fenxiang.png' />
+    </view>
 
-    <v-like isLike="{{likeStatus}}" count="{{likeCount}}" bind:like="onLike" class="like" />
   </view>
-  <!-- <image class="share" src='/images/icon/fenxiang.png' /> -->
-  <v-classic hidden="{{classic.type!=100}}"content="{{classic.content}}" image="{{classic.image}}" />
-  <v-music hidden="{{classic.type!=200}}"content="{{classic.content}}" musicUrl="{{classic.url}}" imageUrl="{{classic.image}}" title="{{classic.title}}" image="{{classic.image}}"/>
-  <v-essay hidden="{{classic.type!=300}}"content="{{classic.content}}"image="{{classic.image}}" />
+
+  <v-classic wx:if="{{classic.type==100}}" content="{{classic.content}}" image="{{classic.image}}" />
+
+  <v-music wx:if="{{classic.type==200}}" content="{{classic.content}}" musicUrl="{{classic.url}}" imageUrl="{{classic.image}}" title="{{classic.title}}" image="{{classic.image}}" index="{{classic.id}}" />
+  <v-essay wx:if="{{classic.type==300}}" content="{{classic.content}}" image="{{classic.image}}" />
   <v-navi title="{{classic.title}}" first="{{first}}" latest="{{latest}}" class='navi' bind:left="onNext" bind:right="onPrevious" />
 </view>

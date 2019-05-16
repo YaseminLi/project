@@ -6,12 +6,25 @@ Component({
     image: String,
     imageUrl: String,
     musicUrl: String,
-    title: String
+    title: String,
+    index: String,
   },
   data: {
     isPlaying: false,
     playSrc: "images/player@play.png",
     pauseSrc: "images/player@pause.png"
+  },
+
+  lifetimes: {
+    attached: function(event) {
+      console.log('a');
+      this._recoverPlaying();
+      this._monitorSwitch();
+    },
+    detached: function(event) {
+      console.log('b')
+
+    },
   },
   methods: {
     onPlay() {
@@ -26,15 +39,39 @@ Component({
       } else {
         backgroundAudioManager.pause();
       };
-    }
-  },
-  ready: function() {
-    backgroundAudioManager.onPlay(
-        console.log('play')
-      ),
+    },
+    _recoverPlaying() {
+      if (backgroundAudioManager.paused) {
+        this.setData({
+          isPlaying: false
+        });
+        return
+      };
+      if (backgroundAudioManager.src == this.properties.musicUrl) {
+        this.setData({
+          isPlaying: true,
+        });
+        return
+      }
+    },
+    _monitorSwitch() {
+      backgroundAudioManager.onPlay(
+        () => {
+          this._recoverPlaying()
+        });
       backgroundAudioManager.onPause(
-        console.log('pause')
-      )
+        () => {
+          this._recoverPlaying()
+        });
+      backgroundAudioManager.onStop(
+        () => {
+          this._recoverPlaying()
+        });
+      backgroundAudioManager.onEnded(
+        () => {
+          this._recoverPlaying()
+        });
+    }
   }
 
 })

@@ -1,0 +1,14 @@
+<view class='book-item-container'>
+  <image src='images/bookItem.png' />
+  <view class='content'>
+  <text class='title'>爱你就像生命</text>
+  <text class='author'>李银河</text>
+  <view class='comments'>
+    <text>233</text>
+    <text>喜欢</text>
+    <text>·</text>
+    <text>68</text>
+    <text>短评</text>
+  </view></view>
+  
+</view>

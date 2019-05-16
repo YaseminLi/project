@@ -16,7 +16,7 @@ Page({
   },
   onMyBookList:function(event){
     wx.navigateTo({
-      url: '../book-list/book-list',
+      url: '../my-book/my-book',
     })
   },
   /**

@@ -1,2 +1,19 @@
-<!--pages/book/book.wxml-->
-<text>pages/book/book.wxml</text>
+<view class='search'>
+<icon type='search' size='16'/>
+<input type="text" placeholder='搜索图书名称'placeholder-class='placeholder'></input></view>
+
+<view class='container'>
+  <view class='quality'>
+    <image src='/images/book/quality.png' />
+  </view>
+
+  <view class='book-list'>
+    <v-book-item bind:tap='onBookDetail'/>
+    <v-book-item/>
+    <v-book-item/>
+    <v-book-item/>
+    <v-book-item/>
+    <v-book-item/>
+  </view>
+
+</view>
