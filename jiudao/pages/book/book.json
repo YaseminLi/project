@@ -1,6 +1,7 @@
 {
   "usingComponents": {
-    "v-book-item": "/components/book-item/index"
+    "v-book": "/components/book/index",
+    "v-search": "/components/search/index"
   },
   "navigationBarTitleText": "旧岛",
   "navigationBarBackgroundColor": "white",

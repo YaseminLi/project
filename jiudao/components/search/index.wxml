@@ -1,0 +1,6 @@
+<view class='search-header'>
+    <view class='search-box'>
+      <icon type='search' size='16' />
+      <input type="text" placeholder='搜索图书名称' placeholder-class='search-placeholder'></input>
+    </view>
+  </view>

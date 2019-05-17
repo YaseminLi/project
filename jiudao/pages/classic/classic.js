@@ -28,7 +28,7 @@ Page({
   },
   onLike: function(event) {
     let behavior = event.detail.behavior;
-    likeModel.like(behavior, this.data.classic.id, this.data.classic.type);
+    likeModel.like(behavior, this.data.classic.index, this.data.classic.type);
   },
   onNext: function(event) {
     this._updateClassic("next")

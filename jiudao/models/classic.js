@@ -1,11 +1,10 @@
 import {
   Http
-} from "../utils/util.js";
-//继承Http
+} from "../utils/http.js";
 class ClassicModel extends Http {
   getLatest(index, sCallback) {
     this.request({
-      url: "/classic/latest.json",
+      url: "/classic/latest",
       success: (res) => {
         sCallback(res.data);
         this._setLatestIndex(res.data.index);
@@ -24,11 +23,11 @@ class ClassicModel extends Http {
     return index;
   }
   getClassic(nextOrPrevious, index, sCallback) {
-    let key = nextOrPrevious == 'next' ? this._getKey(index - 1) : this._getKey(index - 1);
+    let key = nextOrPrevious == 'next' ? this._getKey(index + 1) : this._getKey(index - 1);
     let classic = wx.getStorageSync(key);
     if (!classic) {
       this.request({
-        url: "/classic/" + nextOrPrevious + ".json",
+        url: "/classic/" +index+"/" +nextOrPrevious,
         success: (res) => {
           sCallback(res.data);
           wx.setStorageSync(this._getKey(res.data.index), res.data)

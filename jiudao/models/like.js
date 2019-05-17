@@ -1,8 +1,8 @@
-import {Http} from "../utils/util.js";
+import {Http} from "../utils/http.js";
 class LikeModel extends Http{
   //post建好后要完善
-  like(behavior, artId,category){
-    console.log(behavior,artId,category)
+  like(behavior, index,category){
+    console.log(behavior,index,category)
     let url = behavior == "like" ? "/like" :"/like/cancel";
     this.request({
       url:url,

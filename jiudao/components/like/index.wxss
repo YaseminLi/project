@@ -1,6 +1,6 @@
 .like-container{
   display: inline-flex;
-  width: 100rpx;
+  width: 70rpx;
 }
 .like-container image{
   width: 32rpx;
