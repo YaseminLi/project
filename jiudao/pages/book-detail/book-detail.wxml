@@ -8,22 +8,15 @@
   <view class='comments-container'>
     <view class='title'>短评</view>
     <view class='comments'>
-      <view class='comment-item'>
-        <text>你好哇，李银河</text>
-        <text class='comments-num'>+759</text>
-      </view>
-      <view class='comment-item'>
-        <text>浪漫爱情</text>
-        <text class='comments-num'>+233</text>
-      </view>
-      <view class='comment-item'>
-        <text>你要是喜欢别人我会哭</text>
-        <text class='comments-num'>+520</text>
-      </view>
-      <view class='comment-item'>
-        <text>我还是喜欢你</text>
-        <text class='comments-num'>+678</text>
-      </view>
+      <block wx:for='{{comment}}' wx:key='{{index}}'>
+        <view class='comment-item'>
+          <text>{{item.content}}</text>
+          <text class='comments-num'>+{{item.nums}}</text>
+        </view>
+      </block>
+
+
+
     </view>
   </view>
 </view>

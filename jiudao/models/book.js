@@ -8,6 +8,9 @@ class BookModel extends Http {
   getBookDetail(id) {
     return this.request(`/book/${id}/detail`);
   }
+  getShortComment(id) {
+    return this.request(`/book/${id}/short_comment`);
+  }
 };
 export {
   BookModel
