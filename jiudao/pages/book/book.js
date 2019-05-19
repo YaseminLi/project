@@ -4,7 +4,9 @@ import {
 const bookModel = new BookModel();
 Page({
   data:{
-    hotList:''
+    hotList:'',
+    showSearch:false,
+    inputValue:''
   },
   onLoad: function(options) {
     bookModel.getHotList().then(data => {
@@ -13,8 +15,14 @@ Page({
   },
 onBookDetail: function(event) {
     wx.navigateTo({
-      url: '/pages/book-detail/book-detail',
+      url: '/pages/book-detail/book-detail?id='+ event.currentTarget.dataset.id,
     })
   },
-
+  isShowSearch:function(event){
+    const showSearch=this.data.showSearch;
+    this.setData({showSearch:!showSearch})
+  },
+  onClearInput:function(event){
+    this.setData({inputValue:''})
+  }
 })

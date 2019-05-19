@@ -71,6 +71,7 @@
   margin-top: 10rpx;
   font-size: 28rpx;
   letter-spacing: 3rpx;
+  text-indent:2em
 }
 
 

@@ -1,12 +1,7 @@
 import { config } from '../config.js';
 class Http {
   request(params) {
-    var str = params.url.substring(1, 3);
-    if (str == 'v2') {
-      var url = config.appBase01 + params.url;
-    } else {
-      var url = config.appBase02 + params.url;
-    };
+      var url = config.appBase + params.url;
 
     if (!params.method) {
       params.method = "GET";

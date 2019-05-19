@@ -3,8 +3,8 @@
   <input type="text" placeholder='搜索图书名称' placeholder-class='placeholder'></input>
 </view> -->
 <!-- 不要用input ，只是展示样式，输入是在其他页面 -->
-<view wx:if="{{false}}">
-  <view class='header'>
+<view wx:if="{{!showSearch}}">
+  <view class='header' bind:tap='isShowSearch'>
     <view class='box'>
       <icon type='search' size='16' />
       <text class='placeholder'>搜索图书名称</text>
@@ -19,4 +19,4 @@
     </view>
   </view>
 </view>
-<v-search />
+<v-search wx:if="{{showSearch}}" bind:cancelSearch='isShowSearch' bind:clearInput='onClearInput' inputValue='{{inputValue}}'/>

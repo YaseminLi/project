@@ -1,6 +1,32 @@
 <view class='search-header'>
-    <view class='search-box'>
-      <icon type='search' size='16' />
-      <input type="text" placeholder='搜索图书名称' placeholder-class='search-placeholder'></input>
-    </view>
+  <view class='search-box'>
+    <icon type='search' size='14' />
+    <input type="text" placeholder='书籍名' placeholder-class='search-placeholder' focus='true' value='{{inputValue}}'/>
+    <image src='images/cancel.png' bind:tap='onClearInput'/>
   </view>
+  <text class='cancel' bind:tap='onCancelSearch'>取消</text>
+</view>
+<view class='history'>
+  <view class='title'>
+    <view class='icon'></view>
+    <text>历史搜索</text>
+  </view>
+  <view class='tag-container'>
+    <view class='tag-item'><v-tag /></view>
+    <view class='tag-item'><v-tag /></view>
+    <view class='tag-item'><v-tag /></view>
+    <view class='tag-item'><v-tag /></view>
+  </view>
+</view>
+<view class='hot'>
+  <view class='title'>
+    <view class='icon'></view>
+    <text>热门搜索</text>
+  </view>
+  <view class='tag-container'>
+    <view class='tag-item'><v-tag /></view>
+    <view class='tag-item'><v-tag /></view>
+    <view class='tag-item'><v-tag /></view>
+    <view class='tag-item'><v-tag /></view>
+  </view>
+</view>

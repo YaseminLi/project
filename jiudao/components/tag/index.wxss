@@ -1,0 +1,6 @@
+.tag{
+  font-size: 28rpx;
+  background: #f1f1f1;
+  padding: 5rpx 10rpx;
+  border-radius: 5rpx;
+}

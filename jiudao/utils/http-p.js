@@ -3,19 +3,14 @@ import {
   config
 } from '../config.js';
 class Http {
-  request(url, method = 'GET') {
+  request(url,id,method = 'GET') {
     return new Promise((resolve,reject)=>{
-      this._request(url, resolve, reject, method)
+      this._request(url,resolve, reject, method)
     })
   }
   _request(url,resolve, reject,method='GET') {
-    const str = url.substring(1, 3);
-    if (str == 'v2') {
-      var url = config.appBase01 + url;
-    } else {
-      var url = config.appBase02 + url;
-    };
-
+    var url = config.appBase + url;
+   
     if (!method) {
       method = "GET";
     }

@@ -2,21 +2,15 @@
   "pages": [
     "pages/book/book",
     "pages/classic/classic",
-   
     "pages/book-detail/book-detail",
-   
     "pages/my/my",
     "pages/my-book/my-book",
-    
-    "pages/welcome/welcome",
-    "pages/posts/posts",
-    "pages/posts/post-details/post-details",
-    "pages/movies/movies",
-    "pages/movies/movie-detail/movie-detail",
-    "pages/movies/more-movies/more-movies"
+    "pages/welcome/welcome"
   ],
   "window": {
-    "navigationBarBackgroundColor": "#333"
+    "navigationBarBackgroundColor": "white",
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "旧岛"
   },
   "sitemapLocation": "sitemap.json",
   "requiredBackgroundModes": [
@@ -38,19 +32,7 @@
         "text": "书单",
         "iconPath": "images/tab/book.png",
         "selectedIconPath": "/images/tab/book@highlight.png"
-      },
-      {
-        "pagePath": "pages/posts/posts",
-        "text": "阅读",
-        "iconPath": "images/tab/yuedu.png",
-        "selectedIconPath": "/images/tab/yuedu@highlight.png"
-      },
-      {
-        "pagePath": "pages/movies/movies",
-        "text": "电影",
-        "iconPath": "images/tab/dianying.png",
-        "selectedIconPath": "/images/tab/dianying@highlight.png"
-      },
+      } ,
       {
         "pagePath": "pages/my/my",
         "text": "喜欢",

@@ -1,5 +1,21 @@
-var index = function (index) {
-  var index = index < 10 ? "0" + index : index;
-  return index
+var date = function(date) {
+  var string = date ? date.slice(0, 4) + '-' + date.slice(4) : '';
+  return string;
+};
+var author = function (array) {
+  var array = array?array.join('/'):'';
+  return array;
+};
+var content=function(string){
+  if(!string){
+    return
+  }
+  var reg = getRegExp("\n", "img");
+
+  return string.replace(reg, '\n&nbsp;&nbsp;&nbsp;&nbsp;');
 }
-module.exports={val:index}
+module.exports = {
+  date: date,
+  author:author,
+  content:content
+}
