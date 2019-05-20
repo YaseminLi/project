@@ -1,2 +1,4 @@
-<!--components/tag/index.wxml-->
-<text class='tag'>假如真有时光机</text>
+<view class='tag'>
+        <text class='content'>{{content}}</text>
+        <slot name='after'></slot>
+</view>

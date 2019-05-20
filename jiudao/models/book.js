@@ -11,6 +11,12 @@ class BookModel extends Http {
   getShortComment(id) {
     return this.request(`/book/${id}/short_comment`);
   }
+  getLikeStatus(id){
+    return this.request(`/book/${id}/favor`);
+  }
+  getHotKeyword() {
+    return this.request('/book/hot_keyword');
+  }
 };
 export {
   BookModel

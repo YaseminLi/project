@@ -24,9 +24,8 @@
     <text>热门搜索</text>
   </view>
   <view class='tag-container'>
-    <view class='tag-item'><v-tag /></view>
-    <view class='tag-item'><v-tag /></view>
-    <view class='tag-item'><v-tag /></view>
-    <view class='tag-item'><v-tag /></view>
+  <block wx:for='{{hotKeyword}}' wx:key='{{index}}'>
+    <view class='tag-item'><v-tag content='{{item}}'/></view>
+    </block>
   </view>
 </view>

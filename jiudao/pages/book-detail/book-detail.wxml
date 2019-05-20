@@ -1,58 +1,48 @@
 <wxs src="../../wxs/index.wxs" module="tools" />
-<view class='book-container'>
+<view class='header'>
   <image src='{{detail.image}}' />
   <text class='book-name'>{{detail.title}}</text>
   <text class='author'>{{tools.author(detail.author)}}</text>
 </view>
 <view class='container'>
-  <view class='comments-container'>
-    <view class='title'>短评</view>
-    <view class='comments'>
-      <block wx:for='{{comment}}' wx:key='{{index}}'>
-        <view class='comment-item'>
-          <text>{{item.content}}</text>
-          <text class='comments-num'>+{{item.nums}}</text>
-        </view>
-      </block>
-
-
-
-    </view>
+  <view class='title'>短评</view>
+  <view class='comments'>
+    <block wx:for='{{comment}}' wx:key='{{index}}'>
+      <v-tag  content='{{item.content}}' >
+      <text class='count'slot='after'>+{{item.nums}}</text>
+      </v-tag>
+    </block>
   </view>
 </view>
 <view class='container'>
-  <view class='content-container'>
-    <view class='title'>内容简介</view>
-    <text class='content' decode='true'>{{tools.content(detail.summary)}}</text>
-  </view>
+  <view class='title'>内容简介</view>
+  <text class='content' decode='true'>{{tools.content(detail.summary)}}</text>
 </view>
 <view class='container'>
-  <view class='decription-container'>
-    <view class='title'>书本信息</view>
-    <view class='description'>
-      <view>
-        <text class='plain'>出版社</text>
-        <text class='message'>{{detail.publisher}}</text>
-      </view>
-      <view>
-        <text class='plain'>出版年</text>
-        <text class='message'>{{tools.date(detail.pubdate)}}</text>
-      </view>
-      <view>
-        <text class='plain'>页数</text>
-        <text class='message'>{{detail.pages}}</text>
-      </view>
-      <view>
-        <text class='plain'>定价</text>
-        <text class='message'>¥{{detail.price}}</text>
-      </view>
-      <view>
-        <text class='plain'>精装</text>
-        <text class='message'>{{detail.binding}}</text>
-      </view>
+  <view class='title'>书本信息</view>
+  <view class='description'>
+    <view>
+      <text class='plain'>出版社</text>
+      <text class='message'>{{detail.publisher}}</text>
     </view>
-    <view class='bottom-bgk'></view>
+    <view>
+      <text class='plain'>出版年</text>
+      <text class='message'>{{tools.date(detail.pubdate)}}</text>
+    </view>
+    <view>
+      <text class='plain'>页数</text>
+      <text class='message'>{{detail.pages}}</text>
+    </view>
+    <view>
+      <text class='plain'>定价</text>
+      <text class='message'>¥{{detail.price}}</text>
+    </view>
+    <view>
+      <text class='plain'>精装</text>
+      <text class='message'>{{detail.binding}}</text>
+    </view>
   </view>
+  <view class='bottom-bgk'></view>
 </view>
 <view class='tab-bottom'>
   <view class='write-comment'>
@@ -60,8 +50,7 @@
     <input placeholder='留下你的短评吧～' placeholder-class='placeholder' />
   </view>
   <view class='button'>
-    <v-like/>
+    <v-like isLike='{{likeStatus}}' count='{{likeCount}}' />
     <image src='/images/icon/fenxiang.png' />
   </view>
-
 </view>
