@@ -24,8 +24,7 @@
 }
 .container {
   border-top: 20rpx solid #f1f1f1;
-  padding: 0 30rpx;
-  padding-top: 30rpx;
+  padding: 30rpx;
   width: 690rpx;
   display: flex;
   flex-direction: column;
@@ -51,15 +50,15 @@
   font-size: 20rpx;
   color: #666;
   margin-left: 15rpx;}
-.comments > v-tag:nth-child(1) view{
+/* .comments > v-tag:nth-child(1) view{
   background: #eefbff;
+} */
+.ex-tag1{
+  background: #eefbff !important;
 }
-
-.comments > v-tag:nth-child(2) view {
-  background:#fffbdd;
+.ex-tag2{
+  background: #fffbdd !important;
 }
-
-
 .content {
   display: inline-block;
   margin-top: 10rpx;
@@ -67,7 +66,13 @@
   letter-spacing: 3rpx;
   text-indent:2em
 }
-
+.description{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  margin-bottom: 90rpx;
+}
 
 .description .plain {
   display: inline-block;
@@ -78,12 +83,7 @@
   margin-left: 20rpx;
   color: #333333;
 }
-.decription-container .bottom-bgk{
-  height: 90rpx;
-  width: 100%;
-  background: white;
-}
-.tab-bottom{
+.post-container{
   width: 100%;
   position: fixed;
   bottom: 0;
@@ -95,7 +95,7 @@
   align-items: center;
   border-top: 1rpx solid #f1f1f1;
 }
-.write-comment{
+.post-fake{
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -106,24 +106,71 @@
   border:1rpx solid #333333;
   border-radius: 28rpx;
 }
-.write-comment image{
+.post-fake image{
   width: 25rpx;
   height: 25rpx;
   margin-left: 30rpx;
 }
-.write-comment input{
-  height: 56rpx;
-}
-.placeholder{
+
+.input{
   font-size: 24rpx;
   line-height:24rpx;
   color: #333333;
   margin-left: 10rpx;
 }
 .button{
+  width: 160rpx;
   margin-right: 30rpx;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 .button > image{
   height: 30rpx;
   width: 30rpx;
+}
+.posting-container{
+  position: fixed;
+  bottom: 0;
+  width:100%;
+  background: white;
+}
+.posting-container .post-header{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 100rpx;
+  border-top:1rpx solid #f1f1f1;
+  border-bottom:1rpx solid #f1f1f1;
+}
+.posting-container .post-header text{
+  font-size: 34rpx;
+  margin: 0 30rpx;
+  color: #333333;
+}
+.posting-container .post-header text:first-child{
+  color: #666
+}
+.posting-container .comment-container{
+  width: 100%;
+  margin: 40rpx 30rpx  0 30rpx;
+  display: flex;
+}
+.posting-container .comment-container v-tag{
+  margin-right: 20rpx;
+}
+.posting-container .count {
+  font-size: 20rpx;
+  color: #666;
+  margin-left: 15rpx;}
+.post{
+  height: 66rpx;
+  width: 630rpx;
+  background: #f1f1f1;
+  border-radius: 33rpx;
+  margin: 30rpx;
+  padding: 0 30rpx;
+}
+.placeholder{
+font-size:28rpx;
 }

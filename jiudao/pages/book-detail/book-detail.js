@@ -8,7 +8,8 @@ Page({
     id: '',
     comment: '',
     likeStatus: false,
-    likeCount: ''
+    likeCount: '',
+    posting:false
   },
   onLoad: function(options) {
     const id = options.id;
@@ -28,5 +29,8 @@ Page({
         likeCount: data.fav_nums
       });
     });
+  },
+  onFakePost:function(){
+  this.setData({posting:!this.data.posting})
   }
 })
