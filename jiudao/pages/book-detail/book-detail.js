@@ -12,23 +12,39 @@ Page({
     inputValue: ''
   },
   onLoad: function(options) {
+    wx.showLoading({
+      title: '',
+    });
     const id = options.id;
-    bookModel.getBookDetail(id).then(data => {
+    const detail= bookModel.getBookDetail(id);
+    const comment = bookModel.getShortComment(id);
+    const likeStatus = bookModel.getLikeStatus(id);
+    //并行请求，同时拿到结果
+    Promise.all([detail,comment,likeStatus]).then(res=>{
       this.setData({
-        detail: data
+        detail: res[0],
+        comment: res[1].comment,
+        likeStatus: res[2].like_status,
+        likeCount: res[2].fav_nums
       });
-    });
-    bookModel.getShortComment(id).then(data => {
-      this.setData({
-        comment: data.comment
-      });
-    });
-    bookModel.getLikeStatus(id).then(data => {
-      this.setData({
-        likeStatus: data.like_status,
-        likeCount: data.fav_nums
-      });
-    });
+      wx.hideLoading()
+    })
+    // bookModel.getBookDetail(id).then(data => {
+    //   this.setData({
+    //     detail: data
+    //   });
+    // });
+    // bookModel.getShortComment(id).then(data => {
+    //   this.setData({
+    //     comment: data.comment
+    //   });
+    // });
+    // bookModel.getLikeStatus(id).then(data => {
+    //   this.setData({
+    //     likeStatus: data.like_status,
+    //     likeCount: data.fav_nums
+    //   });
+    // });
   },
   onFakePost: function(event) {
     this.setData({
@@ -53,7 +69,6 @@ Page({
           icon: "none"
         });
         //新增评论接口调用成功后的操作，暂放在这里
-         console.log(this.data.comment)
         if (this.data.comment) {
           this.data.comment.unshift({
             content: comment,

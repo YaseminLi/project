@@ -6,7 +6,6 @@ Page({
   data:{
     hotList:'',
     showSearch:false,
-    inputValue:''
   },
   onLoad: function(options) {
     bookModel.getHotList().then(data => {
@@ -18,11 +17,9 @@ onBookDetail: function(event) {
       url: '/pages/book-detail/book-detail?id='+ event.currentTarget.dataset.id,
     })
   },
-  isShowSearch:function(event){
+  onShowSearch:function(event){
     const showSearch=this.data.showSearch;
     this.setData({showSearch:!showSearch})
   },
-  onClearInput:function(event){
-    this.setData({inputValue:''})
-  }
+ 
 })

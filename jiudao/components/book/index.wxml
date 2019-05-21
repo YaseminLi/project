@@ -3,7 +3,7 @@
   <view class='description'>
     <text class='title'>{{book.title}}</text>
     <text class='author'>{{book.author}}</text>
-    <view class='foot'>
+    <view class='foot' wx:if='{{book.fav_nums}}'>
       <text>{{book.fav_nums}}</text>
       <text>喜欢</text>
     </view>

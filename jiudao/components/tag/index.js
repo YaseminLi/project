@@ -11,6 +11,7 @@ Component({
   methods: {
 onTap:function(event){
   this.triggerEvent('tapping', {comment:this.data.content}, {});
+  this.triggerEvent('searchTag', { text: this.data.content }, {});
 }
   }
 })

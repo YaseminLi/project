@@ -25,6 +25,10 @@
 }
 .search-box .search-placeholder{
   font-size: 28rpx;
+  margin-left: 10rpx;
+}
+.search-box icon{
+  margin-right: 10rpx;
 }
 .search-box image{
   width: 28rpx;
@@ -42,7 +46,7 @@
 display: flex;
 font-weight: 800;
 }
-.title .icon{
+.title icon{
   margin-right: 26rpx;
   width: 5rpx;
   height: 28rpx;
@@ -66,4 +70,12 @@ font-weight: 800;
 .hot{
   width: 100%;
   padding:30rpx 30rpx 30rpx 30rpx;
+}
+.searchResult{
+  padding: 0 90rpx 0 90rpx;
+  padding-top:100rpx;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
 }

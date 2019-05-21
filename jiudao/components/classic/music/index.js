@@ -17,13 +17,8 @@ Component({
 
   lifetimes: {
     attached: function(event) {
-      console.log('a');
       this._recoverPlaying();
       this._monitorSwitch();
-    },
-    detached: function(event) {
-      console.log('b')
-
     },
   },
   methods: {

@@ -14,9 +14,6 @@ class BookModel extends Http {
   getLikeStatus(id) {
     return this.request({url:`/book/${id}/favor`});
   }
-  getHotKeyword() {
-    return this.request({url:'/book/hot_keyword'});
-  }
   postBookComment(bid, content) {
     return this.request({
       url: '/book/add/short_comment',
