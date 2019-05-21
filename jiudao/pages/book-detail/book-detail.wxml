@@ -8,7 +8,7 @@
   <view class='title'>短评</view>
   <view class='comments'>
     <block wx:for='{{comment}}' wx:key='{{index}}'>
-      <v-tag content='{{item.content}}' tag-class='{{tools.highlight(index)}}'>
+      <v-tag content='{{item.content}}' tag-class='{{highlight.highlight(index)}}'>
         <text class='count' slot='after'>+{{item.nums}}</text>
       </v-tag>
     </block>
@@ -55,21 +55,24 @@
   </view>
 </view>
 
+
 <view class='posting-container' wx:if='{{posting}}'>
+
   <view class='post-header'>
     <text>仅可点击标签+1</text>
     <text bind:tap='onFakePost'>取消</text>
   </view>
   <view class='comment-container'>
     <block wx:for='{{comment}}' wx:key='{{index}}'>
-      <v-tag wx:if='{{index<3}}' content='{{item.content}}' tag-class='{{tools.highlight(index)}}'>
+      <v-tag wx:if='{{index<3}}' content='{{item.content}}' tag-class='{{highlight.highlight(index)}}'>
         <text class='count' slot='after'>+1</text>
       </v-tag>
     </block>
   </view>
-  <input class='post' placeholder='短评最多12个字' placeholder-class='placeholder' />
+  <input class='post' focus='true' placeholder='短评最多12个字' placeholder-class='placeholder' />
 </view>
-<wxs module='tools'>
+<v-mask wx:if='{{posting}}'/>
+<wxs module='highlight'>
   var highlight = function(index) {
     if (index == 0) {
       return index = 'ex-tag1'

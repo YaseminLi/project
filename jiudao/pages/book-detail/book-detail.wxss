@@ -134,6 +134,7 @@
   bottom: 0;
   width:100%;
   background: white;
+  z-index: 100;
 }
 .posting-container .post-header{
   display: flex;
