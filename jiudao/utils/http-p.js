@@ -3,12 +3,13 @@ import {
   config
 } from '../config.js';
 class Http {
-  request(url,id,method = 'GET') {
+  request({url,data={},method = 'GET'}) {
+    console.log(url);
     return new Promise((resolve,reject)=>{
-      this._request(url,resolve, reject, method)
+      this._request(url,resolve, reject,data,method)
     })
   }
-  _request(url,resolve, reject,method='GET') {
+  _request(url, resolve, reject,data={},method='GET') {
     var url = config.appBase + url;
    
     if (!method) {
@@ -18,6 +19,7 @@ class Http {
     wx.request({
       url: url,
       method: method,
+      data:data,
       header: {
         "content-type": "application/json"
       },

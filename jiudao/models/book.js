@@ -3,19 +3,29 @@ import {
 } from "../utils/http-p.js";
 class BookModel extends Http {
   getHotList() {
-    return this.request("/book/hot_list");
+    return this.request({url:"/book/hot_list"});
   }
   getBookDetail(id) {
-    return this.request(`/book/${id}/detail`);
+    return this.request({url:`/book/${id}/detail`});
   }
   getShortComment(id) {
-    return this.request(`/book/${id}/short_comment`);
+    return this.request({url:`/book/${id}/short_comment`});
   }
-  getLikeStatus(id){
-    return this.request(`/book/${id}/favor`);
+  getLikeStatus(id) {
+    return this.request({url:`/book/${id}/favor`});
   }
   getHotKeyword() {
-    return this.request('/book/hot_keyword');
+    return this.request({url:'/book/hot_keyword'});
+  }
+  postBookComment(bid, content) {
+    return this.request({
+      url: '/book/add/short_comment',
+      method: 'POST',
+      data: {
+        book_id:bid,
+        content: content,
+      }
+    });
   }
 };
 export {

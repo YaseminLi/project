@@ -6,8 +6,9 @@
 </view>
 <view class='container'>
   <view class='title'>短评</view>
-  <view class='comments'>
-    <block wx:for='{{comment}}' wx:key='{{index}}'>
+  <text class='shadow' wx:if='{{!comment}}'>还没有短评内容～</text>
+  <view class='comments' wx:if='{{comment}}'>
+    <block wx:for='{{tools.limit(comment,5)}}' wx:key='{{index}}'>
       <v-tag content='{{item.content}}' tag-class='{{highlight.highlight(index)}}'>
         <text class='count' slot='after'>+{{item.nums}}</text>
       </v-tag>
@@ -59,17 +60,18 @@
 <view class='posting-container' wx:if='{{posting}}'>
 
   <view class='post-header'>
-    <text>仅可点击标签+1</text>
+    <text wx:if='{{comment}}'>仅可点击标签+1</text>
+    <text wx:else>暂无标签</text>
     <text bind:tap='onFakePost'>取消</text>
   </view>
-  <view class='comment-container'>
-    <block wx:for='{{comment}}' wx:key='{{index}}'>
-      <v-tag wx:if='{{index<3}}' content='{{item.content}}' tag-class='{{highlight.highlight(index)}}'>
+  <view class='comment-container' wx:if='{{comment}}'>
+    <block wx:for='{{tools.limit(comment,3)}}' wx:key='{{index}}'>
+      <v-tag  content='{{item.content}}' tag-class='{{highlight.highlight(index)}}' bind:tapping='onPost'>
         <text class='count' slot='after'>+1</text>
       </v-tag>
     </block>
   </view>
-  <input class='post' focus='true' placeholder='短评最多12个字' placeholder-class='placeholder' />
+  <input class='post' focus='true' placeholder='短评最多12个字' placeholder-class='placeholder' bindconfirm='onPost' value='{{inputValue}}'/>
 </view>
 <v-mask wx:if='{{posting}}'/>
 <wxs module='highlight'>

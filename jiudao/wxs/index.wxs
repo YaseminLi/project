@@ -14,8 +14,12 @@ var content=function(string){
 
   return string.replace(reg, '\n&nbsp;&nbsp;&nbsp;&nbsp;');
 }
+var limit = function (array, length) {
+  return array.slice(0, length)
+}
 module.exports = {
   date: date,
   author:author,
-  content:content
+  content:content,
+  limit:limit
 }
