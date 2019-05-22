@@ -24,6 +24,7 @@ class BookModel extends Http {
       }
     });
   }
+ 
 };
 export {
   BookModel

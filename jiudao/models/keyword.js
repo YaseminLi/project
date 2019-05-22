@@ -1,6 +1,6 @@
 import {
   Http
-} from "../utils/http-p.js";
+} from "../utils/http-m.js";
 class KeywordModel extends Http {
   key = 'q';
   maxLength=10;
@@ -8,11 +8,9 @@ class KeywordModel extends Http {
     //用缓存
    return  wx.getStorageSync(this.key)
   }
-  getHotKeyword() {
-    return this.request({ url: '/book/hot_keyword' });
-  }
-  getSearch(){
-    return this.request({ url: '/book/search'});
+  getSearch(q){
+    return this.request({
+      url: '/v2/movie/search?q='+ q});
   }
   addInputToHistory(keyword){
     let history=this.getHistorySearch();

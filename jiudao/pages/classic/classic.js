@@ -12,7 +12,7 @@ Page({
     latest: true,
     first: false,
     likeStatus: false,
-    likeCount: 0
+    likeCount: ''
   },
   onLoad: function(options) {
     let index = this.data.classic.index;
@@ -21,7 +21,6 @@ Page({
         classic: data,
         likeStatus: data.like_status,
         likeCount: data.fav_nums
-        //...res
       });
       // this._getLikeStatus(res.index,res.type,)
     });
@@ -43,6 +42,8 @@ Page({
       // this._getLikeStatus(res.index, res.type)
       this.setData({
         classic: data,
+        likeStatus: data.like_status,
+        likeCount: data.fav_nums,
         first: classicModel.isFirst(data.index),
         latest: classicModel.isLatest(data.index)
       })

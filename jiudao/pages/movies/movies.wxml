@@ -1,0 +1,17 @@
+<view wx:if="{{!showSearch}}">
+  <view class='header' bind:tap='onShowSearch'>
+    <view class='box'>
+      <icon type='search' size='16' />
+      <text class='placeholder'>搜索电影名称</text>
+    </view>
+  </view>
+  <view class='container' wx:if='{{!isSearchMovie}}'>
+    <v-movieList movies='{{inTheaters}}' />
+    <v-movieList movies='{{comingSoon}}' />
+    <v-movieList movies='{{top250}}' />
+  </view>
+  <view class='search-panel' wx:if='{{isSearchMovie}}'>
+    <template is='movieGridTemplate' data='{{...searchResult}}' />
+  </view>
+</view>
+<v-search wx:if="{{showSearch}}" bind:cancelSearch='onShowSearch' more='{{more}}'/>

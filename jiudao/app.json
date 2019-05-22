@@ -1,11 +1,12 @@
 {
   "pages": [
-    "pages/book/book",
+    "pages/movies/movies",
     "pages/classic/classic",
-    "pages/book-detail/book-detail",
     "pages/my/my",
     "pages/my-book/my-book",
-    "pages/welcome/welcome"
+    "pages/welcome/welcome",
+    "pages/movie-detail/movie-detail",
+    "pages/more-movie/more-movie"
   ],
   "window": {
     "navigationBarBackgroundColor": "white",
@@ -28,11 +29,11 @@
         "selectedIconPath": "/images/tab/classic@highlight.png"
       },
       {
-        "pagePath": "pages/book/book",
-        "text": "书单",
+        "pagePath": "pages/movies/movies",
+        "text": "电影",
         "iconPath": "images/tab/book.png",
         "selectedIconPath": "/images/tab/book@highlight.png"
-      } ,
+      },
       {
         "pagePath": "pages/my/my",
         "text": "喜欢",

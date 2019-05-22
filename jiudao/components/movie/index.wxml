@@ -1,0 +1,5 @@
+<view class='movie-container' data-id='{{movie.movieId}}' bind:tap='onMovieDetail'>
+    <image class='movie-img' src='{{movie.coverageUrl}}'></image>
+    <text class='movie-title'>{{movie.title}}</text>
+    <v-stars stars='{{movie.stars}}' score='{{movie.score}}'/>
+  </view>  

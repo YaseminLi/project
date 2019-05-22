@@ -46,7 +46,7 @@
 display: flex;
 font-weight: 800;
 }
-.title icon{
+.title .icon{
   margin-right: 26rpx;
   width: 5rpx;
   height: 28rpx;
@@ -67,13 +67,10 @@ font-weight: 800;
   margin-right: 20rpx;
   margin-bottom: 10rpx;
 }
-.hot{
-  width: 100%;
-  padding:30rpx 30rpx 30rpx 30rpx;
-}
+
 .searchResult{
   padding: 0 90rpx 0 90rpx;
-  padding-top:100rpx;
+  padding-top:150rpx;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;

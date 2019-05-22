@@ -1,7 +1,6 @@
 {
   "component": true,
   "usingComponents": {
-    "v-tag":"/components/tag/index",
     "v-movie":"/components/movie/index"
   }
 }

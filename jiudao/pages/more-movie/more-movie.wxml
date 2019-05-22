@@ -1,0 +1,7 @@
+  <view class='container'>
+    <block wx:for='{{movies}}' wx:for-item='movie' wx:key='{{index}}'>
+      <view class='single-view-container'>
+        <v-movie movie='{{movie}}'/>
+      </view>
+    </block>
+  </view> 

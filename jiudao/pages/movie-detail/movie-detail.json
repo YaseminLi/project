@@ -1,0 +1,10 @@
+{
+  "navigationBarTitleText": "电影详情",
+  "usingComponents": {
+    "v-stars": "/components/stars/index",
+      "v-like": "/components/like/index",
+      "v-tag": "/components/tag/index",
+      "v-mask": "/components/mask/index"
+
+  }
+}

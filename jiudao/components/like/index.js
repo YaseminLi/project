@@ -4,18 +4,14 @@ Component({
     isLike: {
       type: Boolean,
     },
-    count: {
+    likeCount: {
       type: Number,
     }
   },
-
-  /**
-   * 组件的初始数据
-   */
   data: {
     yesSrc: 'images/like.png',
-    noSrc: 'images/like@dis.png'
-
+    noSrc: 'images/like@dis.png',
+    countNum:""
   },
   methods: {
     onLike(event) {
@@ -31,6 +27,5 @@ Component({
       const myEventOption = {}; // 触发事件的选项
       this.triggerEvent('like', myEventDetail, myEventOption);
     }
-   
   }
 })

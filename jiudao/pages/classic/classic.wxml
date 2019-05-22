@@ -2,7 +2,7 @@
   <view class='header'>
     <v-epsiode index="{{classic.index}}" pubdate="{{classic.pubdate}}" class="epsiode" />
     <view class='button'>
-      <v-like isLike="{{likeStatus}}" count="{{likeCount}}" bind:like="onLike" class="like" />
+      <v-like isLike="{{likeStatus}}" likeCount="{{likeCount}}" bind:like="onLike" class="like" />
       <image class="share" src='/images/icon/fenxiang.png' />
     </view>
 

@@ -1,0 +1,7 @@
+<view class='stars-container'>
+    <block wx:for='{{stars}}'  wx:item='item' wx:key='{{index}}'>
+      <image src="{{item==1?'images/star.png':'images/none-star.png'}}" />
+    </block>
+    <text class='stars-score'>{{score}}</text>
+  </view>
+

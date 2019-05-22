@@ -5,6 +5,7 @@
 .index-container{
   display: flex;
   align-items: baseline;
+  width: 120rpx;
 }
 .plain{
   font-size: 32rpx;
@@ -13,7 +14,7 @@
 .index{
   line-height: 60rpx;
   font-size:60rpx;
-  font-weight: 800;
+  font-weight: 500;
   margin-right: 14rpx;
   color: black;
 }

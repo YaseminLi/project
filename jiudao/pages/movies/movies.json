@@ -1,0 +1,6 @@
+{
+"usingComponents": {
+  "v-movieList": "/components/movie-list/index",
+  "v-search": "/components/search/index"
+}
+}

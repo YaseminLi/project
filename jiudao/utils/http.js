@@ -1,7 +1,7 @@
 import { config } from '../config.js';
 class Http {
   request(params) {
-      var url = config.appBase + params.url;
+      var url = config.classicBase + params.url;
 
     if (!params.method) {
       params.method = "GET";
