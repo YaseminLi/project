@@ -1,8 +1,8 @@
 <view class='search-header'>
   <view class='search-box'>
     <icon type='search' size='14' />
-    <input type="text" placeholder='电影名' placeholder-class='search-placeholder' focus='true' value='{{inputValue}}' bindconfirm='onSearch'/>
-    <image src='images/cancel.png' bind:tap='onClearInput'/>
+    <input type="text" placeholder='电影名' placeholder-class='search-placeholder' focus='true' value='{{inputValue}}' bindconfirm='onSearch' />
+    <image src='images/cancel.png' bind:tap='onClearInput' />
   </view>
   <text class='cancel' bind:tap='onCancelSearch'>取消</text>
 </view>
@@ -12,13 +12,17 @@
     <text>历史搜索</text>
   </view>
   <text wx:if='{{!historySearch}}'>还没有搜索记录～</text>
-  <view  wx:else class='tag-container'>
+  <view wx:else class='tag-container'>
     <block wx:for='{{historySearch}}' wx:key='{{index}}'>
-    <view class='tag-item'><v-tag content='{{item}}' bind:tapping='onSearch'/></view>
+      <view class='tag-item'>
+        <v-tag content='{{item}}' bind:tapping='onSearch' />
+      </view>
     </block>
   </view>
 </view>
 <view class='searchResult' wx:if='{{isSearching}}'>
-<block wx:for='{{movies}}' wx:key='{{index}}'>
-<v-movie movie='{{item}}' bind:tap='onBookDetail' data-id='{{item.id}}'/>
-</block></view>
+  <block wx:for='{{movies}}' wx:key='{{index}}'>
+    <v-movie movie='{{item}}' bind:tap='onBookDetail' data-id='{{item.id}}' />
+  </block>
+</view>
+<text class='empty-tip' wx:if='{{noneResult}}'>没有搜索到相关结果</text>

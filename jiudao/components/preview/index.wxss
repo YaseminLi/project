@@ -8,11 +8,11 @@
 
 .preview-container .image {
   width: 100%;
-  height: 240rpx;
+  height: 250rpx;
 }
 
 .preview-container .header {
-  height: 40rpx;
+  height: 58rpx;
   margin: 20rpx;
   display: flex;
   justify-content: space-between;
@@ -30,7 +30,7 @@
 .preview-container .content {
   margin: 40rpx 20rpx;
   font-size: 28rpx;
-   /* overflow: hidden;
+   overflow: hidden;
   text-overflow: ellipsis;
-  white-space: nowrap; */
+  white-space: nowrap;
 }

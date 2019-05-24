@@ -47,30 +47,3 @@
     </scroll-view>
   </view>
 </view>
-
-<view class='post-container' wx:if='{{!posting}}'>
-  <view class='post-fake' bind:tap="onFakePost">
-    <image src='/images/book/write.png' />
-    <text class='input'>留下你的短评吧～</text>
-  </view>
-  <view class='button'>
-    <v-like isLike='{{likeStatus}}' count='{{likeCount}}' />
-    <image src='/images/icon/fenxiang.png' />
-  </view>
-</view>
-<view class='posting-container' wx:if='{{posting}}'>
-
-  <view class='post-header'>
-    <text >请输入你的评论</text>
-    <text bind:tap='onFakePost'>取消</text>
-  </view>
-  <view class='comment-container' wx:if='{{comment}}'>
-    <block wx:for='{{tools.limit(comment,3)}}' wx:key='{{index}}'>
-      <v-tag  content='{{item.content}}' tag-class='{{highlight.highlight(index)}}' bind:tapping='onPost'>
-        <text class='count' slot='after'>+1</text>
-      </v-tag>
-    </block>
-  </view>
-  <input class='post' focus='true' placeholder='短评最多12个字' placeholder-class='placeholder' bindconfirm='onPost' value='{{inputValue}}'/>
-</view>
-<v-mask wx:if='{{posting}}'/>

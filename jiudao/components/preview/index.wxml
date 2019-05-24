@@ -1,10 +1,11 @@
+<wxs src='../../utils/filter.wxs' module='tool'/>
 <view class='preview-container'>
   <view class='header'>
-    <text class='type'>电影</text>
-    <v-like />
+  <v-tag  content='{{tool.type(movie.type)}}'/>
+    <v-like isLike='{{movie.like_status}}' likeCount="{{movie.fav_nums}}"/>
   </view>
-  <image class="image"src='/images/wx.png' />
-  <text class='content'>人生不能像做菜，把所有的料准备好才下锅</text>
+  <image class="image"src='{{movie.image}}' />
+  <text class='content'>{{movie.content}}</text>
 </view>
 
 

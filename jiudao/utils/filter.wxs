@@ -8,6 +8,22 @@ var format = function (text) {
 
   return text.replace(reg, '\n&nbsp;&nbsp;&nbsp;&nbsp;');
 }
+var type=function(number){
+  var type;
+  switch (number) {
+    case 100:
+      type='电影'
+      break;
+    case 200:
+      type = '音乐'
+      break;
+    default:
+      type = '诗句'
+  } 
+  return type;
+
+}
 module.exports = {
-  format: format
+  format: format,
+  type:type
 }

@@ -6,7 +6,6 @@ Component({
   externalClasses: ['tag-class'],
   properties: {
     content: String,
-    count: Number
   },
   methods: {
 onTap:function(event){

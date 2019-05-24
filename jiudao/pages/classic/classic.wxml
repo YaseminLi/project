@@ -3,7 +3,11 @@
     <v-epsiode index="{{classic.index}}" pubdate="{{classic.pubdate}}" class="epsiode" />
     <view class='button'>
       <v-like isLike="{{likeStatus}}" likeCount="{{likeCount}}" bind:like="onLike" class="like" />
-      <image class="share" src='/images/icon/fenxiang.png' />
+
+      <v-button  open-type='share'>
+        <image slot='image' class="share" src='/images/icon/fenxiang.png' />
+
+      </v-button>
     </view>
 
   </view>

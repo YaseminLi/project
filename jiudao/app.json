@@ -1,12 +1,13 @@
 {
   "pages": [
+    "pages/my/my",
     "pages/movies/movies",
     "pages/classic/classic",
-    "pages/my/my",
-    "pages/my-book/my-book",
+    "pages/my-movie/my-movie",
     "pages/welcome/welcome",
     "pages/movie-detail/movie-detail",
-    "pages/more-movie/more-movie"
+    "pages/more-movie/more-movie",
+    "pages/about/about"
   ],
   "window": {
     "navigationBarBackgroundColor": "white",

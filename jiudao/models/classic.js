@@ -11,7 +11,14 @@ class ClassicModel extends Http {
         wx.setStorageSync(this._getKey(res.data.index), res.data)
       }
     });
-
+  }
+  getClassicFavor(sCallback) {
+    this.request({
+      url: "/classic/favor",
+      success: (res) => {
+        sCallback(res.data);
+      }
+    });
   }
   isFirst(index) {
     var index = index == 1 ? true : false;

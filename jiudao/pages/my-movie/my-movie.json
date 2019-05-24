@@ -1,0 +1,7 @@
+{
+  "usingComponents": {
+    "v-book-like": "/components/book-like/index"
+  },
+
+  "navigationBarTitleText": "我的电影"
+}

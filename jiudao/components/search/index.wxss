@@ -76,3 +76,10 @@ font-weight: 800;
   flex-wrap: wrap;
   justify-content: space-between;
 }
+.empty-tip {
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+    position: absolute;
+    top: 50%;
+}

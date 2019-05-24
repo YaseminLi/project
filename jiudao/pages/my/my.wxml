@@ -1,27 +1,33 @@
 <image class="bg-img" src="/images/my/my@bg.png" />
-<view class="user">
-  <image class="avatar" src="/images/my/my.png" />
-  <text class="user-name">Ming</text>
+<view class='header'>
+  <view class="user">
+    <v-button wx:if='{{!authorized}}' bind:getUserInfo='onGetUserInfo' open-type='getUserInfo'>
+      <image slot='image' class='avatar' src='/images/my/my.png' />
+
+    </v-button>
+    <block wx:if='{{authorized}}'>
+      <image class='avatar' src='{{userInfo.avatarUrl}}' />
+      <text class='user-name'>{{userInfo.nickName}}</text>
+    </block>
+  </view>
   <view class='about'>
-    <view class='about-item'>
+    <view class='about-item' bind:tap='onAboutUs'>
       <image src="/images/my/about.png" />
       <text>关于我们</text>
     </view>
-    <view class='about-item' bind:tap='onMyBookList'>
+    <view class='about-item' bind:tap='onMyMovieList'>
       <text class='like-num'>17</text>
-      <text >我的书单</text>
+      <text>我的电影</text>
     </view>
   </view>
+
 </view>
 
 <view class='like-container'>
   <view class='title'>
     <image src='/images/my/like.png' />
   </view>
-  <block>
-  <v-preview class="preview-item"/>
-  <v-preview class="preview-item"/>
-  <v-preview class="preview-item"/>
-  <v-preview class="preview-item"/>
+  <block wx:for='{{favor}}' wx:key='{{index}}'>
+    <v-preview class="preview-item"  movie='{{item}}'/>
   </block>
 </view>

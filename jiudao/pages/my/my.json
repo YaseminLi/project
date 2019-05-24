@@ -1,8 +1,6 @@
 {
   "usingComponents": {
-    "v-preview": "/components/preview/index"
-  },
-  "navigationBarTitleText": "林白",
-  "navigationBarBackgroundColor": "white",
-  "navigationBarTextStyle": "black"
+    "v-preview": "/components/preview/index",
+    "v-button": "/components/image-button/index"
+  }
 }

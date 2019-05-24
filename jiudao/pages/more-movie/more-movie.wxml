@@ -4,4 +4,7 @@
         <v-movie movie='{{movie}}'/>
       </view>
     </block>
+     <v-loading  class='loading' wx:if='{{showLoading}}'/>
+      <v-loading  class='loadingBottom' wx:if='{{loading}}'/>
   </view> 
+ 

@@ -1,20 +1,12 @@
 import {
   Http
 } from "../utils/http-m.js";
-
+const util = require('../utils/util.js');
 class MovieModel extends Http {
-  getIntheater() {
+  getMoviesData(category) {
+    const url = this.switchCategoryUrl(category) + '?start=0&count=3';
     return this.request({
-      url: '/v2/movie/in_theaters?start=0&count=3'});
-  }
-  getComingSoon() {
-    return this.request({
-      url: '/v2/movie/coming_soon?start=0&count=3'
-    });
-  }
-  getTop250() {
-    return this.request({
-      url: '/v2/movie/top250?start=0&count=3'
+      url
     });
   }
   getSearch(q) {
@@ -28,9 +20,45 @@ class MovieModel extends Http {
     });
   }
   getMoreMovie(categoryUrl) {
-    return this.request({ url: categoryUrl});
+    return this.request({
+      url: categoryUrl
+    });
   }
-
+  processMoviesData(moviesData) {
+    let movies = [];
+    const subjects = moviesData.subjects;
+    for (let idx in subjects) {
+      let title = subjects[idx].title;
+      if (title.length > 6) {
+        title = title.substring(0, 6) + '...';
+      }
+      let stars = util.convertToStars(subjects[idx].rating.stars);
+      let temp = {
+        coverageUrl: subjects[idx].images.large,
+        title: title,
+        movieId: subjects[idx].id,
+        score: subjects[idx].rating.average,
+        stars: stars
+      }
+      movies.push(temp);
+    }
+    return movies;
+  }
+  switchCategoryUrl(category) {
+    let categoryUrl = '';
+    switch (category) {
+      case '正在热映':
+        categoryUrl = '/v2/movie/in_theaters';
+        break;
+      case '即将上映':
+        categoryUrl = '/v2/movie/coming_soon';
+        break;
+      case 'Top250':
+        categoryUrl = '/v2/movie/top250';
+        break;
+    }
+    return categoryUrl;
+  }
 };
 export {
   MovieModel

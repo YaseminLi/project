@@ -1,6 +1,7 @@
 {
 "usingComponents": {
   "v-movieList": "/components/movie-list/index",
-  "v-search": "/components/search/index"
+  "v-search": "/components/search/index",
+  "v-loading": "/components/loading/index"
 }
 }

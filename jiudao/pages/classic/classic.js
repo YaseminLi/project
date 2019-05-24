@@ -4,8 +4,8 @@ import {
 import {
   LikeModel
 } from '../../models/like.js';
-let classicModel = new ClassicModel();
-let likeModel = new LikeModel();
+const classicModel = new ClassicModel();
+const likeModel = new LikeModel();
 Page({
   data: {
     classic: '',

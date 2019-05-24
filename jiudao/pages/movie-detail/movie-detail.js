@@ -1,7 +1,7 @@
 import {
   MovieModel
 } from '../../models/movie.js';
-var util = require('../../utils/util.js');
+const util = require('../../utils/util.js');
 const movieModel = new MovieModel();
 Page({
   data: {
@@ -11,11 +11,11 @@ Page({
   onLoad: function(options) {
     var movieId = options.id;
     movieModel.getMovieDetail(movieId).then(data => {
-      this.processDoubanData(data);
+      this._processData(data);
     })
   },
-  processDoubanData(data) {
-    var movie = {};
+  _processData(data) {
+    let movie = {};
     movie = {
       title: data.title,
       countries: data.countries[0],
@@ -37,47 +37,9 @@ Page({
     });
   },
   viewMoviePostImg: function(event) {
-    var src = event.currentTarget.dataset.src;
+    const src = event.currentTarget.dataset.src;
     wx.previewImage({
       urls: [src],
     })
-  },
-  onFakePost: function(event) {
-    this.setData({
-      posting: !this.data.posting
-    })
-  },
-  onPost: function(event) {
-    const comment = event.detail.value;
-    if (comment.length > 12) {
-      wx.showToast({
-        title: '短评最多12个字',
-        icon: 'none'
-      })
-    }
-
-    wx.showToast({
-      title: '短评提交成功！',
-      icon: "none"
-    });
-
-    if (this.data.comment) {
-      this.data.comment.unshift({
-        content: comment,
-        nums: 1
-      });
-    } else {
-      this.data.comment = [{
-        content: comment,
-        nums: 1
-      }]
-    }
-    this.setData({
-      inputValue: '',
-      posting: !this.data.posting,
-      comment: this.data.comment
-    })
   }
-
-
 })
