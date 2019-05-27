@@ -6,6 +6,7 @@
   width: 32rpx;
   height: 28rpx;
   margin-top: 10rpx;
+  margin-right: 5rpx;
 }
 .like-container text{
   font-family: "PingFangSC-Thin";

@@ -6,17 +6,32 @@ const movieModel = new MovieModel();
 Page({
   data: {
     movie: {},
-    comment: ''
+    comment: '',
+    isCollect: false,
+    movieId: ''
   },
   onLoad: function(options) {
     var movieId = options.id;
+    this.setData({
+      movieId
+    })
     movieModel.getMovieDetail(movieId).then(data => {
       this._processData(data);
     })
+    const movieCollection = wx.getStorageSync('movieCollection');
+    if (movieCollection) {
+      const isCollect = movieCollection.find((e) => (
+        e.movieId == movieId
+      ));
+      this.setData({
+        isCollect: isCollect?true:false
+      })
+    }
   },
   _processData(data) {
     let movie = {};
     movie = {
+      movieId: data.id,
       title: data.title,
       countries: data.countries[0],
       year: data.year,
@@ -41,5 +56,24 @@ Page({
     wx.previewImage({
       urls: [src],
     })
+  },
+  onCollect: function(event) {
+    let isCollect = this.data.isCollect;
+    this.setData({
+      isCollect: !isCollect
+    });
+    let movieCollection = wx.getStorageSync('movieCollection') ? wx.getStorageSync('movieCollection') : [];
+    if (this.data.isCollect) {
+      movieCollection.push(this.data.movie)
+      wx.setStorageSync('movieCollection', movieCollection);
+    } else {
+      for (let i = 0; i < movieCollection.length; i++) {
+        if (movieCollection[i].movieId == this.data.movieId) {
+          movieCollection.splice(i, 1)
+        }
+      }
+      wx.setStorageSync('movieCollection', movieCollection);
+    }
+
   }
 })

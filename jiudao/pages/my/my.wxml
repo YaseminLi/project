@@ -13,11 +13,11 @@
   <view class='about'>
     <view class='about-item' bind:tap='onAboutUs'>
       <image src="/images/my/about.png" />
-      <text>关于我们</text>
+      <text>关于旧岛</text>
     </view>
     <view class='about-item' bind:tap='onMyMovieList'>
-      <text class='like-num'>17</text>
-      <text>我的电影</text>
+      <text class='like-num'>{{count}}</text>
+      <text>收藏的电影</text>
     </view>
   </view>
 

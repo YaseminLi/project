@@ -20,6 +20,9 @@
   justify-content: space-between;
   margin-right: 20rpx;
 }
+.header .button .v-button{
+ margin-top: 7rpx;
+}
 .header .epsiode{
   margin-left: 20rpx;
 }

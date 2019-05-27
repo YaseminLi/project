@@ -6,7 +6,8 @@ Component({
     },
     likeCount: {
       type: Number,
-    }
+    },
+    type:String
   },
   data: {
     yesSrc: 'images/like.png',
@@ -15,6 +16,9 @@ Component({
   },
   methods: {
     onLike(event) {
+      if(this.data.type=='like'){
+        return
+      }
       let count = this.properties.count;
       let isLike = this.properties.isLike;
       count = isLike ? count - 1 : count + 1;

@@ -1,5 +1,3 @@
-
-
 .head-img {
   width: 100%;
   height: 320rpx;
@@ -47,13 +45,30 @@
   font-size: 22rpx;
   margin-right: 30rpx;
 }
+.small-image{
+ position: absolute;
+  top: 150rpx;
+  right: 30rpx;
+  display: flex;
+  flex-direction: column;
+}
+.small-image .collect{
+  display: flex;
+  align-items: center;
+  width:175rpx;
+  justify-content: center;
+  padding: 20rpx 0;
+}
+.small-image .collect image{
+  margin-left: 20rpx;
+  height: 35rpx;
+  width: 35rpx;
+}
 
 .movie-img {
   height: 238rpx;
   width: 175rpx;
-  position: absolute;
-  top: 150rpx;
-  right: 30rpx;
+ 
 }
 
 .summary {

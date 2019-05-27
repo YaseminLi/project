@@ -2,13 +2,13 @@ import { config } from '../config.js';
 class Http {
   request(params) {
       var url = config.classicBase + params.url;
-
     if (!params.method) {
       params.method = "GET";
     }
     wx.request({
       url: url,
       method: params.method,
+      data:params.data,
       header: {
         "content-type": "application/json"
       },

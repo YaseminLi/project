@@ -1,17 +1,19 @@
 import {
- ClassicModel
+  ClassicModel
 } from "../../models/classic.js";
-const classicModel=new ClassicModel();
+const classicModel = new ClassicModel();
 Page({
   data: {
     userInfo: '',
     authorized: false,
-    favor:''
+    favor: '',
+    count: ''
   },
 
-  onLoad: function(options) {
+  onLoad: function (options) {
     this.userAuthorized();
-    classicModel.getClassicFavor((data)=>this.setData({favor:data}))
+    classicModel.getClassicFavor((data) => this.setData({ favor: data }));
+
   },
   onGetUserInfo(e) {
     const userInfo = e.detail.userInfo;
@@ -38,14 +40,22 @@ Page({
       }
     })
   },
-  onMyMovieList: function(event) {
+  onMyMovieList: function (event) {
     wx.navigateTo({
       url: '../my-movie/my-movie',
     })
   },
-  onAboutUs(){
+  onAboutUs() {
     wx.navigateTo({
       url: '/pages/about/about',
     })
+  },
+  onShow: function () {
+    let array = wx.getStorageSync('movieCollection');
+    if (array) {
+      this.setData({
+        count:array.length
+      })
+    }
   }
 })

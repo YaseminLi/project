@@ -22,12 +22,13 @@ Page({
         likeStatus: data.like_status,
         likeCount: data.fav_nums
       });
+      //
       // this._getLikeStatus(res.index,res.type,)
     });
   },
   onLike: function(event) {
     let behavior = event.detail.behavior;
-    likeModel.like(behavior, this.data.classic.index, this.data.classic.type);
+    likeModel.like(behavior, this.data.classic.index,()=>{});
   },
   onNext: function(event) {
     this._updateClassic("next")

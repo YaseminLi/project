@@ -22,11 +22,11 @@
   color: black;
   font-weight: 800;
 }
-.content .author{
+.content .score{
   margin-top: 10rpx;
   font-size: 20rpx;
 }
-.like-img{
-  width: 33rpx;
-  height: 28rpx;
+.collect-img{
+  width: 38rpx;
+  height: 38rpx;
 }

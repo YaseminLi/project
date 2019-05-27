@@ -1,9 +1,5 @@
-<view class='book-item'>
-  <v-book-like/>
+<block wx:for="{{movies}}" wx:key='{{index}}'>
+<view class='item'>
+  <v-movie-collect movie='{{item}}' bind:tap='onMovieDetail' data-id='{{item.movieId}}'/>
 </view>
-<view class='book-item'>
-  <v-book-like/>
-</view>
-<view class='book-item'>
-  <v-book-like/>
-</view>
+</block>

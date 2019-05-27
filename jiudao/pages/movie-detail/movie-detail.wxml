@@ -1,4 +1,4 @@
-<wxs src='../../utils/filter.wxs' module='tools'/>
+<wxs src='../../utils/filter.wxs' module='tools' />
 <view class='container'>
   <image class='head-img' src='{{movie.movieImg}}' data-src='{{movie.movieImg}}' catchtap='viewMoviePostImg' mode='aspectFill' />
   <view class='head-img-hover'>
@@ -11,12 +11,19 @@
       <text class='plain-font'>条评论</text>
     </view>
   </view>
-  <image src='{{movie.movieImg}} ' class='movie-img' data-src='{{movie.movieImg}}' catchtap='viewMoviePostImg'/>
+  <view class='small-image'>
+    <image src='{{movie.movieImg}} ' class='movie-img' data-src='{{movie.movieImg}}' catchtap='viewMoviePostImg' />
+    <view class='collect' bind:tap='onCollect'>
+      <text>{{isCollect?'已收藏':'收藏 + '}}</text>
+      <image src='{{isCollect?"/images/icon/collection.png":"/images/icon/collection-anti.png"}}' class='collect' />
+    </view>
+
+  </view>
   <view class='summary'>
     <view class='original-title'>{{movie.originalTitle}}</view>
     <view class="flex-row">
       <text class="mark">评分</text>
-      <v-stars stars='{{movie.stars}}' score='{{movie.score}}'/>
+      <v-stars stars='{{movie.stars}}' score='{{movie.score}}' />
     </view>
     <view class="flex-row">
       <text class="mark">导演</text>

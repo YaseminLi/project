@@ -1,0 +1,8 @@
+<view class='book-like-container'>
+  <image class='book-img'src='{{movie.movieImg}}'/>
+  <view class='content'>
+    <text class='title'>{{movie.title}}</text>
+    <view class='score'> <v-stars score='{{movie.score}}' stars='{{movie.stars}}'/></view>
+  </view>
+  <image class='collect-img'src='images/collection.png'/>
+</view>

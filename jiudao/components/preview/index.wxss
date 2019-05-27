@@ -24,13 +24,14 @@
   line-height: 40rpx;
   color: black;
   text-align: center;
- 
 }
 
 .preview-container .content {
   margin: 40rpx 20rpx;
   font-size: 28rpx;
-   overflow: hidden;
+  overflow: hidden;
   text-overflow: ellipsis;
-  white-space: nowrap;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
 }

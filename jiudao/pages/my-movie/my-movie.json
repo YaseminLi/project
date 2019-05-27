@@ -1,7 +1,7 @@
 {
   "usingComponents": {
-    "v-book-like": "/components/book-like/index"
+    "v-movie-collect":"/components/movie-collect/index"
   },
 
-  "navigationBarTitleText": "我的电影"
+  "navigationBarTitleText": "收藏的电影"
 }

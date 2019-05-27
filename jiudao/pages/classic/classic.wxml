@@ -4,7 +4,7 @@
     <view class='button'>
       <v-like isLike="{{likeStatus}}" likeCount="{{likeCount}}" bind:like="onLike" class="like" />
 
-      <v-button  open-type='share'>
+      <v-button  open-type='share' class='v-button'>
         <image slot='image' class="share" src='/images/icon/fenxiang.png' />
 
       </v-button>

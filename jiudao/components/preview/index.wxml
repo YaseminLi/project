@@ -2,7 +2,7 @@
 <view class='preview-container'>
   <view class='header'>
   <v-tag  content='{{tool.type(movie.type)}}'/>
-    <v-like isLike='{{movie.like_status}}' likeCount="{{movie.fav_nums}}"/>
+    <v-like isLike='{{movie.like_status}}' likeCount="{{movie.fav_nums}}" type='like'/>
   </view>
   <image class="image"src='{{movie.image}}' />
   <text class='content'>{{movie.content}}</text>

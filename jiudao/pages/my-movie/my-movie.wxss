@@ -1,7 +1,7 @@
 page{
   background-color: #f2f2f2;
 }
-.book-item{
+.item{
   margin-top: 20rpx;
 
 }
