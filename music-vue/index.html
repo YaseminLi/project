@@ -11,21 +11,39 @@
 </head>
 
 <body>
-  <div id='app'>
-   姓：<input v-model='firstName'/>
-   名：<input v-model='lastName'/>
-   姓名：<span>{{fullName}}</span>
+  <div id='app' :class="['active','apple',{todos:todos.length>5}]">
+    <todo-item v-for="(todo,index) in todos" :content='todo.text' :index='index' :key='index' @delete='handleDelete'
+      ></todo-item>
   </div>
   <script>
+    Vue.component('todo-item', {
+      props: ['content', 'index'],
+      data: function () {
+        return {
+          style: {
+            color: 'red'
+          }
+      }},
+      template: '<li @click="handleClick" :style="style">{{content}}</li>',
+        methods: {
+      handleClick() {
+        this.$emit('delete', this.index)
+      }
+    }
+    })
     new Vue({
       el: '#app',
+
       data: {
-       firstName:'',
-       lastName:''
+        todos: [
+          { text: '学习 JavaScript' },
+          { text: '学习 Vue' },
+          { text: '整个牛项目' }
+        ]
       },
-      computed:{
-        fullName(){
-          return this.firstName+' '+this.lastName
+      methods: {
+        handleDelete(index) {
+          console.log(index)
         }
       }
     })
