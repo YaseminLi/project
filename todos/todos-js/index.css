@@ -55,7 +55,7 @@ h1{
     -moz-osx-font-smoothing: grayscale;
     outline: none;/* 去除蓝框 */
 }
-
+j
 .new-todo {
 	padding: 16px 16px 16px 60px;
 	border: none;
@@ -217,8 +217,7 @@ h1{
 	padding: 0;
 	list-style: none;
 	position: absolute;
-	right: 0;
-	left: 0;
+	left: 200px;
 }
 
 .filters li{
@@ -271,7 +270,6 @@ button{
     color:#bfbfbf;
     font-size: 10px;
     margin: 65px auto 0;/*和todoapp之间的margin折叠为65*/
-    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
 }
 
 .info p{
