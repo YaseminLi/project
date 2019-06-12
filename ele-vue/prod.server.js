@@ -1,3 +1,18 @@
+
+// const express = require('express');
+// const bodyParser = require('body-parser');
+// const app = express();
+// app.use(bodyParser.json())
+// const port = 8080;
+// const appData = require('./data.json');
+// const seller = appData.seller;
+// const goods = appData.goods;
+// const ratings = appData.ratings;
+// app.get('/pi', function (req, res) {
+//    console.log("主页 GET 请求");
+//    res.send(seller);
+// });
+// app.listen(port, () => console.log(`Example app listening on port ${port}!`))
 const express = require('express')
 
 const app = express()
