@@ -15,3 +15,13 @@ body,html
     font-family: 'PingFang SC','STHeiti Light'
     margin: 0
     padding: 0
+    color:white
+.clearfix
+    display inline-block
+    &::after
+        content: '.'
+        display: block
+        height: 0
+        line-height: 0
+        clear both
+        visibility hidden
