@@ -3,7 +3,7 @@
     <div class="container">
       <div class="wrapper-title">
         <div class="name">{{name}}</div>
-        <v-star :score='score' :size='24' />
+        <v-star :score='score' :size='48' />
       </div>
       <div v-if="supports" class="supports">
         <div class="title">
@@ -63,24 +63,29 @@ export default {
       .name
         font-size: 16px
         font-weight: 700
+        margin-bottom 16px
     .title
       display: flex
+      width 100%
       align-items: center
+      margin 28px auto 24px auto
       .text
         font-size: 14px
         font-weight: 700
-        margin: 0 11px
+        margin: 0 12px
       .line
-        width: 112px
+        flex 1
         height: 1px
         background: rgba(255, 255, 255, 0.2)
     .supports
       .content
-        padding: 18px 12px 22px 12px
+        padding: 0 12px 
         .item
-          padding: 6px 0
+          padding-bottom: 12px
           display: flex
           align-items: center
+          &:last-child
+              padding-bottom:0
           .icon
             height: 16px
             width: 16px
@@ -101,7 +106,7 @@ export default {
             font-size: 12px
     .bulletin
       .content
-        padding: 24px 12px 0 12px
+        padding: 0 12px 0 12px
         font-size: 12px
         line-height: 24px
 

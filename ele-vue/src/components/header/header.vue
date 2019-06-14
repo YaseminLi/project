@@ -17,7 +17,7 @@
       </div>
       <div v-if="seller.supports" class="support-count" @click="showDetail">
         <span>{{seller.supports.length}}个</span>
-        <i class="icon-keyboard_arrow_right" ></i>
+        <i class="icon-keyboard_arrow_right"></i>
       </div>
     </div>
     <div class="bulletin-wrapper">
@@ -28,18 +28,20 @@
     <div class="background">
       <img :src="seller.avatar">
     </div>
-    <div class="detail" v-show="detailShow">
-      <v-detail
-        :name="seller.name"
-        :score="seller.score"
-        :supports="seller.supports"
-        :bulletin="seller.bulletin"
-        :classMap="classMap"
-      />
-      <div class="detail-close" @click="showDetail">
-        <i class="icon-close"></i>
+    <transition name="fade">
+      <div class="detail" v-show="detailShow">
+        <v-detail
+          :name="seller.name"
+          :score="seller.score"
+          :supports="seller.supports"
+          :bulletin="seller.bulletin"
+          :classMap="classMap"
+        />
+        <div class="detail-close" @click="showDetail">
+          <i class="icon-close"></i>
+        </div>
       </div>
-    </div>
+    </transition>
   </div>
 </template>
 
@@ -156,7 +158,7 @@ export default {
       background-repeat: no-repeat
       margin-right: 4px
     .bulletin-text
-      width: 310px
+      width: 96%
       margin-right: 4px
       overflow: hidden
       white-space: nowrap
@@ -169,9 +171,14 @@ export default {
     top: 0
     z-index: -1
     filter: blur(5px)
-    clip: rect(0px 375px 134px 0px)
+    // clip: rect(0px 375px 134px 0px)
     img
       width: 100%
+      height:100%
+  .fade-enter-active, .fade-leave-active
+      transition: opacity 1s
+  .fade-enter, .fade-leave-to
+      opacity: 0
   .detail
     width: 100%
     height: 100%
@@ -181,13 +188,14 @@ export default {
     top: 0
     left: 0
     overflow: auto
+    backdrop-filter blur(10px)
     .detail-close
-      position relative
-      width 32px
-      height 32px
-      margin -64px auto 0 auto 
-      clear both
+      position: relative
+      width: 32px
+      height: 32px
+      margin: -64px auto 0 auto
+      clear: both
       .icon-close
-       font-size: 32px
-       color: rgba(255, 255, 255, 0.5)
+        font-size: 32px
+        color: rgba(255, 255, 255, 0.5)
 </style>
