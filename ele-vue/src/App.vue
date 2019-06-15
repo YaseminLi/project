@@ -9,12 +9,13 @@
     <div class="content">
       <router-view></router-view>
     </div>
+    <!-- <v-goodsDetail /> -->
   </div>
 </template>
 
 <script>
 import header from "components/header/header";
-
+// import goodsDetail from 'components/goods_detail/goods_detail';
 
 export default {
   data() {
@@ -29,14 +30,13 @@ export default {
     get:function(){
        this.$http.get('/api/seller').then(response => {
                                   this.seller = response.body;
-                                  console.log(this.seller);
-                                  
                                  }, ()=> {
                                     console.log('获取商家数据失败');
             });}
   },
   components: {
     "v-header": header
+    // "v-goodsDetail":goodsDetail
   }
 };
 </script>
