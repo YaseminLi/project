@@ -82,10 +82,14 @@ export default {
     },
     _computeHeight:function(){
       let foodList=this.$refs.foodsWrapper.getElementsByClassName('food-list-hook');
+      let scrollHeight=[0];
+      let scrollY=0;
       for(let i=0;i<foodList.length;i++){
-        
+        scrollHeight.push(scrollY+=foodList[i].clientHeight)
       }
       console.log(foodList);
+      console.log(scrollHeight);
+      
     }
   }
 };
