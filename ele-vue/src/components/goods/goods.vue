@@ -40,20 +40,19 @@
                 <span v-show="food.oldPrice" class="oldPrice">¥{{food.oldPrice}}</span>
               </div>
             </div>
-            <div class="add">
-              <i class="icon-remove_circle_outline icon"></i>
-              <span class="count">1</span>
-              <i class="icon-add_circle icon"></i>
-            </div>
+            <v-cartcontrol  class="cartcontrol" @decrease='decrease' @add='add'/>
           </div>
         </div>
       </div>
     </div>
+    <v-shopcart  :deliveryPrice='seller.deliveryPrice' :minPrice='seller.minPrice'/>
   </div>
 </template>
 
 <script>
 import BScroll from "better-scroll";
+import shopcart from "components/shopcart/shopcart.vue";
+import cartcontrol from "components/cartcontrol/cartcontrol.vue";
 export default {
   data() {
     return {
@@ -62,6 +61,13 @@ export default {
       listHeight: [0],
       scrollY: 0
     };
+  },
+  props:{
+    seller:Object
+  },
+  components:{
+    'v-shopcart':shopcart,
+    'v-cartcontrol':cartcontrol
   },
   computed: {
     // eslint-disable-next-line 
@@ -102,6 +108,19 @@ export default {
       );
       let el=foodList[index];
       this.foodsScroll.scrollToElement(el,300);
+    },
+    decrease:function(){
+      console.log('de'); 
+    },
+    add:function(target){
+      console.log('add'); 
+      console.log(target);
+      
+      this._drop(target);
+    },
+    _drop:function(){
+console.log('drop');
+
     },
     _initScroll: function() {
       this.menuScroll = new BScroll(this.$refs.menuWrapper, { click: true });
@@ -241,24 +260,9 @@ export default {
               color: rgb(147, 153, 159)
               font-weight: 700
               text-decoration: line-through
-        .add
+        .cartcontrol
           position: absolute
           right: 0
-          bottom: 18px
-          display: flex
-          flex-direction: row
-          align-items: center
-          .count
-            display: block
-            width: 24px
-            font-size: 10px
-            line-height: 24px
-            color: rgb(143, 157, 159)
-            text-align: center
-          .icon
-            width: 24px
-            height: 24px
-            font-size: 24px
-            color: rgb(0, 160, 220)
-            margin: 0
+          bottom: 12px
+
 </style>

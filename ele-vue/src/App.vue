@@ -7,16 +7,13 @@
       <router-link tag="div" class="tab-item" to="/seller">商家</router-link>
     </div>
     <div class="content">
-      <router-view></router-view>
+      <router-view :seller='seller'></router-view>
     </div>
-    <!-- <v-goodsDetail /> -->
   </div>
 </template>
 
 <script>
 import header from "components/header/header";
-// import goodsDetail from 'components/goods_detail/goods_detail';
-
 export default {
   data() {
     return {
@@ -36,7 +33,6 @@ export default {
   },
   components: {
     "v-header": header
-    // "v-goodsDetail":goodsDetail
   }
 };
 </script>
@@ -50,7 +46,6 @@ export default {
     height: 40px
     width: 100%
     border-1px(rgba(7, 17, 27, 0.1))
-    // border-bottom:1px solid rgba(7,17,27,0.1)
     .tab-item
       flex: 1
       font-size: 14px

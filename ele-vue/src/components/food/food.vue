@@ -62,7 +62,12 @@ export default {};
 <style lang="stylus">
 @import '../../common/stylus/mixin.styl'
 .goods
+  position fixed
+  top -174px
+  left 0
+  bottom 50px
   width: 100%
+  z-index 30
   background: #f3f5f7
   .image
     width: 100%
