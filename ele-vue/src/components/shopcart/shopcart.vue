@@ -40,6 +40,11 @@
            }
        }
    },
+   methods:{
+    //    drop(el){
+
+    //    }
+   },
    computed:{
        totalPrice(){
            let totalPrice=0;

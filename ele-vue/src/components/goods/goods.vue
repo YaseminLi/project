@@ -40,12 +40,12 @@
                 <span v-show="food.oldPrice" class="oldPrice">¥{{food.oldPrice}}</span>
               </div>
             </div>
-            <v-cartcontrol  class="cartcontrol" @decrease='decrease' @add='add'/>
+            <v-cartcontrol class="cartcontrol" :food="food" @decrease="decrease" @add="add"/>
           </div>
         </div>
       </div>
     </div>
-    <v-shopcart  :deliveryPrice='seller.deliveryPrice' :minPrice='seller.minPrice'/>
+    <v-shopcart :deliveryPrice="seller.deliveryPrice" :minPrice="seller.minPrice" :selectedFoods='selectedFoods'/>
   </div>
 </template>
 
@@ -56,28 +56,44 @@ import cartcontrol from "components/cartcontrol/cartcontrol.vue";
 export default {
   data() {
     return {
-      goods: "",
+      goods: [],
       classMap: ["decrease", "discount", "guarantee", "invoice", "special"],
       listHeight: [0],
       scrollY: 0
     };
   },
-  props:{
-    seller:Object
+  props: {
+    seller: Object
   },
-  components:{
-    'v-shopcart':shopcart,
-    'v-cartcontrol':cartcontrol
+  components: {
+    "v-shopcart": shopcart,
+    "v-cartcontrol": cartcontrol
   },
   computed: {
-    // eslint-disable-next-line 
+    // eslint-disable-next-line
     currentIndex() {
       for (let i = 0; i < this.listHeight.length; i++) {
-        if (!this.listHeight[i+1]||this.scrollY >= this.listHeight[i] && this.scrollY < this.listHeight[i + 1]) {
+        if (
+          !this.listHeight[i + 1] ||
+          (this.scrollY >= this.listHeight[i] &&
+            this.scrollY < this.listHeight[i + 1])
+        ) {
           return i;
         }
       }
       return 0;
+    },
+    selectedFoods(){
+      let foods=[];
+      for(let i=0;i<this.goods.length;i++){
+        for(let j=0;j<this.goods[i].foods.length;j++){
+          let food=this.goods[i].foods[j];
+          if(food.count>0){
+            foods.push(food);
+          }
+        }
+      }
+      return foods;
     }
   },
   created() {
@@ -99,29 +115,47 @@ export default {
         }
       );
     },
-    selectMenu: function(index,event) {
-      if(!event._constructed){
+    selectMenu: function(index, event) {
+      if (!event._constructed) {
         return;
       }
       let foodList = this.$refs.foodsWrapper.getElementsByClassName(
         "food-list-hook"
       );
-      let el=foodList[index];
-      this.foodsScroll.scrollToElement(el,300);
+      let el = foodList[index];
+      this.foodsScroll.scrollToElement(el, 300);
     },
-    decrease:function(){
-      console.log('de'); 
+    decrease: function(food) {
+      this.goods.forEach(items =>
+        items.foods.forEach(item => {
+          if (item === food) {
+            console.log("find decrease food", item);
+            if (item.count) {
+              item.count -= 1;
+            }
+          }
+        })
+      );
     },
-    add:function(target){
-      console.log('add'); 
-      console.log(target);
-      
-      this._drop(target);
-    },
-    _drop:function(){
-console.log('drop');
+    add: function(food) {
+      this.goods.forEach(items =>
+        items.foods.forEach(item => {
+          if (item === food) {
+            console.log("find add food", item);
+            if (!item.count) {
+              this.$set(item, "count", 1);
+            } else {
+              item.count += 1;
+            }
+          }
+        })
+      );
 
+      // this._drop(target);
     },
+    // _drop: function(target) {
+    //   console.log("drop");
+    // },
     _initScroll: function() {
       this.menuScroll = new BScroll(this.$refs.menuWrapper, { click: true });
       this.foodsScroll = new BScroll(this.$refs.foodsWrapper, {
@@ -170,9 +204,9 @@ console.log('drop');
       &.current
         background: white
         font-weight: 700
-        position relative
-        z-index 10
-        margin-top:-1px
+        position: relative
+        z-index: 10
+        margin-top: -1px
         .text
           border-none()
       .text
@@ -264,5 +298,4 @@ console.log('drop');
           position: absolute
           right: 0
           bottom: 12px
-
 </style>
