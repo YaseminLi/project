@@ -25,6 +25,7 @@
             v-for="(food,index) in item.foods"
             :key="index"
             class="food-item border-1px border-none"
+            @click="showFood(food)"
           >
             <img class="icon" :src="food.icon">
             <div class="content">
@@ -40,18 +41,34 @@
                 <span v-show="food.oldPrice" class="oldPrice">¥{{food.oldPrice}}</span>
               </div>
             </div>
-            <v-cartcontrol class="cartcontrol" :food="food" @decrease="decrease" @add="add"/>
+            <v-cartcontrol
+              class="cartcontrol"
+              :food="food"
+              @decrease="decrease"
+              @add="add"
+              @ballDrop="ballDrop"
+            />
           </div>
         </div>
       </div>
     </div>
-    <v-shopcart :deliveryPrice="seller.deliveryPrice" :minPrice="seller.minPrice" :selectedFoods='selectedFoods'/>
+    <v-shopcart
+      :deliveryPrice="seller.deliveryPrice"
+      :minPrice="seller.minPrice"
+      :selectedFoods="selectedFoods"
+      ref="shopcart"
+      @clear='clear'
+      @add='add'
+      @decrease='decrease'
+    />
+    <v-food ref="food" :food='choosedFood'/>
   </div>
 </template>
 
 <script>
 import BScroll from "better-scroll";
 import shopcart from "components/shopcart/shopcart.vue";
+import food from "components/food/food.vue";
 import cartcontrol from "components/cartcontrol/cartcontrol.vue";
 export default {
   data() {
@@ -59,7 +76,8 @@ export default {
       goods: [],
       classMap: ["decrease", "discount", "guarantee", "invoice", "special"],
       listHeight: [0],
-      scrollY: 0
+      scrollY: 0,
+      choosedFood:{}
     };
   },
   props: {
@@ -67,7 +85,8 @@ export default {
   },
   components: {
     "v-shopcart": shopcart,
-    "v-cartcontrol": cartcontrol
+    "v-cartcontrol": cartcontrol,
+    "v-food":food
   },
   computed: {
     // eslint-disable-next-line
@@ -83,12 +102,12 @@ export default {
       }
       return 0;
     },
-    selectedFoods(){
-      let foods=[];
-      for(let i=0;i<this.goods.length;i++){
-        for(let j=0;j<this.goods[i].foods.length;j++){
-          let food=this.goods[i].foods[j];
-          if(food.count>0){
+    selectedFoods() {
+      let foods = [];
+      for (let i = 0; i < this.goods.length; i++) {
+        for (let j = 0; j < this.goods[i].foods.length; j++) {
+          let food = this.goods[i].foods[j];
+          if (food.count > 0) {
             foods.push(food);
           }
         }
@@ -104,7 +123,6 @@ export default {
       this.$http.get("/api/goods").then(
         response => {
           this.goods = response.body;
-          console.log(response);
           this.$nextTick(() => {
             this._initScroll();
             this._calculateHeight();
@@ -129,7 +147,6 @@ export default {
       this.goods.forEach(items =>
         items.foods.forEach(item => {
           if (item === food) {
-            console.log("find decrease food", item);
             if (item.count) {
               item.count -= 1;
             }
@@ -141,7 +158,6 @@ export default {
       this.goods.forEach(items =>
         items.foods.forEach(item => {
           if (item === food) {
-            console.log("find add food", item);
             if (!item.count) {
               this.$set(item, "count", 1);
             } else {
@@ -150,12 +166,24 @@ export default {
           }
         })
       );
-
-      // this._drop(target);
     },
-    // _drop: function(target) {
-    //   console.log("drop");
-    // },
+    ballDrop: function(target) {
+      this._drop(target);
+    },
+    clear:function(){
+     this.goods.forEach(items =>
+        items.foods.forEach(item => {
+              item.count=0;
+        })
+      );
+    },
+    showFood:function(food){
+      this.$refs.food.showFood();
+      this.choosedFood=food;
+    },
+    _drop: function(target) {
+      this.$refs.shopcart.drop(target);
+    },
     _initScroll: function() {
       this.menuScroll = new BScroll(this.$refs.menuWrapper, { click: true });
       this.foodsScroll = new BScroll(this.$refs.foodsWrapper, {

@@ -58,21 +58,17 @@ export default {
       if (!event._constructed) {
         return;
       }
-      // if (this.food.count) {
-      //   this.food.count -= 1;
-      // }
       this.$emit("decrease", this.food);
     },
     addCart(event) {
+      //阻止浏览器派发的点击事件
       if (!event._constructed) {
         return;
       }
-      // if (!this.food.count) {
-      //   this.food.count = 1;
-      // } else {
-      //   this.food.count += 1;
-      // }
+      console.log('add');
+      
       this.$emit("add", this.food);
+      this.$emit('ballDrop',event.target);
     }
   }
 };
