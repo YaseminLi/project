@@ -75,6 +75,7 @@ export default {
 </script>
 
 <style lang='stylus' >
+@import '../../common/stylus/variable.styl';
 .cartcontrol
   display: flex
   flex-direction: row
@@ -88,14 +89,14 @@ export default {
     width: 12px
     font-size: 10px
     line-height: 24px
-    color: rgb(143, 157, 159)
+    color: $color-grey
     text-align: center
   .cart-icon
     display: inline-block
     width: 24px
     height: 24px
     font-size: 24px
-    color: rgb(0, 160, 220)
+    color: $color-blue
     margin: 0
     padding: 6px
   .ball-container
@@ -108,5 +109,5 @@ export default {
         width: 16px
         height: 16px
         border-radius: 50%
-        background: rgb(0, 160, 220)
+        background: $color-blue
 </style>

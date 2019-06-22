@@ -1,9 +1,9 @@
 <template>
   <div class="detail-wrapper clearfix">
-    <div class="container">
+    <div class="detail-container">
       <div class="wrapper-title">
         <div class="name">{{name}}</div>
-        <v-star :score='score' :size='48' />
+        <v-star :score="score" :size="48"/>
       </div>
       <div v-if="supports" class="supports">
         <div class="title">
@@ -12,10 +12,13 @@
           <div class="line"></div>
         </div>
         <div class="content">
-          <div class="item" v-for="(support,index) in supports" :key="index">
-            <span class="icon" :class="classMap[support.type]"></span>
-            <span class="text">{{support.description}}</span>
-          </div>
+          <v-support
+            v-for="(support,index) in supports"
+            :key="index"
+            :size="2"
+            :text="support.description"
+            :type="support.type"
+          />
         </div>
       </div>
       <div v-if="bulletin" class="bulletin">
@@ -26,36 +29,36 @@
         </div>
         <div class="content">{{bulletin}}</div>
       </div>
-      
     </div>
-    
   </div>
 </template>
 
 <script>
-import star from '../star/star';
+import star from "../star/star";
+import support from "../support/support.vue";
 export default {
   props: {
     name: String,
     score: Number,
     supports: Array,
     bulletin: String,
-    classMap: Array
   },
-  components:{
-      'v-star':star
+  components: {
+    "v-star": star,
+    "v-support": support
   }
 };
 </script>
 
 <style lang='stylus' >
-@import '../../common/stylus/mixin.styl'
+@import '../../common/stylus/mixin.styl';
+@import '../../common/stylus/variable.styl';
 .detail-wrapper
-  min-height 100%
-  .container
-    padding :64px 36px 64px 36px
-    display flex
-    flex-direction column
+  min-height: 100%
+  .detail-container
+    padding: 64px 36px 64px 36px
+    display: flex
+    flex-direction: column
     .wrapper-title
       display: flex
       flex-direction: column
@@ -63,45 +66,35 @@ export default {
       .name
         font-size: 16px
         font-weight: 700
-        margin-bottom 16px
+        margin-bottom: 16px
     .title
       display: flex
-      width 100%
+      width: 100%
       align-items: center
-      margin 28px auto 24px auto
+      margin: 28px auto 24px auto
       .text
         font-size: 14px
         font-weight: 700
         margin: 0 12px
       .line
-        flex 1
+        flex: 1
         height: 1px
-        background: rgba(255, 255, 255, 0.2)
+        background: $color-grey-ss
     .supports
       .content
-        padding: 0 12px 
-        .item
+        padding: 0 12px
+        .support
           padding-bottom: 12px
           display: flex
           align-items: center
           &:last-child
-              padding-bottom:0
+            padding-bottom: 0
           .icon
             height: 16px
             width: 16px
             margin-right: 6px
             background-size: 16px 16px
             background-repeat: no-repeat
-            &.decrease
-              bg-img('decrease_2')
-            &.discount
-              bg-img('discount_2')
-            &.guarantee
-              bg-img('guarantee_2')
-            &.invoice
-              bg-img('invoice_2')
-            &.special
-              bg-img('special_2')
           .text
             font-size: 12px
     .bulletin
@@ -109,5 +102,4 @@ export default {
         padding: 0 12px 0 12px
         font-size: 12px
         line-height: 24px
-
 </style>

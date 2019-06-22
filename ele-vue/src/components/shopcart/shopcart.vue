@@ -146,7 +146,8 @@ export default {
 };
 </script>
 <style lang='stylus'>
-@import '../../common/stylus/mixin.styl'
+@import '../../common/stylus/mixin.styl';
+  @import '../../common/stylus/variable.styl';
 .shopcart
   z-index: 50
   position: fixed
@@ -156,12 +157,12 @@ export default {
   height 50px
   .filter
     width: 100%
-    background: rgba(7, 17, 27, 0.6)
+    background: $color-background-sssss
   .content
     height: 50px
     display: flex
     width: 100%
-    color: rgba(255, 255, 255, 0.4)
+    color: $color-grey-sss
     background: #141d27
     // position fixed
     // left: 0
@@ -182,19 +183,19 @@ export default {
         position: relative
         top: -8px
         &.haveSeleced
-          background: #00a0dc
+          background: $color-green
           .icon-shopping_cart
             color: white
         .icon-shopping_cart
           font-size: 24px
-          color: rgba(255, 255, 255, 0.4)
+          color: $color-grey-sss
           width: 24px
           height: 24px
           margin: 10px
         .totalCount
           font-size: 9px
           color: white
-          background: red
+          background: $color-red
           height: 16px
           width: 24px
           text-align: center
@@ -210,7 +211,7 @@ export default {
         font-size: 16px
         font-weight: 700
         line-height: 24px
-        border-right: 1px solid rgba(255, 255, 255, 0.1)
+        border-right: 1px solid $color-grey-sss
         &.haveSeleced
           color: white
       .desc
@@ -228,10 +229,10 @@ export default {
       font-weight: 700
       text-align: center
       &.enough
-        background: #00b43c
+        background: $color-green
         color: white
       &.not-enough
-        background: #2b333b
+        background: $color-grey-sssss
   .selectedFoods
     position: absolute
     bottom: 50px
@@ -244,20 +245,20 @@ export default {
     //   transition: all 5s
     .head
       height: 40px
-      background: #f3f5f7
+      background: $color-background-ssss
       width: 100%
       display: flex
       justify-content: space-between
-      border-bottom: 1px solid rgba(7, 17, 27, 0.1)
+      border-bottom: 1px solid $color-background
       .cart
         font-size: 14px
         line-height: 40px
-        color: rgb(7, 17, 27)
+        color: $color-grey-ssss
         margin-left: 18px
       .clear
         font-size: 12px
         line-height: 40px
-        color: rgb(0, 160, 200)
+        color: $color-grey-ssss
         margin-right: 18px
     .foods
       background: white
@@ -268,12 +269,12 @@ export default {
         height: 24px
         margin: 0 18px
         padding: 12px 0
-        border-1px(rgba(7, 17, 27, 0.1))
+        border-1px($color-row-line)
         display: flex
         justify-content: space-between
         .name
           font-size: 14px
-          color: rgb(7, 17, 27)
+          color: $color-grey-ssss
           line-height: 24px
           font-weight: 500
         .extra
@@ -282,6 +283,6 @@ export default {
             margin: 0 12px 0 18px
             font-size: 14px
             font-weight: 700
-            color: red
+            color: $color-red
             line-height: 24px
 </style>

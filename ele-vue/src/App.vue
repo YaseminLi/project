@@ -37,20 +37,21 @@ export default {
 };
 </script>
 
-<style lang='stylus' rel='stylesheet/stylus'>
-@import './common/stylus/mixin.styl'
+<style lang='stylus' rel='stylesheet/stylus' >
+@import './common/stylus/mixin.styl';
+  @import '../../common/stylus/variable.styl';
 #app
   .tab
     display: flex
     align-items: center
     height: 40px
     width: 100%
-    border-1px(rgba(7, 17, 27, 0.1))
+    border-1px($color-row-line)
     .tab-item
       flex: 1
       font-size: 14px
-      color: rgb(77, 85, 93)
+      color: $color-grey-s
       text-align: center
     .router-link-active
-      color: rgb(240, 20, 20)
+      color: $color-red
 </style>

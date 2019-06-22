@@ -1,3 +1,4 @@
+@import "./variable";
 @media (-webkit-min-device-pixel-ratio: 3),(min-device-pixel-ratio: 3)
     .border-1px
         &&::after
@@ -25,3 +26,9 @@ body,html
         line-height: 0
         clear both
         visibility hidden
+
+.container
+    background: white
+    border-top:1px solid $color-row-line
+    border-bottom:1px solid $color-row-line
+    margin 16px 0

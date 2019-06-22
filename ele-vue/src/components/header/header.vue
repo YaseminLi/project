@@ -10,10 +10,12 @@
           <span class="name">{{seller.name}}</span>
         </div>
         <div class="description">{{seller.description}}/{{seller.deliveryTime}}分钟必达</div>
-        <div v-if="seller.supports" class="supports">
-          <span class="icon" :class="classMap[seller.supports[0].type]"></span>
-          <span class="text">{{seller.supports[0].description}}</span>
-        </div>
+        <v-support
+          v-if="seller.supports"
+          :size="1"
+          :text="seller.supports[0].description"
+          :type="seller.supports[0].type"
+        />
       </div>
       <div v-if="seller.supports" class="support-count" @click="showDetail">
         <span>{{seller.supports.length}}个</span>
@@ -35,7 +37,6 @@
           :score="seller.score"
           :supports="seller.supports"
           :bulletin="seller.bulletin"
-          :classMap="classMap"
         />
         <div class="detail-close" @click="showDetail">
           <i class="icon-close"></i>
@@ -47,6 +48,7 @@
 
 <script>
 import detail from "../detail/detail.vue";
+import support from "../support/support.vue";
 export default {
   data() {
     return {
@@ -63,18 +65,20 @@ export default {
     }
   },
   components: {
-    "v-detail": detail
+    "v-detail": detail,
+    "v-support": support
   }
 };
 </script>
 
 <style lang='stylus' >
 @import '../../common/stylus/mixin.styl'
+@import '../../common/stylus/variable.styl'
 .header
   width: 100%
   height: 134px
   position: relative
-  background: rgba(7, 17, 27, 0.5)
+  background: $color-background-ss
   .content-wrapper
     padding: 24px 12px 18px 24px
     display: flex
@@ -106,7 +110,7 @@ export default {
     .description
       font-size: 12px
       margin: 8px 0 10px 0
-    .supports
+    .support
       font-size: 10px
       line-height: 12px
       display: flex
@@ -116,19 +120,8 @@ export default {
         width: 12px
         height: 12px
         background-size: 12px
-        background-repeat: no-repeat
-        &.decrease
-          bg-img('decrease_1')
-        &.discount
-          bg-img('discount_1')
-        &.guarantee
-          bg-img('guarantee_1')
-        &.invoice
-          bg-img('invoice_1')
-        &.special
-          bg-img('special_1')
     .support-count
-      background-color: rgba(0, 0, 0, 0.2)
+      background-color: $color-background-ssssss
       border-radius: 24px
       height: 10px
       padding: 7px 8px
@@ -146,7 +139,7 @@ export default {
     font-size: 10px
     line-height: 28px
     padding: 0 12px
-    background-color: rgba(7, 17, 27, 0.1)
+    background-color: $color-background-sssssss
     display: flex
     align-items: center
     .bulletin-title
@@ -174,21 +167,21 @@ export default {
     // clip: rect(0px 375px 134px 0px)
     img
       width: 100%
-      height:100%
+      height: 100%
   .fade-enter-active, .fade-leave-active
-      transition: opacity 1s
+    transition: opacity 1s
   .fade-enter, .fade-leave-to
-      opacity: 0
+    opacity: 0
   .detail
     width: 100%
     height: 100%
-    background: rgba(7, 17, 27, 0.8)
+    background: $color-background-s
     position: fixed
     z-index: 100
     top: 0
     left: 0
     overflow: auto
-    backdrop-filter blur(10px)
+    backdrop-filter: blur(10px)
     .detail-close
       position: relative
       width: 32px
@@ -197,5 +190,5 @@ export default {
       clear: both
       .icon-close
         font-size: 32px
-        color: rgba(255, 255, 255, 0.5)
+        color: $color-grey-ssssss
 </style>

@@ -9,10 +9,7 @@
           @click="selectMenu(index,$event)"
           :class="{'current':currentIndex==index}"
         >
-          <span class="text border-1px">
-            <span v-show="item.type>0" class="icon" :class="classMap[item.type]"></span>
-            {{item.name}}
-          </span>
+          <v-support class="border-1px" :size="3" :text="item.name" :type="item.type"/>
         </div>
       </div>
     </div>
@@ -57,11 +54,11 @@
       :minPrice="seller.minPrice"
       :selectedFoods="selectedFoods"
       ref="shopcart"
-      @clear='clear'
-      @add='add'
-      @decrease='decrease'
+      @clear="clear"
+      @add="add"
+      @decrease="decrease"
     />
-    <v-food ref="food" :food='choosedFood'/>
+    <v-food ref="food" :food="choosedFood"/>
   </div>
 </template>
 
@@ -70,6 +67,7 @@ import BScroll from "better-scroll";
 import shopcart from "components/shopcart/shopcart.vue";
 import food from "components/food/food.vue";
 import cartcontrol from "components/cartcontrol/cartcontrol.vue";
+import support from "../support/support.vue";
 export default {
   data() {
     return {
@@ -77,7 +75,7 @@ export default {
       classMap: ["decrease", "discount", "guarantee", "invoice", "special"],
       listHeight: [0],
       scrollY: 0,
-      choosedFood:{}
+      choosedFood: {}
     };
   },
   props: {
@@ -86,7 +84,8 @@ export default {
   components: {
     "v-shopcart": shopcart,
     "v-cartcontrol": cartcontrol,
-    "v-food":food
+    "v-food": food,
+    "v-support": support
   },
   computed: {
     // eslint-disable-next-line
@@ -170,16 +169,16 @@ export default {
     ballDrop: function(target) {
       this._drop(target);
     },
-    clear:function(){
-     this.goods.forEach(items =>
+    clear: function() {
+      this.goods.forEach(items =>
         items.foods.forEach(item => {
-              item.count=0;
+          item.count = 0;
         })
       );
     },
-    showFood:function(food){
+    showFood: function(food) {
       this.$refs.food.showFood();
-      this.choosedFood=food;
+      this.choosedFood = food;
     },
     _drop: function(target) {
       this.$refs.shopcart.drop(target);
@@ -209,6 +208,7 @@ export default {
 
 <style lang='stylus'>
 @import '../../common/stylus/mixin.styl'
+@import '../../common/stylus/variable.styl'
 .goods
   display: flex
   position: absolute
@@ -219,14 +219,14 @@ export default {
   color: black
   .menu-wrapper
     flex: 0 0 80px
-    background: #f3f5f7
+    background: $color-background-ssss
     overflow: hidden
     .name
       padding: 0 12px
       width: 56px
       height: 54px
       font-size: 12px
-      color: rgb(75, 85, 93)
+      color: $color-grey-s
       line-height: 14px
       display: table
       &.current
@@ -235,31 +235,19 @@ export default {
         position: relative
         z-index: 10
         margin-top: -1px
-        .text
+      .support
           border-none()
-      .text
-        display: table-cell
-        vertical-align: middle
-        width: 56px
-        border-1px(rgba(7, 17, 27, 0.1))
-      .icon
-        margin-right: 2px
-        width: 12px
-        height: 12px
-        background-size: 12px
-        background-repeat: no-repeat
-        display: inline-block
-        vertical-align: top
-        &.decrease
-          bg-img('decrease_3')
-        &.discount
-          bg-img('discount_3')
-        &.guarantee
-          bg-img('guarantee_3')
-        &.invoice
-          bg-img('invoice_3')
-        &.special
-          bg-img('special_3')
+          display: table-cell
+          vertical-align: middle
+          width: 56px
+          border-1px($color-row-line)
+          .icon
+            margin-right: 2px
+            width: 12px
+            height: 12px
+            background-size: 12px
+            display: inline-block
+            vertical-align: top
   .foods-wrapper
     flex: 1
     background: white
@@ -270,11 +258,11 @@ export default {
         padding-left: 14px
         font-size: 12px
         line-height: 26px
-        color: rgb(147, 153, 159)
-        background: #f3f5f7
-        border-left: 2px solid #d9dde1
+        color: $color-grey
+        background: $color-background-ssss
+        border-left: 2px solid $color-col-line
       .food-item
-        border-1px(rgba(7, 17, 27, 0.1))
+        border-1px($color-row-line)
         display: flex
         margin: 0 18px
         padding: 18px 0
@@ -291,16 +279,16 @@ export default {
           .food-name
             margin-top: 2px
             font-size: 14px
-            color: rgb(7, 17, 27)
+            color: $color-grey-ssss
           .description
             margin-top: 8px
             font-size: 10px
             line-height: 12px
-            color: rgb(147, 153, 159)
+            color: $color-grey
           .extra
             margin-top: 8px
             font-size: 10px
-            color: rgb(147, 153, 159)
+            color: $color-grey
             .rating
               margin-left: 12px
           .price
@@ -315,11 +303,11 @@ export default {
             .nowPrice
               font-size: 14px
               font-weight: 700
-              color: rgb(240, 20, 20)
+              color: $color-red
             .oldPrice
               margin-left: 8px
               font-size: 10px
-              color: rgb(147, 153, 159)
+              color: $color-grey
               font-weight: 700
               text-decoration: line-through
         .cartcontrol

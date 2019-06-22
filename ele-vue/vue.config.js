@@ -10,6 +10,7 @@ module.exports = {
 	chainWebpack: (config)=>{
             config.resolve.alias
 						.set('components', resolve('src/components'))
+						.set('common', resolve('src/common'))
 	},
 	devServer: {
 		before: function(app, server) {
