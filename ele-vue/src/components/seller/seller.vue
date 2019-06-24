@@ -87,12 +87,12 @@ export default {
     };
   },
   created() {
-    let width = 0;
-    if (this.seller.pics) {
-      width = 126 * this.seller.pics.length - 6;
-      this.$refs.picsInner.style.width = width + "px";
-    }
     this.$nextTick(() => {
+      let width = 0;
+      if (this.seller.pics) {
+        width = 126 * this.seller.pics.length - 6;
+        this.$refs.picsInner.style.width = width + "px";
+      }
       this.sellerScroll = new Bscroll(this.$refs.seller, { click: true });
       this.picsScroll = new Bscroll(this.$refs.pics, { scrollX: true });
     });
@@ -233,9 +233,9 @@ export default {
       margin-top: 12px
       display: flex
       height: 90px
-      overflow hidden
+      overflow: hidden
       .picsInner
-        height 90px
+        height: 90px
         .pics-item
           height: 90px
           width: 120px

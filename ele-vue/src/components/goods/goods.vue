@@ -58,7 +58,7 @@
       @add="add"
       @decrease="decrease"
     />
-    <v-food ref="food" :food="choosedFood"/>
+    <v-food ref="food" :food="choosedFood"  @add="add" @decrease="decrease"/>
   </div>
 </template>
 
@@ -180,8 +180,8 @@ export default {
       this.$refs.food.showFood();
       this.choosedFood = food;
     },
-    _drop: function(target) {
-      this.$refs.shopcart.drop(target);
+    _drop: function() {
+      // this.$refs.shopcart.drop(target);
     },
     _initScroll: function() {
       this.menuScroll = new BScroll(this.$refs.menuWrapper, { click: true });

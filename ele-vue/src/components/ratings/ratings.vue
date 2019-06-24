@@ -1,50 +1,35 @@
 <template>
-  <div class="ratings" ref="ratings">
+  <div class="ratings-wrapper" ref="ratings">
     <div>
-      <div class="ratings-seller container">
-        <div class="total">
+      <div class="overview">
+        <div class="overview-left">
           <div class="score">{{seller.score}}</div>
           <div class="text">综合评分</div>
           <div class="rankRate">高于周边商家{{seller.rankRate}}%</div>
         </div>
-        <div class="scores">
-          <div class="service item">
-            服务态度
+        <div class="overview-right">
+          <div class="item">服务态度
             <v-star :size="36" :score="seller.serviceScore"/>
             <span class="score">{{seller.serviceScore}}</span>
           </div>
-          <div class="food item">
-            味道评分
+          <div class="item">商品评分
             <v-star :size="36" :score="seller.foodScore"/>
             <span class="score">{{seller.foodScore}}</span>
           </div>
-          <div class="delivery item">
-            送达时间
+          <div class="item">送达时间
             <span class="text">{{seller.deliveryTime}}分钟</span>
           </div>
         </div>
       </div>
-      <div class="ratings-content container">
-        <div class="rateType border-1px">
-          <span class="type all">
-            全部
-            <span class="ratings-num">1</span>
-          </span>
-          <span class="type thumb-up">
-            推荐
-            <span class="ratings-num">2</span>
-          </span>
-          <span class="type thumb-down">
-            吐槽
-            <span class="ratings-num">3</span>
-          </span>
-        </div>
-        <div class="contentOnly">
-          <i class="icon-check_circle"></i>
-          <span class="selectedRatings">只看有内容的评价</span>
-        </div>
+      <v-split/>
+      <div class="ratings-content">
+        <v-ratingSelect
+          :ratings="ratings"
+          @contentOnly="toggleContent"
+          @selectType="select"
+        />
         <div class="rating-list">
-          <div class="item border-1px" v-for="(item,index) in ratings" :key="index">
+          <div v-show="needShow(item.rateType,item.text)" class="item border-1px" v-for="(item,index) in ratings" :key="index">
             <img class="avatar" :src="item.avatar">
             <div class="content">
               <div class="username-time">
@@ -74,15 +59,24 @@
 </template>
 
 <script>
-import Bscroll from 'better-scroll';
+import Bscroll from "better-scroll";
 import star from "components/star/star";
+import split from "components/split/split";
+import ratingSelect from "components/ratingSelect/ratingSelect";
 import { timeStamp } from "common/js/util.js";
 export default {
   data() {
     return {
       ratings: [],
-      ratingTypeMap: ["icon-thumb_up", "icon-thumb_down"]
+      ratingTypeMap: ["icon-thumb_up", "icon-thumb_down"],
+      contentOnly: false,
+      selectType: 2
     };
+  },
+  computed: {
+    ratingsContentOnly() {
+      return this.ratings.filter(item => item.text !== "");
+    }
   },
   props: {
     seller: Object
@@ -90,8 +84,12 @@ export default {
   created() {
     this.$http.get("/api/ratings").then(response => {
       this.ratings = response.body;
-      this.$nextTick(()=>{
-        this.ratingsScroll=new Bscroll(this.$refs.ratings,{click:true});
+      this.$nextTick(() => {
+        if (!this.scroll) {
+          this.scroll = new Bscroll(this.$refs.ratings, { click: true });
+        } else {
+          this.scroll.refresh();
+        }
       });
     }),
       () => {
@@ -101,59 +99,83 @@ export default {
   methods: {
     rateTime: function(a) {
       return timeStamp(a);
-    }
+    },
+    toggleContent: function(boolean) {
+      this.contentOnly = boolean;
+    },
+    select: function(type) {
+      this.selectType = type;
+    },
+    needShow: function(type, text) {
+      if (this.contentOnly && !text) {
+        return false;
+      }
+      if (this.selectType == type || this.selectType == 2) {
+        return true;
+      } else {
+        return false;
+      }
+    },
   },
   components: {
-    "v-star": star
+    "v-star": star,
+    "v-split": split,
+    "v-ratingSelect": ratingSelect
   }
 };
 </script>
 
-<style lang='stylus' scoped>
-@import '../../common/stylus/mixin.styl'
-@import '../../common/stylus/variable.styl'
-.ratings
-  background: $color-background-ssss
+<style lang='stylus' >
+@import '../../common/stylus/mixin.styl';
+@import '../../common/stylus/variable.styl';
+.ratings-wrapper
   width: 100%
   position: absolute
   top: 174px
   left: 0
-  bottom: 50px
   overflow: hidden
-  .ratings-seller
-    margin-top: 0
-    border-top: 0
+  .overview
+    background: white
     display: flex
     flex-direction: row
-    .total
-      flex: 137px
+    .overview-left
+      flex: 0 0 137px
+      // width 137px
       margin: 18px 0px
       display: flex
       flex-direction: column
       align-items: center
-      // 1px?
       border-right: 1px solid $color-row-line
+      @media screen and (max-width: 320px)
+        flex 0 0 120px
       .score
         color: $color-yellow
         font-size: 24px
         line-height: 28px
+        margin-bottom 6px
       .text
         font-size: 12px
         color: $color-grey-ssss
-        line-height: 24px
+        line-height: 12px
+        margin-bottom 8px
       .rankRate
         font-size: 10px
         color: $color-grey
-    .scores
-      flex: 237px
+        margin-bottom 6px
+    .overview-right
+      flex: 1
       padding: 18px 24px
       box-sizing: border-box
+      @media screen and (max-width: 320px)
+        padding 18px 4px
       .item
         font-size: 12px
         line-height: 18px
         color: $color-grey-ssss
         display: flex
+        align-items center
         margin-bottom: 8px
+        height: 18px
         &:last-child
           margin: 0
         .stars
@@ -165,39 +187,7 @@ export default {
           margin-left: 12px
   .ratings-content
     background: white
-    border-bottom none
-    .rateType
-      margin: 18px 18px 0 18px
-      padding-bottom: 18px
-      border-1px($color-row-line)
-      display: flex
-      .type
-        padding: 8px 12px
-        font-size: 12px
-        border-radius: 2px
-        margin-right: 8px
-        .ratings-num
-          font-size: 8px
-        &.all
-          color: white
-          background: $color-blue
-        &.thumb-up
-          color: $color-grey-s
-          background: $color-light-blue
-        &.thumb-down
-          color: $color-grey-s
-          background: $color-background-ssss
-    .contentOnly
-      padding: 12px 18px
-      display: flex
-      color: $color-grey
-      border-bottom: 1px solid $color-row-line
-      .icon-check_circle
-        font-size: 24px
-      .selectedRatings
-        font-size: 12px
-        line-height: 24px
-        margin-left: 4px
+    border-bottom: none
     .rating-list
       margin: 0 18px
       display: flex
@@ -207,7 +197,7 @@ export default {
         border-1px($color-row-line)
         display: flex
         &:last-child
-                border-none();
+          border-none()
         .avatar
           width: 28px
           height: 28px
@@ -264,5 +254,4 @@ export default {
               overflow: hidden
               text-overflow: ellipsis
               white-space: nowrap
-              
 </style>

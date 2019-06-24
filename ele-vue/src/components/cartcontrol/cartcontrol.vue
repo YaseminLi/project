@@ -1,12 +1,12 @@
 <template>
   <div class="cartcontrol">
     <transition name="move">
-      <div class="decrease" v-show="food.count>0" @click="decreaseCart">
+      <div class="decrease" v-show="food.count>0" @click.stop="decreaseCart">
         <i class="icon-remove_circle_outline cart-icon"></i>
       </div>
     </transition>
     <span class="count" v-show="food.count>0">{{food.count}}</span>
-    <div class="add" @click="addCart">
+    <div class="add" @click.stop="addCart">
       <i class="icon-add_circle cart-icon"></i>
     </div>
     <div class="ball-container">
@@ -65,8 +65,6 @@ export default {
       if (!event._constructed) {
         return;
       }
-      console.log('add');
-      
       this.$emit("add", this.food);
       this.$emit('ballDrop',event.target);
     }
