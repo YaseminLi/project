@@ -3,15 +3,15 @@
     <div class="rateType border-1px">
       <span class="positive" :class="{'active':selectType=='2'}" @click="select(2)">
         {{desc.all}}
-        <span class="ratings-num">{{ratings.length}}</span>
+        <span class="ratings-num">{{ratings?ratings.length:'0'}}</span>
       </span>
       <span class="positive" :class="{'active':selectType=='0'}" @click="select(0)">
         {{desc.positive}}
-        <span class="ratings-num">{{positives.length}}</span>
+        <span class="ratings-num">{{positives?positives.length:'0'}}</span>
       </span>
       <span class="negative" :class="{'active':selectType=='1'}" @click="select(1)">
         {{desc.negative}}
-        <span class="ratings-num">{{negatives.length}}</span>
+        <span class="ratings-num">{{negatives?negatives.length:'0'}}</span>
       </span>
     </div>
     <div class="switch" @click="toggleContent" >
@@ -44,9 +44,15 @@ export default {
   },
   computed: {
     positives() {
+      if(!this.ratings){
+        return;
+      }
       return this.ratings.filter(item=>(item.rateType==0));
     },
     negatives() {
+      if(!this.ratings){
+        return;
+      }
      return this.ratings.filter(item=>(item.rateType==1));
     }
   },

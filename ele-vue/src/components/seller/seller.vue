@@ -1,33 +1,33 @@
 <template>
   <div class="seller" ref="seller">
     <div>
-      <div class="desc container">
+      <div class="desc">
         <div class="desc-header border-1px">
           <div class="title">{{seller.name}}</div>
           <div class="score">
             <v-star :size="36" :score="seller.score"/>
-            <span class="num">(661)</span>
+            <span class="num">({{seller.ratingCount}})</span>
             <span class="sellCount">月售{{seller.sellCount}}单</span>
           </div>
-          <div :class="collectState" class="collect-container" @click="sellerCollect">
+          <div :class="{'active':collect}" class="collect-container" @click="sellerCollect">
             <i class="icon-favorite"></i>
             <span class="text">{{collectDesc}}</span>
           </div>
         </div>
         <div class="delivery">
-          <div class="item">
+          <div class="item border-right-1px">
             <div class="title">起送价</div>
             <div class="content">
               <span class="num">{{seller.minPrice}}</span>元
             </div>
           </div>
-          <div class="item">
+          <div class="item border-right-1px">
             <div class="title">商家配送</div>
             <div class="content">
               <span class="num">{{seller.deliveryPrice}}</span>元
             </div>
           </div>
-          <div class="item">
+          <div class="item border-right-1px">
             <div class="title">平均配送时间</div>
             <div class="content">
               <span class="num">{{seller.deliveryTime}}</span>元
@@ -35,7 +35,8 @@
           </div>
         </div>
       </div>
-      <div class="bulletin-supports container">
+      <v-split />
+      <div class="bulletin-supports">
         <div class="bulletin border-1px">
           <div class="title">公告与活动</div>
           <div class="content">{{seller.bulletin}}</div>
@@ -51,7 +52,8 @@
           />
         </div>
       </div>
-      <div class="pics container">
+      <v-split />
+      <div class="pics">
         <div class="title">商家实景</div>
         <div class="pics-container" ref="pics">
           <div ref="picsInner" class="picsInner">
@@ -59,7 +61,8 @@
           </div>
         </div>
       </div>
-      <div class="infos container">
+      <v-split />
+      <div class="infos">
         <div class="title border-1px">商家信息</div>
         <div class="infos-container">
           <div
@@ -77,6 +80,7 @@
 import Bscroll from "better-scroll";
 import star from "components/star/star";
 import support from "../support/support.vue";
+import split from "components/split/split";
 export default {
   props: {
     seller: Object
@@ -94,39 +98,31 @@ export default {
         this.$refs.picsInner.style.width = width + "px";
       }
       this.sellerScroll = new Bscroll(this.$refs.seller, { click: true });
-      this.picsScroll = new Bscroll(this.$refs.pics, { scrollX: true });
+      this.picsScroll = new Bscroll(this.$refs.pics, { scrollX: true,evnetPassthrough:'vertical' });
     });
   },
   methods: {
     sellerCollect: function() {
       if (!this.collect) {
         this.collect = !this.collect;
-        window.alert("已收藏该商家！");
       } else {
         this.collect = !this.collect;
-        window.alert("取消收藏该商家！");
       }
     }
   },
   computed: {
-    collectState() {
-      if (this.collect) {
-        return "collect";
-      } else {
-        return "un-collect";
-      }
-    },
     collectDesc() {
       if (this.collect) {
         return "已收藏";
       } else {
-        return "+收藏";
+        return "收藏";
       }
     }
   },
   components: {
     "v-star": star,
-    "v-support": support
+    "v-support": support,
+    'v-split':split
   }
 };
 </script>
@@ -135,20 +131,18 @@ export default {
 @import '../../common/stylus/mixin.styl'
 @import '../../common/stylus/variable.styl'
 .seller
-  background: $color-background-ssss
   color: $color-grey-ssss
   width: 100%
   position: absolute
   top: 174px
   left: 0
-  bottom: 50px
+  bottom: 0
   overflow: hidden
   .title
     font-size: 14px
   .desc
-    margin-top: 0
-    border-top: 0
     padding: 0 18px
+    background white
     .desc-header
       position: relative
       padding: 18px 0
@@ -161,6 +155,8 @@ export default {
         font-size: 10px
         color: $color-grey-s
         line-height: 18px
+        .stars
+          line-height 18px
         .num
           margin: 0 12px 0 8px
       .collect-container
@@ -171,13 +167,10 @@ export default {
         flex-direction: column
         align-items: center
         width: 30px
-        &.un-collect
+        font-size: 24px
+        color: $color-grey
+        &.active
           .icon-favorite
-            font-size: 24px
-            color: $color-grey
-        &.collect
-          .icon-favorite
-            font-size: 24px
             color: $color-red
         .text
           font-size: 10px
@@ -187,12 +180,11 @@ export default {
       padding: 18px 0
       display: flex
       .item
+        border-right-1px($color-row-line)
         flex: 1
         text-align: center
-        // 1px?
-        border-right: 1px solid $color-row-line
         &:last-child
-          border: none
+          border-none()
         .title
           margin-bottom: 4px
           font-size: 10px
@@ -204,6 +196,7 @@ export default {
             line-height: 24px
   .bulletin-supports
     padding: 0 18px
+    background white
     .bulletin
       padding: 18px 0 16px 0
       border-1px($color-row-line)
@@ -228,12 +221,15 @@ export default {
           line-height: 16px
           color: $color-grey-ssss
   .pics
+    background white
     padding: 18px
     .pics-container
+      width 100%
       margin-top: 12px
       display: flex
       height: 90px
       overflow: hidden
+      white-space nowrap
       .picsInner
         height: 90px
         .pics-item
@@ -243,8 +239,8 @@ export default {
           &:last-child
             margin: 0
   .infos
+    background white
     padding: 18px 18px 0 18px
-    margin-bottom: 0
     .title
       padding-bottom: 12px
       border-1px($color-row-line)

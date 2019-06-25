@@ -12,9 +12,7 @@
             <v-star :size="36" :score="seller.serviceScore"/>
             <span class="score">{{seller.serviceScore}}</span>
           </div>
-          <div class="item">商品评分
-            <v-star :size="36" :score="seller.foodScore"/>
-            <span class="score">{{seller.foodScore}}</span>
+          <div class="item">商品评分<v-star :size="36" :score="seller.foodScore"/><span class="score">{{seller.foodScore}}</span>
           </div>
           <div class="item">送达时间
             <span class="text">{{seller.deliveryTime}}分钟</span>
@@ -38,14 +36,13 @@
               </div>
               <div class="score">
                 <v-star :size="24" :score="item.score"/>
-                <span class="deliveryTime">{{item.deliveryTime}}分钟送达</span>
+                <span class="deliveryTime" v-show="item.deliveryTime">{{item.deliveryTime}}分钟送达</span>
               </div>
               <div class="text">{{item.text}}</div>
-              <div class="recommend">
+              <div class="recommend" v-show="item.recommend.length!==0">
                 <i :class="ratingTypeMap[item.rateType]" class="thumpType"></i>
                 <span
                   class="recommend-item"
-                  v-show="index<4"
                   v-for="(recommend,index) in item.recommend"
                   :key="index"
                 >{{recommend}}</span>
@@ -133,6 +130,7 @@ export default {
   position: absolute
   top: 174px
   left: 0
+  bottom 0
   overflow: hidden
   .overview
     background: white
@@ -140,13 +138,12 @@ export default {
     flex-direction: row
     .overview-left
       flex: 0 0 137px
-      // width 137px
       margin: 18px 0px
       display: flex
       flex-direction: column
       align-items: center
-      border-right: 1px solid $color-row-line
-      @media screen and (max-width: 320px)
+      border-right-1px($color-row-line)
+      @media screen and (max-width: 360px)
         flex 0 0 120px
       .score
         color: $color-yellow
@@ -166,7 +163,7 @@ export default {
       flex: 1
       padding: 18px 24px
       box-sizing: border-box
-      @media screen and (max-width: 320px)
+      @media screen and (max-width: 360px)
         padding 18px 4px
       .item
         font-size: 12px
@@ -180,6 +177,7 @@ export default {
           margin: 0
         .stars
           margin: 0 12px
+          height 18px
         .score
           color: $color-yellow
         .text
@@ -233,25 +231,27 @@ export default {
           .recommend
             display: flex
             align-items: center
+            flex-wrap wrap
             .thumpType
+              margin-bottom 6px
               font-size: 12px
+              margin-right: 8px
               &.icon-thumb_up
                 color: $color-blue
               &.icon-thumb_down
                 color: $color-grey
             .recommend-item
+              margin-bottom 6px
               height: 16px
-              max-width: 63px
               box-sizing: border-box
-              margin-left: 8px
-              // 1px?
+              margin-right: 8px
               border: 1px solid $color-row-line
               border-radius: 1px
               padding: 0 6px
               font-size: 9px
               color: $color-grey
               line-height: 16px
-              overflow: hidden
-              text-overflow: ellipsis
-              white-space: nowrap
+              // overflow: hidden
+              // text-overflow: ellipsis
+              // white-space: nowrap
 </style>

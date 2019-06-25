@@ -1,7 +1,7 @@
 <template>
+<div>
   <div class="shopcart">
-    <div class="filter" v-show="isShowCart" @click="showCart"></div>
-    <!-- <transition name="fold"> -->
+    <transition name="fold">
       <div class="selectedFoods" v-show="isShowCart">
         <div class="head">
           <span class="cart">购物车</span>
@@ -19,7 +19,7 @@
           </div>
         </div>
       </div>
-    <!-- </transition> -->
+    </transition>
     <div class="content" @click="showCart">
       <div class="content-left">
         <div class="logo-wrapper" :class="{'haveSeleced':totalCount>0}">
@@ -32,6 +32,8 @@
       <div class="content-right" :class="payClass" @click.stop='pay'>{{payDesc}}</div>
     </div>
   </div>
+     <div class="filter" v-show="isShowCart" @click="showCart"></div>
+     </div>
 </template>
 
 <script>
@@ -155,35 +157,29 @@ export default {
   bottom: 0
   width: 100%
   height 50px
-  .filter
-    width: 100%
-    background: $color-background-sssss
   .content
     height: 50px
     display: flex
     width: 100%
     color: $color-grey-sss
     background: #141d27
-    // position fixed
-    // left: 0
-    // bottom: 0
-    // z-index 1
     .content-left
       display: flex
       flex-direction: row
       margin-right: 12px
       flex: 1
+      // background #141d27
       .logo-wrapper
         width: 44px
         height: 44px
         margin: 0 12px
-        border: 6px solid #141d27
-        background: #2b343c
+        border: 6px solid  #141d27
         border-radius: 44px
         position: relative
         top: -8px
+        background:$color-grey-ss
         &.haveSeleced
-          background: $color-green
+          background: $color-blue
           .icon-shopping_cart
             color: white
         .icon-shopping_cart
@@ -238,18 +234,19 @@ export default {
     bottom: 50px
     left: 0
     width: 100%
-    // &.fold-enter, .fold-leave-to
-    //   transform: translate3d(0, 0, 0)
-    // &.fold-enter-tp, .fold-leave
-    //   transform: translate3d(0, -100%, 0)
-    //   transition: all 5s
+    &.fold-enter, .fold-leave-active
+      // transform: translate3d(0, -100%, 0)
+      transform: translate3d(0, 0, 0)
+    &.fold-enter-active, .fold-leave-active
+      
+      transition: all 5s
     .head
       height: 40px
       background: $color-background-ssss
       width: 100%
       display: flex
       justify-content: space-between
-      border-bottom: 1px solid $color-background
+      border-bottom: 1px solid $color-row-line
       .cart
         font-size: 14px
         line-height: 40px
@@ -285,4 +282,12 @@ export default {
             font-weight: 700
             color: $color-red
             line-height: 24px
+.filter
+  z-index: 40
+  position: fixed
+  left: 0
+  bottom: 0
+  width: 100%
+  height 100%
+  background: $color-background-sssss
 </style>

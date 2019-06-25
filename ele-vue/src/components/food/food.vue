@@ -29,7 +29,7 @@
           <div class="title">商品介绍</div>
           <div class="content">{{food.info}}</div>
         </div>
-        <v-split/>
+        <v-split v-show="food.info"/>
         <div class="ratings">
           <div class="title">商品评价</div>
           <v-ratingSelect

@@ -1,13 +1,15 @@
 <template>
   <div id="app">
-    <v-header :seller='seller'/>
+    <v-header :seller="seller"/>
     <div class="tab border-1px">
       <router-link tag="div" class="tab-item" to="/goods">商品</router-link>
       <router-link tag="div" class="tab-item" to="/ratings">评价</router-link>
       <router-link tag="div" class="tab-item" to="/seller">商家</router-link>
     </div>
     <div class="content">
-      <router-view :seller='seller'></router-view>
+      <keep-alive>
+        <router-view :seller="seller"></router-view>
+      </keep-alive>
     </div>
   </div>
 </template>
@@ -17,19 +19,23 @@ import header from "components/header/header";
 export default {
   data() {
     return {
-      seller:{}
+      seller: {}
     };
   },
- created(){
+  created() {
     this.get();
   },
-  methods:{
-    get:function(){
-       this.$http.get('/api/seller').then(response => {
-                                  this.seller = response.body;
-                                 }, ()=> {
-                                    console.log('获取商家数据失败');
-            });}
+  methods: {
+    get: function() {
+      this.$http.get("/api/seller").then(
+        response => {
+          this.seller = response.body;
+        },
+        () => {
+          console.log("获取商家数据失败");
+        }
+      );
+    }
   },
   components: {
     "v-header": header
@@ -38,8 +44,8 @@ export default {
 </script>
 
 <style lang='stylus' rel='stylesheet/stylus' >
-@import './common/stylus/mixin.styl';
-  @import '../../common/stylus/variable.styl';
+@import './common/stylus/mixin.styl'
+@import '../../common/stylus/variable.styl'
 #app
   .tab
     display: flex
