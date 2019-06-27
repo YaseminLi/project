@@ -24,10 +24,10 @@ export default {
         pagination: {
           el: ".swiper-pagination",
           type: "bullets",
-          clickable: true //此参数设置为true时，点击分页器的指示点分页器会控制Swiper切换。
+          clickable: true ,//此参数设置为true时，点击分页器的指示点分页器会控制Swiper切换。
         },
         autoplay: true,
-        speed: 2000//图片切换的速度
+        speed: 2000 //图片切换的速度
       }
     };
   },
@@ -39,7 +39,6 @@ export default {
 </script>
 
 <style lang='stylus' rel="stylesheet/stylus">
-@import '~common/stylus/variable.styl'
 a
   overflow: hidden
   width: 100%
@@ -48,5 +47,5 @@ a
   img
     width: 100%
 .swiper-pagination-bullet-active
-    background white
+  background: white
 </style>

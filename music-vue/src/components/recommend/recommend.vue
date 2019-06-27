@@ -1,7 +1,7 @@
 <template>
   <div class="recommend">
     <div class="recommend-content">
-          <slider v-if="slider" :slider='slider'/>
+          <slider v-if="slider.length>0" :slider='slider'/>
     </div>
   </div>
 </template>
@@ -23,6 +23,7 @@ export default {
     _getRecommend() {
       getRecommend().then(res => {
         if (res.code === ERR_OK) {
+            console.log(res.data);
           this.slider = res.data.slider;
         }
       });
