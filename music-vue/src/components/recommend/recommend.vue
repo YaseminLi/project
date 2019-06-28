@@ -1,5 +1,6 @@
 <template>
-    <scroll class="recommend" :data='discList' ref="scroll">
+<div class="recommend">
+    <scroll class="recommend-content" :data='discList' ref="scroll">
         <div>
           <slider v-if="slider.length>0" :slider="slider" @loadImg='loadImg'/>
           <div class="discList-wrapper">
@@ -14,6 +15,11 @@
           </div>
         </div>
     </scroll>
+    <div class="loading-container" v-show="!discList.length">
+      <loading />
+    </div>
+    
+    </div>
 </template>
 
 <script>
@@ -21,6 +27,7 @@ import { getRecommend, getDiscList } from "api/recommend.js";
 import { ERR_OK } from "api/config.js";
 import slider from "base/slider/slider.vue";
 import scroll from "base/scroll/scroll.vue";
+import loading from "base/loading/loading.vue";
 import { setTimeout } from 'timers';
 export default {
   data() {
@@ -62,14 +69,15 @@ export default {
   },
   components: {
     slider,
-    scroll
+    scroll,
+    loading
   }
 };
 </script>
 
 <style scoped lang="stylus" rel="stylesheet/stylus">
 @import '~common/stylus/variable.styl'
-  .recommend
+ .recommend-content
     position: fixed
     top: 44px
     bottom: 0
@@ -108,5 +116,9 @@ export default {
             right: 6px
             color: white
             font-size: 10px
+ .loading-container
+   width 100%
+   position absolute
+   top: 50%
 </style>
 
