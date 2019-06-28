@@ -2,7 +2,7 @@
   <swiper :options="swiperOption" ref="mySwiper">
     <swiper-slide v-for="(item,index) in slider" :key="index">
       <a :href="item.linkUrl">
-        <img :src="item.picUrl">
+        <img :src="item.picUrl" @load='loadImg'>
       </a>
     </swiper-slide>
     <div class="swiper-pagination" slot="pagination"></div>
@@ -30,6 +30,11 @@ export default {
         speed: 2000 //图片切换的速度
       }
     };
+  },
+  methods:{
+    loadImg(){
+      this.$emit('loadImg');
+    }
   },
   components: {
     swiper,
