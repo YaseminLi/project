@@ -29,6 +29,19 @@ module.exports = {
                 }).catch((e)=>{
                     console.log(e);
                 })
+            }),
+            app.get('/api/getSinger',function(req,res){
+                const url='https://u.y.qq.com/cgi-bin/musicu.fcg';
+                axios.get(url,{
+                    headers:{
+                        referer: 'https://y.qq.com/portal/singer_list.html',
+                    },
+                    params:req.query
+                }).then((response)=>{
+                    res.json(response.data)
+                }).catch((e)=>{
+                    console.log(e);
+                })
             })
         }
     }

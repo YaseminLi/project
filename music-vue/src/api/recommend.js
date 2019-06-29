@@ -11,7 +11,6 @@ export function getRecommend() {
     return jsonp(url, data, options)
 }
 export function getDiscList() {
-    // 线上环境地址，同学们根据自己的需要配置修改
     const url = '/api/getDiscList';
     const data = Object.assign({}, commonParams, {
         picmid: 1,
