@@ -1,12 +1,19 @@
 <template>
   <div class="listview">
-    <scroll class="singer-wrapper" :data="data" ref="singerWrapper" :listenScroll="true" :probeType='3' @scroll='scroll'>
+    <scroll
+      class="singer-wrapper"
+      :data="data"
+      ref="singerWrapper"
+      :listenScroll="true"
+      :probeType="3"
+      @scroll="scroll"
+    >
       <div>
         <div class="singer-group" v-for="(item,index) in data" :key="index" ref="singerGroup">
-          <h1 class="title">{{item.title}}</h1>
+          <div class="title">{{item.title}}</div>
           <div>
             <div class="singer-item" v-for="(singer,index) in item.items" :key="index">
-              <img class="avatar" :src="singer.avatar" />
+              <img class="avatar" v-lazy="singer.avatar" />
               <span class="name">{{singer.name}}</span>
             </div>
           </div>
@@ -25,6 +32,8 @@
           :class="{'current':currentIndex==index}"
         >{{item}}</span>
       </div>
+      <div v-show='fixedTitle' class="title fixed-title" ref="fixedTitle">{{fixedTitle}}</div>
+      <div v-show='!data.length' class="loading"><loading /></div>
     </scroll>
   </div>
 </template>
@@ -32,18 +41,21 @@
 <script>
 import scroll from "base/scroll/scroll.vue";
 import { getData } from "common/js/dom.js";
+import loading from'base/loading/loading';
 const ANCHOR_HEIGHT = 18;
+const TITLE_HEIGHT = 30;
 export default {
-  data(){
+  data() {
     return {
-      scrollY:-1,
-      currentIndex:0
-    }
+      scrollY: -1,
+      currentIndex: 0,
+      diff:-1
+    };
   },
   created() {
     //data,props中的数据有setter、getter方法，这个不需要
     this.touch = {};
-    this.listHeight=[];
+    this.listHeight = [];
   },
   props: {
     data: {
@@ -56,6 +68,12 @@ export default {
       return this.data.map(item => {
         return item.title.substr(0, 1);
       });
+    },
+    fixedTitle(){
+      if(this.scrollY>0){
+        return ''
+      }
+      return this.data[this.currentIndex]?this.data[this.currentIndex].title:'';
     }
   },
   methods: {
@@ -70,59 +88,80 @@ export default {
     onShortcutTouchMove(e) {
       let firstTouch = e.touches[0];
       this.touch.y2 = firstTouch.pageY;
-      let delta = (this.touch.y2 - this.touch.y1) / ANCHOR_HEIGHT|0;
+      let delta = ((this.touch.y2 - this.touch.y1) / ANCHOR_HEIGHT) | 0;
       let anchorIndex = parseInt(this.touch.anchorIndex + delta);
       this._scrollTo(anchorIndex);
     },
-    scroll(pos){
-      this.scrollY=pos.y;
+    scroll(pos) {
+      this.scrollY = pos.y;
     },
     _scrollTo(index) {
-      this.scrollY=this.listHeight[index];
+      this.scrollY = this.listHeight[index];
       this.$refs.singerWrapper.scrollToElement(
         this.$refs.singerGroup[index],
         0
       );
     },
-    _calculateHeight(){
-      let list=this.$refs.singerGroup;
-      let listHeight=[0];
-      let height=0;
-      for(let i=0;i<list.length;i++){
-        height+=list[i].clientHeight
+    _calculateHeight() {
+      let list = this.$refs.singerGroup;
+      let listHeight = [0];
+      let height = 0;
+      for (let i = 0; i < list.length; i++) {
+        height += list[i].clientHeight;
         listHeight.push(height);
-      } 
-      this.listHeight=listHeight;  
+      }
+      this.listHeight = listHeight;
     }
   },
-  watch:{
-    data(){
+  watch: {
+    data() {
       setTimeout(() => {
         this._calculateHeight();
       }, 20);
     },
-    scrollY(newY){
-      let scrollY=Math.abs(Math.round(newY));
-      let listHeight=this.listHeight;
-      for(let i=0;i<listHeight.length;i++){
-        if(listHeight[i+1]){
-          if(scrollY>=listHeight[i]&&scrollY<listHeight[i+1]){
-            this.currentIndex=i;
-            console.log(i);
-            
+    scrollY(newY) {
+      let scrollY = Math.abs(Math.round(newY));
+      let listHeight = this.listHeight;
+      for (let i = 0; i < listHeight.length; i++) {
+        if (listHeight[i + 1]) {
+          if (scrollY >= listHeight[i] && scrollY < listHeight[i + 1]) {
+            this.currentIndex = i;
+            this.diff=listHeight[i+1]+newY;
           }
         }
       }
-    }
+    },
+    diff(newVal){
+        let fixedTop=(newVal>0&&newVal<TITLE_HEIGHT)?newVal-TITLE_HEIGHT:'0';
+        if(this.fixedTop==fixedTop){
+          return
+        }
+        this.fixedTop=fixedTop;
+        this.$refs.fixedTitle.style.transform=`translate3d(0,${fixedTop}px,0)`;
+     }
   },
   components: {
-    scroll
+    scroll,
+    loading
   }
 };
 </script>
 
 <style lang='stylus' >
 @import '~common/stylus/variable'
+.title
+  width: 100%
+  box-sizing: border-box
+  height: 30px
+  line-height: 30px
+  padding-left: 20px
+  background: $color-background-dd
+  color: $color-text
+  font-size: 12px
+  &.fixed-title
+    position: absolute
+    top: 0
+    left: 0
 .singer-wrapper
   position: fixed
   top: 44px
@@ -131,13 +170,6 @@ export default {
   overflow: hidden
   .singer-group
     padding-bottom: 30px
-    .title
-      height: 30px
-      line-height: 30px
-      padding-left: 20px
-      background: $color-background-dd
-      color: $color-text
-      font-size: 12px
     .singer-item
       width: 100%
       box-sizing: border-box
@@ -172,5 +204,8 @@ export default {
       color: $color-text
       text-align: center
       &.current
-        color:$color-theme-d
+        color: $color-theme-d
+  .loading
+    position fixed
+    top 50%
 </style>
