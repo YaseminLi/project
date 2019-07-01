@@ -1,8 +1,8 @@
 <template>
   <div class="listview">
-    <scroll class="singer-wrapper" :data="data" ref='singerWrapper'>
+    <scroll class="singer-wrapper" :data="data" ref="singerWrapper">
       <div>
-        <div class="singer-group" v-for="(item,index) in data" :key="index" ref='singerGroup'>
+        <div class="singer-group" v-for="(item,index) in data" :key="index" ref="singerGroup">
           <h1 class="title">{{item.title}}</h1>
           <div>
             <div class="singer-item" v-for="(singer,index) in item.items" :key="index">
@@ -12,8 +12,16 @@
           </div>
         </div>
       </div>
-      <div class="list-shortcut" @touchstart='onShortcutTouchStart'>
-        <span  class="item" :data-index='index' v-for="(item,index) in shortcutList" :key="index"
+      <div
+        class="list-shortcut"
+        @touchstart="onShortcutTouchStart"
+        @touchmove="onShortcutTouchMove"
+      >
+        <span
+          class="item"
+          :data-index="index"
+          v-for="(item,index) in shortcutList"
+          :key="index"
         >{{item}}</span>
       </div>
     </scroll>
@@ -22,8 +30,13 @@
 
 <script>
 import scroll from "base/scroll/scroll.vue";
-import {getData} from 'common/js/dom.js';
+import { getData } from "common/js/dom.js";
+const ANCHOR_HEIGHT=18;
 export default {
+  created() {
+    //data,props中的数据有setter、getter方法，这个不需要
+    this.touch = {};
+  },
   props: {
     data: {
       type: Array,
@@ -38,14 +51,23 @@ export default {
     }
   },
   methods: {
-    onShortcutTouchStart(e){
+    onShortcutTouchStart(e) {
       //点击了哪个tag
-      let anchorIndex=getData(e.target,'index');
-      this.$refs.singerWrapper.scrollToElement(this.$refs.singerGroup[anchorIndex],0)
-      
-      // let firstTouch=e.touches[0];
-      // console.log(firstTouch);
-     
+      let anchorIndex = getData(e.target, "index");
+      let firstTouch = e.touches[0];
+      this.touch.y1 = firstTouch.pageY;
+      this.touch.anchorIndex=anchorIndex;
+      this._scrollTo(anchorIndex);
+    },
+    onShortcutTouchMove(e) {
+      let firstTouch = e.touches[0];
+      this.touch.y2 = firstTouch.pageY;
+      let delta = Math.floor((this.touch.y2 - this.touch.y1) / ANCHOR_HEIGHT);
+      let anchorIndex=parseInt(this.touch.anchorIndex+delta);
+      this._scrollTo(anchorIndex);
+    },
+    _scrollTo(index) {
+      this.$refs.singerWrapper.scrollToElement(this.$refs.singerGroup[index],0);
     }
   },
   components: {
