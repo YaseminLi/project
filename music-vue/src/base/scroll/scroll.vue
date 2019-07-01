@@ -21,6 +21,11 @@ export default {
     data: {
       type: Array,
       default: null
+    },
+    //是否监听滚动事件
+    listenScroll:{
+      type:Boolean,
+      default:false
     }
   },
   mounted() {
@@ -37,6 +42,12 @@ export default {
         probeType: this.probeType,
         click: this.click
       });
+      if(this.listenScroll){
+        const that=this;
+        this.scroll.on('scroll',(pos)=>{
+          that.$emit('scroll',pos)
+        })
+      }
     },
     refresh() {
       this.scroll && this.scroll.refresh();

@@ -1,6 +1,6 @@
 <template>
   <div class="listview">
-    <scroll class="singer-wrapper" :data="data" ref="singerWrapper">
+    <scroll class="singer-wrapper" :data="data" ref="singerWrapper" :listenScroll="true" :probeType='3' @scroll='scroll'>
       <div>
         <div class="singer-group" v-for="(item,index) in data" :key="index" ref="singerGroup">
           <h1 class="title">{{item.title}}</h1>
@@ -22,6 +22,7 @@
           :data-index="index"
           v-for="(item,index) in shortcutList"
           :key="index"
+          :class="{'current':currentIndex==index}"
         >{{item}}</span>
       </div>
     </scroll>
@@ -31,11 +32,18 @@
 <script>
 import scroll from "base/scroll/scroll.vue";
 import { getData } from "common/js/dom.js";
-const ANCHOR_HEIGHT=18;
+const ANCHOR_HEIGHT = 18;
 export default {
+  data(){
+    return {
+      scrollY:-1,
+      currentIndex:0
+    }
+  },
   created() {
     //data,props中的数据有setter、getter方法，这个不需要
     this.touch = {};
+    this.listHeight=[];
   },
   props: {
     data: {
@@ -56,18 +64,54 @@ export default {
       let anchorIndex = getData(e.target, "index");
       let firstTouch = e.touches[0];
       this.touch.y1 = firstTouch.pageY;
-      this.touch.anchorIndex=anchorIndex;
+      this.touch.anchorIndex = anchorIndex;
       this._scrollTo(anchorIndex);
     },
     onShortcutTouchMove(e) {
       let firstTouch = e.touches[0];
       this.touch.y2 = firstTouch.pageY;
       let delta = Math.floor((this.touch.y2 - this.touch.y1) / ANCHOR_HEIGHT);
-      let anchorIndex=parseInt(this.touch.anchorIndex+delta);
+      let anchorIndex = parseInt(this.touch.anchorIndex + delta);
       this._scrollTo(anchorIndex);
     },
+    scroll(pos){
+      this.scrollY=pos.y;
+    },
     _scrollTo(index) {
-      this.$refs.singerWrapper.scrollToElement(this.$refs.singerGroup[index],0);
+      this.$refs.singerWrapper.scrollToElement(
+        this.$refs.singerGroup[index],
+        0
+      );
+    },
+    _calculateHeight(){
+      let list=this.$refs.singerGroup;
+      let listHeight=[0];
+      let height=0;
+      for(let i=0;i<list.length;i++){
+        height+=list[i].clientHeight
+        listHeight.push(height);
+      } 
+      this.listHeight=listHeight;  
+    }
+  },
+  watch:{
+    data(){
+      setTimeout(() => {
+        this._calculateHeight();
+      }, 20);
+    },
+    scrollY(newY){
+      let scrollY=Math.abs(Math.round(newY));
+      let listHeight=this.listHeight;
+      for(let i=0;i<listHeight.length;i++){
+        if(listHeight[i+1]){
+          if(scrollY>=listHeight[i]&&scrollY<listHeight[i+1]){
+            this.currentIndex=i;
+            console.log(i);
+            
+          }
+        }
+      }
     }
   },
   components: {
@@ -126,4 +170,6 @@ export default {
       background: $color-background-dd
       color: $color-text
       text-align: center
+      &.current
+        color:$color-theme-d
 </style>
