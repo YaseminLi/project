@@ -23,13 +23,6 @@ export default {
     this._getSinger();
   },
   methods: {
-    selectTitle(index) {
-      let a = this.$refs.singerWrapper.getElementsByClassName(
-        "singer-container"
-      );
-      console.log(a);
-      console.log(index);
-    },
     _getSinger() {
       getSinger().then(res => {
         if (res.code === ERR_OK) {

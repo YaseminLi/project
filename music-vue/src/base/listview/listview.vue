@@ -1,31 +1,28 @@
 <template>
   <div class="listview">
-    <scroll class="singer-wrapper" :data="data" ref="singerWrapper">
+    <scroll class="singer-wrapper" :data="data" ref='singerWrapper'>
       <div>
-        <div class="singer-container" v-for="(item,index) in data" :key="index">
+        <div class="singer-group" v-for="(item,index) in data" :key="index" ref='singerGroup'>
           <h1 class="title">{{item.title}}</h1>
           <div>
             <div class="singer-item" v-for="(singer,index) in item.items" :key="index">
-              <img class="avatar" :src="singer.avatar">
+              <img class="avatar" :src="singer.avatar" />
               <span class="name">{{singer.name}}</span>
             </div>
           </div>
         </div>
       </div>
+      <div class="list-shortcut" @touchstart='onShortcutTouchStart'>
+        <span  class="item" :data-index='index' v-for="(item,index) in shortcutList" :key="index"
+        >{{item}}</span>
+      </div>
     </scroll>
-    <div class="list-shortcut">
-      <span
-        @click="selectTitle(index)"
-        class="item"
-        v-for="(item,index) in data"
-        :key="index"
-      >{{index==0?'热':item.title}}</span>
-    </div>
   </div>
 </template>
 
 <script>
 import scroll from "base/scroll/scroll.vue";
+import {getData} from 'common/js/dom.js';
 export default {
   props: {
     data: {
@@ -33,8 +30,26 @@ export default {
       default: null
     }
   },
+  computed: {
+    shortcutList() {
+      return this.data.map(item => {
+        return item.title.substr(0, 1);
+      });
+    }
+  },
+  methods: {
+    onShortcutTouchStart(e){
+      //点击了哪个tag
+      let anchorIndex=getData(e.target,'index');
+      this.$refs.singerWrapper.scrollToElement(this.$refs.singerGroup[anchorIndex],0)
+      
+      // let firstTouch=e.touches[0];
+      // console.log(firstTouch);
+     
+    }
+  },
   components: {
-      scroll
+    scroll
   }
 };
 </script>
@@ -47,7 +62,7 @@ export default {
   bottom: 0
   width: 100%
   overflow: hidden
-  .singer-container
+  .singer-group
     padding-bottom: 30px
     .title
       height: 30px
@@ -70,23 +85,23 @@ export default {
         font-size: 14px
         color: $color-text
         margin-left: 20px
-.list-shortcut
-  position: absolute
-  right: 0
-  bottom: 50px
-  width: 20px
-  padding: 20px 0
-  border-radius: 10px
-  background: $color-background-dd
-  display: flex
-  flex-direction: column
-  .item
-    font-size: 12px
-    height: 12px
-    width: 14px
-    color: $color-text
-    padding: 3px
+  .list-shortcut
+    position: absolute
+    right: 0
+    bottom: 50px
+    width: 20px
+    padding: 20px 0
+    border-radius: 10px
     background: $color-background-dd
-    color: $color-text
-    text-align: center
+    display: flex
+    flex-direction: column
+    .item
+      font-size: 12px
+      height: 12px
+      width: 14px
+      color: $color-text
+      padding: 3px
+      background: $color-background-dd
+      color: $color-text
+      text-align: center
 </style>
