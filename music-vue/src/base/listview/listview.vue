@@ -15,7 +15,7 @@
       <div
         class="list-shortcut"
         @touchstart="onShortcutTouchStart"
-        @touchmove="onShortcutTouchMove"
+        @touchmove.stop.prevent="onShortcutTouchMove"
       >
         <span
           class="item"
@@ -70,7 +70,7 @@ export default {
     onShortcutTouchMove(e) {
       let firstTouch = e.touches[0];
       this.touch.y2 = firstTouch.pageY;
-      let delta = Math.floor((this.touch.y2 - this.touch.y1) / ANCHOR_HEIGHT);
+      let delta = (this.touch.y2 - this.touch.y1) / ANCHOR_HEIGHT|0;
       let anchorIndex = parseInt(this.touch.anchorIndex + delta);
       this._scrollTo(anchorIndex);
     },
@@ -78,6 +78,7 @@ export default {
       this.scrollY=pos.y;
     },
     _scrollTo(index) {
+      this.scrollY=this.listHeight[index];
       this.$refs.singerWrapper.scrollToElement(
         this.$refs.singerGroup[index],
         0
