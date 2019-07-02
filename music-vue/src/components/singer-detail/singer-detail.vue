@@ -5,9 +5,16 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 export default {
   data() {
     return {};
+  },
+  computed: {
+    ...mapGetters(["singer"])
+  },
+  created() {
+    console.log(this.singer);
   },
   components: {}
 };
@@ -21,8 +28,8 @@ export default {
   top: 0
   width: 100%
   height: 100%
-.slide-enter,.slide-leave-to
-    transform: translate3d(100%, 0, 0)
+.slide-enter, .slide-leave-to
+  transform: translate3d(100%, 0, 0)
 .slide-enter-active, .slide-leave-active
-    transition: all .8s 
+  transition: all 0.8s
 </style>
