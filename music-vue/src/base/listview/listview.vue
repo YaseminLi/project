@@ -12,7 +12,7 @@
         <div class="singer-group" v-for="(item,index) in data" :key="index" ref="singerGroup">
           <div class="title">{{item.title}}</div>
           <div>
-            <div class="singer-item" v-for="(singer,index) in item.items" :key="index">
+            <div class="singer-item" v-for="(singer,index) in item.items" :key="index" @click="selectItem(singer)">
               <img class="avatar" v-lazy="singer.avatar" />
               <span class="name">{{singer.name}}</span>
             </div>
@@ -95,6 +95,9 @@ export default {
     scroll(pos) {
       this.scrollY = pos.y;
     },
+    selectItem(item){
+      this.$emit('select',item);
+    },
     _scrollTo(index) {
       this.scrollY = this.listHeight[index];
       this.$refs.singerWrapper.scrollToElement(
@@ -147,7 +150,7 @@ export default {
 };
 </script>
 
-<style lang='stylus' >
+<style lang='stylus'  scoped>
 @import '~common/stylus/variable'
 .title
   width: 100%
