@@ -1,22 +1,36 @@
 <template>
   <transition appear name="slide">
-    <div class="singer-detail">jhuhvuifb valbalk</div>
+    <musicList />
   </transition>
 </template>
 
 <script>
+import { getSingerDetail } from "api/singer.js";
+import { ERR_OK } from "api/config.js";
 import { mapGetters } from "vuex";
+import musicList from 'components/music-list/music-list'
 export default {
   data() {
     return {};
   },
+  created() {
+    this._getSingerDetail();
+  },
   computed: {
     ...mapGetters(["singer"])
   },
-  created() {
-    console.log(this.singer);
+  methods: {
+    _getSingerDetail() {
+      getSingerDetail(this.singer.id).then(res => {
+        if (res.code == ERR_OK) {
+          console.log(res.singer.data);
+        }
+      });
+    }
   },
-  components: {}
+  components: {
+      musicList
+  }
 };
 </script>
 

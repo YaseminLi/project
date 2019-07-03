@@ -30,11 +30,11 @@ module.exports = {
                     console.log(e);
                 })
             }),
-            app.get('/api/getSinger',function(req,res){
+            app.get('/api/getSingerDetail',function(req,res){
                 const url='https://u.y.qq.com/cgi-bin/musicu.fcg';
                 axios.get(url,{
                     headers:{
-                        referer: 'https://y.qq.com/portal/singer_list.html',
+                        referer: `https://y.qq.com/n/yqq/singer/${req.query.myid}.html`,
                     },
                     params:req.query
                 }).then((response)=>{

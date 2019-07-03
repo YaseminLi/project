@@ -49,9 +49,8 @@ export default {
         if (index < HOT_SINGER_LEN) {
           map.hot.items.push(
             new Singer({
-              id: item.Fsinger_id,
+              id: item.Fsinger_mid,
               name: item.Fsinger_name,
-              mid: item.Fsinger_mid
             })
           );
         }
@@ -64,9 +63,8 @@ export default {
         }
         map[key].items.push(
           new Singer({
-            id: item.Fsinger_id,
+            id: item.Fsinger_mid,
             name: item.Fsinger_name,
-            mid: item.Fsinger_mid
           })
         );
       });
