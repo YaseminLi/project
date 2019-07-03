@@ -1,6 +1,6 @@
 <template>
   <transition appear name="slide">
-    <musicList />
+    <musicList :singerInfo='singerInfo' :musicList='musicList'/>
   </transition>
 </template>
 
@@ -8,10 +8,13 @@
 import { getSingerDetail } from "api/singer.js";
 import { ERR_OK } from "api/config.js";
 import { mapGetters } from "vuex";
-import musicList from 'components/music-list/music-list'
+import musicList from 'components/music-list/music-list';
 export default {
   data() {
-    return {};
+    return {
+        singerInfo:{},
+        musicList:[]
+    };
   },
   created() {
     this._getSingerDetail();
@@ -23,9 +26,28 @@ export default {
     _getSingerDetail() {
       getSingerDetail(this.singer.id).then(res => {
         if (res.code == ERR_OK) {
-          console.log(res.singer.data);
+            console.log(res.singer.data);
+            
+          this._normalizeSingerDetail(res.singer.data);
         }
       });
+    },
+    _normalizeSingerDetail(data){
+        let musicList=[];
+        for(let i=0;i<data.songlist.length;i++){
+            musicList.push({
+                name:data.songlist[i].name,
+                album:data.songlist[i].album.title,
+                singer:this.singer.name
+            })
+        }
+        let singerInfo=Object.assign({},this.singer,{
+            fans:data.singer_info.fans,
+            desc:data.singer_brief,
+            total_song:data.total_song
+        })
+        this.singerInfo=singerInfo;
+        this.musicList=musicList;
     }
   },
   components: {
@@ -34,14 +56,9 @@ export default {
 };
 </script>
 
-<style lang='stylus' >
+<style lang='stylus'>
 @import '~common/stylus/variable'
-.singer-detail
-  background: white
-  position: absolute
-  top: 0
-  width: 100%
-  height: 100%
+
 .slide-enter, .slide-leave-to
   transform: translate3d(100%, 0, 0)
 .slide-enter-active, .slide-leave-active
