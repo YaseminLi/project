@@ -9,7 +9,7 @@
               <div class="item" v-for="(item,index) in discList" :key="index">
                 <img v-lazy="item.imgurl">
                 <p class="dissname">{{item.dissname}}</p>
-                <div class="listennum">{{item.listennum}}</div>
+                <div class="listennum">{{normalizeNum(item.listennum)}}</div>
               </div>
             </div>
           </div>
@@ -29,6 +29,7 @@ import slider from "base/slider/slider.vue";
 import scroll from "base/scroll/scroll.vue";
 import loading from "base/loading/loading.vue";
 import { setTimeout } from 'timers';
+import {normalizeNum} from 'common/js/filter.js'
 export default {
   data() {
     return {
@@ -41,6 +42,9 @@ export default {
     this._getDiscList();
   },
   methods: {
+     normalizeNum(num){
+          return normalizeNum(num);
+      },
     _getRecommend() {
       getRecommend().then(res => {
         if (res.code === ERR_OK) {

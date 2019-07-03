@@ -1,17 +1,111 @@
 <template>
-    <div>
-        排行
-    </div>
+
+    <scroll class="rank">
+      <div class="container">
+        <div class="list-group" v-for="(item,index) in rank" :key="index">
+          <div class="left">
+            <img class="pic" :src="item.picUrl" />
+            <span class="listenCount">{{normalizeNum(item.listenCount)}}</span>
+          </div>
+          <div class="right">
+            <div class="title">{{item.topTitle}}</div>
+            <ul class="songList" v-for="(song,index) in item.songList" :key="index">
+              <ol class="song">{{index+1}}
+                <span class="songname">{{song.songname}}</span>
+                -{{song.songname}}
+              </ol>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </scroll>
 </template>
 
 <script>
-    export default {
-        
+import { getRank } from "api/rank.js";
+import { ERR_OK } from "api/config.js";
+import scroll from "base/scroll/scroll";
+import {normalizeNum} from 'common/js/filter.js'
+export default {
+  data() {
+    return {
+      rank: []
+    };
+  },
+  created() {
+    this._initedRank();
+  },
+  methods: {
+      normalizeNum(num){
+          return normalizeNum(num);
+      },
+    _initedRank() {
+      getRank().then(res => {
+        if (res.code == ERR_OK) {
+          this.rank = res.data.topList;
+          console.log(res.data);
+        }
+      });
     }
+  },
+  components: {
+    scroll
+  }
+};
 </script>
 
 <style scoped lang="stylus" rel="stylesheet/stylus">
-@import '~common/stylus/variable';
-@import '~common/stylus/mixin';
-
+@import '~common/stylus/variable'
+.rank
+    position fixed
+    top 44px
+    width 100%
+    bottom 0
+    overflow hidden
+    background $color-background-dd
+    .container 
+        margin 0 10px
+        padding 10px 0
+        .list-group
+            width 100%
+            font-size 0px
+            margin-bottom 10px
+            background $color-background
+            display flex
+            flex-direction row
+            .left
+                width 100px
+                position relative
+                .pic
+                    height 100px
+                    width 100px
+                .listenCount
+                    position absolute
+                    bottom 8px
+                    left 5px
+                    font-size 9px
+                    color $color-background
+            .right
+                flex 1
+                padding  4px 10px 4px 15px
+                .title
+                    font-size 16px
+                    line-height 24px
+                    margin-bottom 5px
+                    color $color-theme
+                .songList
+                    display flex
+                    flex-direction column
+                    .song
+                        line-height 21px
+                        font-size 14px
+                        color $color-text-lll
+                        overflow hidden
+                        white-space nowrap
+                        text-overflow ellipsis
+                        .songname
+                            color $color-theme
+                            margin 0 5px 0 8px
+                    
+        
 </style>
