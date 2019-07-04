@@ -15,7 +15,7 @@
         歌曲共
         <span class="num">{{singerInfo.total_song}}首</span>
       </div>
-      <songList :songList="musicList" />
+      <songList :songs="songs" />
     </div>
   </div>
 </template>
@@ -28,7 +28,7 @@ export default {
   },
   props: {
     singerInfo: Object,
-    musicList: Array
+    songs: Array
   },
   components: {
     songList
@@ -43,6 +43,7 @@ export default {
   position: absolute
   top: 0
   width: 100%
+  min-height 100%
   .info
     margin: 12px 30px 13px 30px
     display: flex

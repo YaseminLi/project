@@ -1,20 +1,20 @@
 <template>
   <transition appear name="slide">
-    <musicList :singerInfo='singerInfo' :musicList='musicList'/>
+    <musicList :singerInfo='singerInfo' :songs='songs'/>
   </transition>
 </template>
 
 <script>
-import { getSingerDetail } from "api/singer.js";
+import { getSingerDetail} from "api/singer.js";
 import { ERR_OK } from "api/config.js";
 import { mapGetters } from "vuex";
 import musicList from 'components/music-list/music-list';
-import {createSong} from 'common/js/song.js'
+import {createSong,processSongsUrl} from 'common/js/song.js'
 export default {
   data() {
     return {
         singerInfo:{},
-        musicList:[]
+        songs:[]
     };
   },
   created() {
@@ -30,8 +30,9 @@ export default {
       }
       getSingerDetail(this.singer.id).then(res => {
         if (res.code == ERR_OK) {
-            console.log(res.singer.data);
-          this._normalizeSingerDetail(res.singer.data);
+          processSongsUrl(this._normalizeSingerDetail(res.singer.data)).then((songs)=>{
+            this.songs=songs;
+          });
         }
       });
     },
@@ -51,7 +52,7 @@ export default {
             total_song:data.total_song
         })
         this.singerInfo=singerInfo;
-        this.musicList=musicList;
+        return musicList;
     }
   },
   components: {
