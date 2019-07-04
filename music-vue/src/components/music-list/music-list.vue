@@ -1,6 +1,7 @@
 <template>
   <div class="music-list">
     <div class="info">
+      <i @click="back" class="iconfont iconreturn" />
       <img class="avatar" :src="singerInfo.avatar" />
       <div class="name">{{singerInfo.name}}</div>
       <div class="fans">粉丝 {{singerInfo.fans}}</div>
@@ -10,28 +11,34 @@
         <span>随机播放全部</span>
       </div>
     </div>
-    <div class="list">
-      <div class="total">
-        歌曲共
-        <span class="num">{{singerInfo.total_song}}首</span>
+    <scroll class="list" :data="songs">
+      <div>
+        <div class="total">
+          歌曲共
+          <span class="num">{{singerInfo.total_song}}首</span>
+        </div>
+        <songList :songs="songs" />
       </div>
-      <songList :songs="songs" />
-    </div>
+    </scroll>
   </div>
 </template>
 
 <script>
 import songList from "base/song-list/song-list";
+import scroll from "base/scroll/scroll";
 export default {
-  data() {
-    return {};
-  },
   props: {
     singerInfo: Object,
     songs: Array
   },
+  methods: {
+    back() {
+      this.$router.push("/singer");
+    }
+  },
   components: {
-    songList
+    songList,
+    scroll
   }
 };
 </script>
@@ -43,12 +50,18 @@ export default {
   position: absolute
   top: 0
   width: 100%
-  min-height 100%
+  min-height: 100%
   .info
-    margin: 12px 30px 13px 30px
+    margin: 12px 30px 30px 30px
     display: flex
     flex-direction: column
     align-items: center
+    .iconreturn
+      color: $color-theme-d
+      position: fixed
+      left: 10px
+      font-size: 30px
+      font-weight: 700
     .avatar
       width: 190px
       height: 190px
@@ -78,12 +91,16 @@ export default {
       color: white
       background: $color-theme-d
       box-shadow: 0 6px 32px rgba(24, 213, 156, 0.5)
-      display flex
-      justify-content center
-      align-items center
+      display: flex
+      justify-content: center
+      align-items: center
       .iconbofang
         font-size: 24px
   .list
+    position fixed
+    top 370px
+    bottom 0
+    width 100%
     .total
       margin-left: 16px
       font-size: 12px

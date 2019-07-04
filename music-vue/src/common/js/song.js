@@ -12,15 +12,18 @@ class Song {
     }
 }
 
-export function createSong(musicData) {
+export function createSong(data) {
+    const musicData=data.musicData;
+    console.log(musicData);
+    
     return new Song({
-        id: musicData.id,
-        mid: musicData.mid,
+        id: musicData.songid,
+        mid: musicData.songmid,
         singer: filterSinger(musicData.singer),
-        songname: musicData.name,
-        album: musicData.album.name,
+        songname: musicData.songname,
+        album: musicData.albumname,
         duration: musicData.interval,
-        image: `https://y.gtimg.cn/music/photo_new/T002R300x300M000${musicData.album.mid}.jpg?max_age=2592000`,
+        image: `https://y.gtimg.cn/music/photo_new/T002R300x300M000${musicData.albummid}.jpg?max_age=2592000`,
         url: musicData.url
     })
 }

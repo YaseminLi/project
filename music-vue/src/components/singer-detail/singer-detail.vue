@@ -28,9 +28,10 @@ export default {
       if(!this.singer.id){
         this.$router.push('/singer')
       }
-      getSingerDetail(this.singer.id).then(res => {
+      getSingerDetail(this.singer).then(res => {
         if (res.code == ERR_OK) {
-          processSongsUrl(this._normalizeSingerDetail(res.singer.data)).then((songs)=>{
+          console.log(res.data);
+          processSongsUrl(this._normalizeSingerDetail(res.data)).then((songs)=>{
             this.songs=songs;
           });
         }
@@ -38,20 +39,20 @@ export default {
     },
     _normalizeSingerDetail(data){
         let musicList=[];
-        let list=data.songlist;
+        let list=data.list;
+        console.log(list);
+        
         for(let i=0;i<list.length;i++){
-          if(list[i].mid&&list[i].album.mid){
              musicList.push(createSong(list[i]))
-          }
-         
         }
-       
         let singerInfo=Object.assign({},this.singer,{
-            fans:data.singer_info.fans,
-            desc:data.singer_brief,
-            total_song:data.total_song
+            fans:data.fans,
+            desc:data.SingerDesc,
+            total_song:data.total
         })
         this.singerInfo=singerInfo;
+        console.log(musicList);
+        
         return musicList;
     }
   },

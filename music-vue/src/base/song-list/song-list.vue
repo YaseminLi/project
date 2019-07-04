@@ -9,17 +9,9 @@
 
 <script>
  export default {
-   data () {
-     return {
-
-     };
-   },
    props:{
        songs:Array
    },
-   components: {
-
-   }
  };
 </script>
 

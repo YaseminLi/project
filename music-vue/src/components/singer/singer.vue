@@ -27,7 +27,7 @@ export default {
   methods: {
     selectSinger(singer){
       this.$router.push({
-        path:`/singer/${singer.id}`
+        path:`/singer/${singer.mid}`
       });
       this.setSinger(singer);
     },
@@ -49,7 +49,8 @@ export default {
         if (index < HOT_SINGER_LEN) {
           map.hot.items.push(
             new Singer({
-              id: item.Fsinger_mid,
+              id: item.Fsinger_id,
+              mid:item.Fsinger_mid,
               name: item.Fsinger_name,
             })
           );
@@ -63,8 +64,9 @@ export default {
         }
         map[key].items.push(
           new Singer({
-            id: item.Fsinger_mid,
-            name: item.Fsinger_name,
+            id: item.Fsinger_id,
+              mid:item.Fsinger_mid,
+              name: item.Fsinger_name,
           })
         );
       });
