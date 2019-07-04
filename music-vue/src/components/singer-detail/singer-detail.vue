@@ -9,6 +9,7 @@ import { getSingerDetail } from "api/singer.js";
 import { ERR_OK } from "api/config.js";
 import { mapGetters } from "vuex";
 import musicList from 'components/music-list/music-list';
+import {createSong} from 'common/js/song.js'
 export default {
   data() {
     return {
@@ -24,23 +25,26 @@ export default {
   },
   methods: {
     _getSingerDetail() {
+      if(!this.singer.id){
+        this.$router.push('/singer')
+      }
       getSingerDetail(this.singer.id).then(res => {
         if (res.code == ERR_OK) {
             console.log(res.singer.data);
-            
           this._normalizeSingerDetail(res.singer.data);
         }
       });
     },
     _normalizeSingerDetail(data){
         let musicList=[];
-        for(let i=0;i<data.songlist.length;i++){
-            musicList.push({
-                name:data.songlist[i].name,
-                album:data.songlist[i].album.title,
-                singer:this.singer.name
-            })
+        let list=data.songlist;
+        for(let i=0;i<list.length;i++){
+          if(list[i].mid&&list[i].album.mid){
+             musicList.push(createSong(list[i]))
+          }
+         
         }
+       
         let singerInfo=Object.assign({},this.singer,{
             fans:data.singer_info.fans,
             desc:data.singer_brief,

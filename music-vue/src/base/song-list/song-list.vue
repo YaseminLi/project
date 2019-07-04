@@ -1,7 +1,7 @@
 <template>
  <div class="song-list">
 <div class="item" v-for="(item,index) in songList" :key="index">
-  <div class="name">{{item.name}}</div>
+  <div class="name">{{item.songname}}</div>
   <div class="album">{{item.singer}}·{{item.album}}</div>
 </div>
  </div>
