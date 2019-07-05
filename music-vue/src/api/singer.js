@@ -25,7 +25,7 @@ export function getSingerDetail(singer){
     needNewCode: 1,
     order: 'listen',
     from: 'h5',
-    num: 10,
+    num: 20,
     begin: 0,
     singerid: singer.id,
     singermid: singer.mid,

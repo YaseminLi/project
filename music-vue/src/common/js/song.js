@@ -1,11 +1,12 @@
 import { getSongsUrl } from 'api/song'
 class Song {
-    constructor({ id, mid, singer, songname, album, duration, image, url }) {
+    constructor({ id, mid, singer, songname, album,albumdesc, duration, image, url }) {
         this.id = id;
         this.mid = mid;
         this.singer = singer;
         this.songname = songname;
         this.album = album;
+        this.albumdesc=albumdesc;
         this.duration = duration;
         this.image = image;
         this.url = url;
@@ -14,14 +15,13 @@ class Song {
 
 export function createSong(data) {
     const musicData=data.musicData;
-    console.log(musicData);
-    
     return new Song({
         id: musicData.songid,
         mid: musicData.songmid,
         singer: filterSinger(musicData.singer),
         songname: musicData.songname,
         album: musicData.albumname,
+        albumdesc:musicData.albumdesc,
         duration: musicData.interval,
         image: `https://y.gtimg.cn/music/photo_new/T002R300x300M000${musicData.albummid}.jpg?max_age=2592000`,
         url: musicData.url

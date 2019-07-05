@@ -2,7 +2,7 @@
  <div class="song-list">
 <div class="item" v-for="(item,index) in songs" :key="index">
   <div class="name">{{item.songname}}</div>
-  <div class="album">{{item.singer}}·{{item.album}}</div>
+  <div class="album">{{songDesc(item)}}</div>
 </div>
  </div>
 </template>
@@ -12,6 +12,18 @@
    props:{
        songs:Array
    },
+   methods:{
+     songDesc(song){
+       let array=[];
+       array.push(song.singer);
+       array.push(song.album);
+       if(song.albumdesc!==''){
+          array.push(song.albumdesc);
+       }
+       let songDesc=array.join('·');
+       return songDesc
+     }
+   }
  };
 </script>
 
@@ -31,5 +43,7 @@
       font-size 12px
       color $color-text-lll 
       line-height 18px
- 
+      overflow hidden
+      white-space nowrap
+      text-overflow ellipsis
 </style>
