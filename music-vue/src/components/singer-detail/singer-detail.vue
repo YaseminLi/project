@@ -29,7 +29,7 @@
             歌曲共
             <span class="num">{{singerInfo.total_song}}首</span>
           </div>
-          <songList :songs="songs" />
+          <songList :songs="songs" @selectItem='selectItem'/>
         </div>
       </scroll>
     </div>
@@ -40,7 +40,7 @@
 import { getSingerDetail } from "api/singer.js";
 import {normalizeNum} from 'common/js/filter.js'
 import { ERR_OK } from "api/config.js";
-import { mapGetters } from "vuex";
+import { mapGetters,mapActions} from "vuex";
 import songList from "base/song-list/song-list";
 import scroll from "base/scroll/scroll";
 import { createSong, processSongsUrl } from "common/js/song.js";
@@ -100,7 +100,16 @@ export default {
     },
     normalizeNum(num){
       return normalizeNum(num)
-    }
+    },
+    selectItem(item,index){
+      this.selectPlay({
+          list: this.songs,
+          index
+        })
+    },
+   ...mapActions([
+        'selectPlay'
+      ])
   },
   watch: {
     scrollY(newY) {
