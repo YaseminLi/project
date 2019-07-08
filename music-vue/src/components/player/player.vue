@@ -11,20 +11,20 @@
         </div>
 
         <div class="middle">
-          <img :src="currentSong.image" :class="rotate"/>
+          <img :src="currentSong.image" :class="rotate" />
         </div>
         <div class="bottom">
           <div class="operators">
             <div class="icon">
               <i class="iconfont iconliebiaoxunhuan" />
             </div>
-            <div class="icon">
-              <i class="iconfont iconkuaitui" />
+            <div class="icon" @click="prev" :class="disableCls" >
+              <i class="iconfont iconkuaitui"  />
             </div>
-            <div class="icon"  @click="togglePlaying" >
-              <i class="iconfont" :class="playIcon"/>
+            <div class="icon" @click="togglePlaying" :class="disableCls" >
+              <i class="iconfont" :class="playIcon" />
             </div>
-            <div class="icon">
+            <div class="icon" @click="next" :class="disableCls" >
               <i class="iconfont iconkuaijin" />
             </div>
             <div class="icon">
@@ -36,32 +36,46 @@
     </transition>
     <transition appear name="mini-move">
       <div class="mini-player" v-show="!fullScreen" @click="open">
-        <img :src="currentSong.image" />
+        <img :src="currentSong.image" :class="rotate" />
         <div class="title">
           <div class="songname">{{currentSong.songname}}</div>
           <div class="singer">{{currentSong.singer}}</div>
         </div>
-        <div class="controls"  @click.stop="togglePlaying">
-            <i class="iconfont" :class="playIcon" />
+        <div class="controls" @click.stop="togglePlaying">
+          <i class="iconfont" :class="playIcon" />
         </div>
-        
+
         <i class="iconfont iconliebiao" />
       </div>
     </transition>
-    <audio ref="audio" :src="currentSong.url"></audio>
+    <audio ref="audio" :src="currentSong.url" @canplay='ready' @error="error"></audio>
   </div>
 </template>
 
 <script>
 import { mapGetters, mapMutations } from "vuex";
 export default {
-  computed: {
-    ...mapGetters(["playingState", "fullScreen", "playList", "currentSong"]),
-    playIcon(){
-        return this.playingState?'iconbofang2':'iconzanting'
+    data(){
+        return{
+            songReady:false
+        }
     },
-    rotate(){
-        return this.playingState?'play':''
+  computed: {
+    ...mapGetters([
+      "playingState",
+      "fullScreen",
+      "playList",
+      "currentSong",
+      "currentIndex"
+    ]),
+    playIcon() {
+      return this.playingState ? "iconbofang2" : "iconzanting";
+    },
+    rotate() {
+      return this.playingState ? "play" : "";
+    },
+    disableCls(){
+        return this.songReady?"":"disable"
     }
   },
   methods: {
@@ -74,9 +88,41 @@ export default {
     togglePlaying() {
       this.setPlayingState(!this.playingState);
     },
+    prev() {
+        if(!this.songReady){
+            return
+        }
+      const length = this.playList.length;
+      if (this.currentIndex === 0) {
+        this.setCurrentIndex(length - 1);
+      } else {
+        this.setCurrentIndex(this.currentIndex - 1);
+      }
+      this.setPlayingState(true);
+      this.songReady=false;
+    },
+    next() {
+        if(!this.songReady){
+            return
+        }
+      if (this.currentIndex === this.playList.length - 1) {
+        this.setCurrentIndex(0);
+      } else {
+        this.setCurrentIndex(this.currentIndex + 1);
+      }
+      this.setPlayingState(true);
+      this.songReady=false;
+    },
+    ready(){
+        this.songReady=true;
+    },
+    error(){
+        this.songReady=true;
+    },
     ...mapMutations({
       setFullScreen: "SET_FULL_SCREEN",
-      setPlayingState: "SET_PLAYING_STATE"
+      setPlayingState: "SET_PLAYING_STATE",
+      setCurrentIndex: "SET_CURRENT_INDEX"
     })
   },
   watch: {
@@ -86,10 +132,10 @@ export default {
       });
     },
     playingState(newP) {
-       const audio=this.$refs.audio;
-       this.$nextTick(()=>{
-           newP?audio.play():audio.pause()
-       })
+      const audio = this.$refs.audio;
+      this.$nextTick(() => {
+        newP ? audio.play() : audio.pause();
+      });
     }
   }
 };
@@ -129,9 +175,9 @@ export default {
         height: 300px
         box-shadow: 0 0 32px $color-theme-d
         &.play
-            animation: rotate 10s linear infinite
+          animation: rotate 30s linear infinite
         &.pause
-            animation-play-state: paused
+          animation-play-state: paused
     .bottom
       .operators
         width: 100%
@@ -180,13 +226,13 @@ export default {
         line-height: 20px
     .iconfont
       padding: 0 10px
-    .iconbofang2,.iconzanting
+    .iconbofang2, .iconzanting
       font-size: 30px
     .iconliebiao
       font-size: 22px
- @keyframes rotate
-    0%
-      transform: rotate(0)
-    100%
-      transform: rotate(360deg)
+@keyframes rotate
+  0%
+    transform: rotate(0)
+  100%
+    transform: rotate(360deg)
 </style>
