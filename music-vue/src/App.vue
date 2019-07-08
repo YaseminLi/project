@@ -1,18 +1,20 @@
 <template>
   <div id="app">
-    <Tab />
+    <tab />
     <keep-alive>
       <router-view></router-view>
     </keep-alive>
-    
+    <player />
   </div>
 </template>
 
 <script type="text/ecmascript-6">
-import Tab from 'components/tab/tab'
+import tab from 'components/tab/tab'
+import player from 'components/player/player'
 export default{
   components:{
-    Tab
+    tab,
+    player
   }
 }
 </script>

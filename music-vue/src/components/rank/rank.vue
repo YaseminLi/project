@@ -5,7 +5,7 @@
         <div class="left">
           <img class="pic" :src="item.picUrl" />
           <span class="listenCount">
-            <i class="iconfont iconlisten" />
+            <i class="iconfont iconerji" />
             <span>{{normalizeNum(item.listenCount)}}</span>
           </span>
         </div>
@@ -89,8 +89,8 @@ export default {
           color: $color-background
           display flex
           align-items center
-          .iconlisten
-            font-size: 14px
+          .iconerji
+            font-size: 10px
             margin-right: 3px
           span 
             font-size: 9px

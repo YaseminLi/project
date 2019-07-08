@@ -2,10 +2,10 @@
   <div class="search">
     <div class="search-bar">
       <div class="search-container">
-        <i class="iconfont iconsousuo"/>
+        <i class="iconfont iconchaxun"/>
         <input type="text" placeholder="搜索歌曲、歌单、专辑" @click="search" v-model="inputValue"/>
         <span v-show='isSearching' class="cancel" @click="cancelSearch">取消</span>
-        <i v-show="inputValue" class="iconfont iconquxiao" @click="clearInput"></i>
+        <i v-show="inputValue" class="iconfont iconshanchu" @click="clearInput"></i>
       </div>
     </div>
     <div class="hotkeys" v-show="!isSearching">
@@ -84,9 +84,9 @@ export default {
         color #b1b1b1
         font-size 20px
         bottom 7px
-    .iconquxiao
+    .iconshanchu
         right 60px
-    .iconsousuo
+    .iconchaxun
         left 10px
 .hotkeys
     padding 15px

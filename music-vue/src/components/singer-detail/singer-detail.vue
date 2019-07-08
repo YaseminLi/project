@@ -1,6 +1,6 @@
 <template>
   <transition appear name="slide">
-    <div class="singer-detail">
+    <div class="singer-detail" >
       <i @click="back" class="iconfont iconreturn" />
       <div  class="head" ref="singerHead" :style={zIndex:0}>      
         <img class="avatar" :src="singerInfo.avatar" />
@@ -15,6 +15,7 @@
           <span>无法获取到歌曲！</span>
         </div>
       </div>
+      <loading v-show="songs.length==0"/>
       <scroll
         class="list"
         :data="songs"
@@ -43,6 +44,7 @@ import { mapGetters } from "vuex";
 import songList from "base/song-list/song-list";
 import scroll from "base/scroll/scroll";
 import { createSong, processSongsUrl } from "common/js/song.js";
+import loading from 'base/loading/loading'
 export default {
   data() {
     return {
@@ -57,7 +59,10 @@ export default {
     this._getSingerDetail();
   },
   computed: {
-    ...mapGetters(["singer"])
+    ...mapGetters(["singer"]),
+    // show(){
+    //     return this.singerInfo.fans&&this.singerInfo.desc
+    // }
   },
   methods: {
     _getSingerDetail() {
@@ -111,7 +116,8 @@ export default {
   },
   components: {
     songList,
-    scroll
+    scroll,
+    loading
   }
 };
 </script>
