@@ -14,17 +14,21 @@
           <img :src="currentSong.image" :class="rotate" />
         </div>
         <div class="bottom">
+          <div class="progress">
+            <span class="time">{{format(currentTime)}}</span>
+            <span class="time">{{format(currentSong.duration)}}</span>
+          </div>
           <div class="operators">
             <div class="icon">
               <i class="iconfont iconliebiaoxunhuan" />
             </div>
-            <div class="icon" @click="prev" :class="disableCls" >
-              <i class="iconfont iconkuaitui"  />
+            <div class="icon" @click="prev" :class="disableCls">
+              <i class="iconfont iconkuaitui" />
             </div>
-            <div class="icon" @click="togglePlaying" :class="disableCls" >
+            <div class="icon" @click="togglePlaying" :class="disableCls">
               <i class="iconfont" :class="playIcon" />
             </div>
-            <div class="icon" @click="next" :class="disableCls" >
+            <div class="icon" @click="next" :class="disableCls">
               <i class="iconfont iconkuaijin" />
             </div>
             <div class="icon">
@@ -48,18 +52,25 @@
         <i class="iconfont iconliebiao" />
       </div>
     </transition>
-    <audio ref="audio" :src="currentSong.url" @canplay='ready' @error="error"></audio>
+    <audio
+      ref="audio"
+      :src="currentSong.url"
+      @canplay="ready"
+      @error="error"
+      @timeupdate="timeUpdate"
+    ></audio>
   </div>
 </template>
 
 <script>
 import { mapGetters, mapMutations } from "vuex";
 export default {
-    data(){
-        return{
-            songReady:false
-        }
-    },
+  data() {
+    return {
+      songReady: false,
+      currentTime: 0
+    };
+  },
   computed: {
     ...mapGetters([
       "playingState",
@@ -74,8 +85,8 @@ export default {
     rotate() {
       return this.playingState ? "play" : "";
     },
-    disableCls(){
-        return this.songReady?"":"disable"
+    disableCls() {
+      return this.songReady ? "" : "disable";
     }
   },
   methods: {
@@ -89,9 +100,9 @@ export default {
       this.setPlayingState(!this.playingState);
     },
     prev() {
-        if(!this.songReady){
-            return
-        }
+      if (!this.songReady) {
+        return;
+      }
       const length = this.playList.length;
       if (this.currentIndex === 0) {
         this.setCurrentIndex(length - 1);
@@ -99,25 +110,35 @@ export default {
         this.setCurrentIndex(this.currentIndex - 1);
       }
       this.setPlayingState(true);
-      this.songReady=false;
+      this.songReady = false;
     },
     next() {
-        if(!this.songReady){
-            return
-        }
+      if (!this.songReady) {
+        return;
+      }
       if (this.currentIndex === this.playList.length - 1) {
         this.setCurrentIndex(0);
       } else {
         this.setCurrentIndex(this.currentIndex + 1);
       }
       this.setPlayingState(true);
-      this.songReady=false;
+      this.songReady = false;
     },
-    ready(){
-        this.songReady=true;
+    ready() {
+      this.songReady = true;
     },
-    error(){
-        this.songReady=true;
+    error() {
+      this.songReady = true;
+    },
+    timeUpdate(e) {
+      this.currentTime = e.target.currentTime;
+    },
+    format(time) {
+      let minute = Math.floor(time / 60);
+      minute = minute < 10 ? "0" + minute : minute;
+      let second = Math.round(time % 60);
+      second = second < 10 ? "0" + second : second;
+      return minute + ":" + second;
     },
     ...mapMutations({
       setFullScreen: "SET_FULL_SCREEN",
