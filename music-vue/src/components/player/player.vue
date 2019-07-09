@@ -16,12 +16,12 @@
         <div class="bottom">
           <div class="progress-wrapper">
             <span class="time timel">{{format(currentTime)}}</span>
-            <progressBar :percent="percent" @progressBarChange="progressBarChange"/>
+            <progressBar :percent="percent" @progressBarChange="progressBarChange" />
             <span class="time timer">{{format(currentSong.duration)}}</span>
           </div>
           <div class="operators">
-            <div class="icon">
-              <i class="iconfont iconshunxu" />
+            <div class="icon" @click="modeChange">
+              <i :class="modeIcon" />
             </div>
             <div class="icon" @click="prev" :class="disableCls">
               <i class="iconfont iconprev" />
@@ -47,7 +47,9 @@
           <div class="singer">{{currentSong.singer}}</div>
         </div>
         <div class="controls" @click.stop="togglePlaying">
-          <i class="iconfont" :class="playIcon" />
+          <progressCircle :radius="32" :percent="percent">
+            <i class="iconfont" :class="playIcon" />
+          </progressCircle>
         </div>
 
         <i class="iconfont iconliebiao" />
@@ -59,7 +61,7 @@
       @canplay="ready"
       @error="error"
       @timeupdate="timeUpdate"
-      @ended="next"
+      @ended="ended"
     ></audio>
   </div>
 </template>
@@ -67,6 +69,9 @@
 <script>
 import { mapGetters, mapMutations } from "vuex";
 import progressBar from "base/progress-bar/progress-bar";
+import progressCircle from "base/progress-circle/progress-circle";
+import { playMode } from "common/js/config.js";
+import {shullfle} from "common/js/filter.js"
 export default {
   data() {
     return {
@@ -80,7 +85,8 @@ export default {
       "fullScreen",
       "playList",
       "currentSong",
-      "currentIndex"
+      "currentIndex",
+      "mode"
     ]),
     playIcon() {
       return this.playingState ? "iconplay" : "iconpause";
@@ -91,8 +97,17 @@ export default {
     disableCls() {
       return this.songReady ? "" : "disable";
     },
-    percent(){
-        return (this.currentTime)/(this.currentSong.duration)
+    percent() {
+      return this.currentTime / this.currentSong.duration;
+    },
+    modeIcon() {
+      let mode = "";
+      for (var key in playMode) {
+        if (playMode[key] === this.mode) {
+          mode = key;
+        }
+      }
+      return `iconfont icon${mode}`;
     }
   },
   methods: {
@@ -130,6 +145,14 @@ export default {
       this.setPlayingState(true);
       this.songReady = false;
     },
+    ended() {
+      if (this.mode == playMode.loop) {
+        this.$refs.audio.currentTime = 0;
+        this.$refs.audio.play();
+      } else {
+        this.next();
+      }
+    },
     ready() {
       this.songReady = true;
     },
@@ -142,25 +165,44 @@ export default {
     format(time) {
       let minute = Math.floor(time / 60);
       let second = Math.round(time % 60);
-      if(second==60){
-          second='00';
-          minute+=1;
+      if (second == 60) {
+        second = "00";
+        minute += 1;
       }
       second = second < 10 ? "0" + second : second;
       return minute + ":" + second;
     },
-    progressBarChange(percent){
-        const currentTime=this.currentSong.duration*percent;
-        this.$refs.audio.currentTime=currentTime;
-        this.currentTime=currentTime;
-        if(!this.playingState){
-            this.togglePlaying();
-        }
+    progressBarChange(percent) {
+      const currentTime = this.currentSong.duration * percent;
+      this.$refs.audio.currentTime = currentTime;
+      this.currentTime = currentTime;
+      if (!this.playingState) {
+        this.togglePlaying();
+      }
     },
+    modeChange() {
+      let mode = 0;
+      this.mode == 2 ? (mode = 0) : (mode = this.mode + 1);
+      this.setMode(mode);
+      if(this.mode==playMode.random){
+          this.setPlayList(shullfle(this.playList))
+          let currentIndex=this.playList.findIndex(item=>{
+              return item.id==this.currentSong.id
+          });
+          console.log(currentIndex);
+          
+          this._resetCurrentIndex(currentIndex);
+      }
+    },
+      _resetCurrentIndex(index){
+          this.setCurrentIndex(index);
+      },
     ...mapMutations({
       setFullScreen: "SET_FULL_SCREEN",
       setPlayingState: "SET_PLAYING_STATE",
-      setCurrentIndex: "SET_CURRENT_INDEX"
+      setCurrentIndex: "SET_CURRENT_INDEX",
+      setMode: "SET_MODE",
+      setPlayList:"SET_PLAY_LIST"
     })
   },
   watch: {
@@ -176,8 +218,9 @@ export default {
       });
     }
   },
-  components:{
-      progressBar
+  components: {
+    progressBar,
+    progressCircle
   }
 };
 </script>
@@ -220,24 +263,24 @@ export default {
         &.pause
           animation-play-state: paused
     .bottom
-      width 100%
+      width: 100%
       position: absolute
       bottom: 50px
       .progress-wrapper
-          width 80%
-          height 30px
-          margin 0 auto
-          display flex
-          align-items center
-          .time
-              font-size 12px
-              width 30px
-          .timel
-              margin-right 10px
-          .timer
-              margin-left 10px
-          .progress-bar
-              flex 1   
+        width: 80%
+        height: 30px
+        margin: 0 auto
+        display: flex
+        align-items: center
+        .time
+          font-size: 12px
+          width: 30px
+        .timel
+          margin-right: 10px
+        .timer
+          margin-left: 10px
+        .progress-bar
+          flex: 1
       .operators
         width: 100%
         box-sizing: border-box
@@ -272,6 +315,10 @@ export default {
       height: 40px
       border-radius: 50%
       margin: 0 10px 0 20px
+      &.play
+        animation: rotate 30s linear infinite
+      &.pause
+        animation-play-state: paused
     .title
       flex: 1
       .songname
@@ -280,9 +327,13 @@ export default {
       .singer
         font-size: 12px
         line-height: 20px
-    .iconfont
-      padding: 0 10px
+    .iconliebiao
       font-size: 30px
+      padding: 0 20px
+    .controls
+      .iconfont
+        position: absolute
+        font-size: 32px
 @keyframes rotate
   0%
     transform: rotate(0)

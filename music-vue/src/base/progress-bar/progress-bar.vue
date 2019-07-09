@@ -23,7 +23,7 @@ export default {
   watch: {
     percent(newP) {
       if (newP >= 0&&!this.touch.initialed) {
-        let width = this.$refs.barInner.clientWidth * newP;
+        let width = this.$refs.progressBar.clientWidth * newP;
         this._offset(width);
       }
     }
