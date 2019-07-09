@@ -1,13 +1,13 @@
 <template>
   <transition appear name="slide">
-    <div class="singer-detail" >
+    <div class="singer-detail">
       <i @click="back" class="iconfont iconreturn" />
-      <div  class="head" ref="singerHead" :style={zIndex:0}>      
+      <div class="head" ref="singerHead" :style="{zIndex:0}">
         <img class="avatar" :src="singerInfo.avatar" />
         <div class="name">{{singerInfo.name}}</div>
         <div class="fans">粉丝 {{normalizeNum(singerInfo.fans)}}</div>
         <div class="desc">{{singerInfo.desc}}</div>
-        <div class="play" v-show="songs.length>0">
+        <div class="play" v-show="songs.length>0" @click="random">
           <i class="iconfont iconbofang" />
           <span>随机播放全部</span>
         </div>
@@ -15,7 +15,7 @@
           <span>无法获取到歌曲！</span>
         </div>
       </div>
-      <loading v-show="songs.length==0"/>
+      <loading v-show="songs.length==0" />
       <scroll
         class="list"
         :data="songs"
@@ -29,7 +29,7 @@
             歌曲共
             <span class="num">{{singerInfo.total_song}}首</span>
           </div>
-          <songList :songs="songs" @selectItem='selectItem'/>
+          <songList :songs="songs" @selectItem="selectItem" />
         </div>
       </scroll>
     </div>
@@ -38,13 +38,13 @@
 
 <script>
 import { getSingerDetail } from "api/singer.js";
-import {normalizeNum} from 'common/js/filter.js'
+import { normalizeNum } from "common/js/filter.js";
 import { ERR_OK } from "api/config.js";
-import { mapGetters,mapActions} from "vuex";
+import { mapGetters, mapActions } from "vuex";
 import songList from "base/song-list/song-list";
 import scroll from "base/scroll/scroll";
 import { createSong, processSongsUrl } from "common/js/song.js";
-import loading from 'base/loading/loading'
+import loading from "base/loading/loading";
 export default {
   data() {
     return {
@@ -59,10 +59,7 @@ export default {
     this._getSingerDetail();
   },
   computed: {
-    ...mapGetters(["singer"]),
-    // show(){
-    //     return this.singerInfo.fans&&this.singerInfo.desc
-    // }
+    ...mapGetters(["singer"])
   },
   methods: {
     _getSingerDetail() {
@@ -71,7 +68,6 @@ export default {
       }
       getSingerDetail(this.singer).then(res => {
         if (res.code == ERR_OK) {
-          console.log(res.data);
           processSongsUrl(this._normalizeSingerDetail(res.data)).then(songs => {
             this.songs = songs;
           });
@@ -98,29 +94,32 @@ export default {
     scroll(pos) {
       this.scrollY = pos.y;
     },
-    normalizeNum(num){
-      return normalizeNum(num)
+    normalizeNum(num) {
+      return normalizeNum(num);
     },
-    selectItem(item,index){
+    selectItem(item, index) {
       this.selectPlay({
-          list: this.songs,
-          index
-        })
+        list: this.songs,
+        index
+      });
     },
-   ...mapActions([
-        'selectPlay'
-      ])
+    random() {
+      this.randomPlay({ list: this.songs });
+    },
+    ...mapActions(["selectPlay", "randomPlay"])
   },
   watch: {
     scrollY(newY) {
-      let zIndex=0;
+      let zIndex = 0;
       if (newY < -304) {
-        console.log('zindex');
-        
-        this.$refs.singerHead.style.zIndex=10;
-         this.$refs.singerHead.style.height=`35px`;
-      }else{this.$refs.singerHead.style.zIndex=zIndex;
-      this.$refs.singerHead.style.height=`339px`;}
+        console.log("zindex");
+
+        this.$refs.singerHead.style.zIndex = 10;
+        this.$refs.singerHead.style.height = `35px`;
+      } else {
+        this.$refs.singerHead.style.zIndex = zIndex;
+        this.$refs.singerHead.style.height = `339px`;
+      }
     }
   },
   components: {
@@ -144,21 +143,21 @@ export default {
   width: 100%
   bottom: 0
   .iconreturn
-      color: $color-theme-d
-      position: fixed
-      left: 10px
-      top:10px
-      font-size: 30px
-      font-weight: 700
-      z-index 20
+    color: $color-theme-d
+    position: fixed
+    left: 10px
+    top: 10px
+    font-size: 30px
+    font-weight: 700
+    z-index: 20
   .head
-    position relative
+    position: relative
     padding: 12px 30px 0px 30px
     display: flex
     flex-direction: column
     align-items: center
-    background white
-    overflow hidden
+    background: white
+    overflow: hidden
     .avatar
       width: 190px
       height: 190px
@@ -199,12 +198,12 @@ export default {
     width: 100%
     top: 381px
     .list-content
-      background white
+      background: white
       .total
         margin-left: 16px
         font-size: 12px
         color: $color-text-l
-        padding-top 20px
+        padding-top: 20px
         .num
           margin-left: 5px
 </style>

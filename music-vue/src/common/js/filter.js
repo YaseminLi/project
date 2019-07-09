@@ -13,11 +13,12 @@ function _getRandom(min, max) {
 
 //随机打乱数组
 export function shullfle(arr) {
+    let _arr=[];
     for (let i = 0; i < arr.length; i++) {
         let j = _getRandom(0, i);
         let m = arr[i];
-        arr[i] = arr[j];
-        arr[j] = m
+        _arr[i] = arr[j];
+        _arr[j] = m
     }
-    return arr
+    return _arr;
 }
