@@ -14,22 +14,23 @@
           <img :src="currentSong.image" :class="rotate" />
         </div>
         <div class="bottom">
-          <div class="progress">
-            <span class="time">{{format(currentTime)}}</span>
-            <span class="time">{{format(currentSong.duration)}}</span>
+          <div class="progress-wrapper">
+            <span class="time timel">{{format(currentTime)}}</span>
+            <progressBar :percent="percent" @progressBarChange="progressBarChange"/>
+            <span class="time timer">{{format(currentSong.duration)}}</span>
           </div>
           <div class="operators">
             <div class="icon">
-              <i class="iconfont iconliebiaoxunhuan" />
+              <i class="iconfont iconshunxu" />
             </div>
             <div class="icon" @click="prev" :class="disableCls">
-              <i class="iconfont iconkuaitui" />
+              <i class="iconfont iconprev" />
             </div>
             <div class="icon" @click="togglePlaying" :class="disableCls">
               <i class="iconfont" :class="playIcon" />
             </div>
             <div class="icon" @click="next" :class="disableCls">
-              <i class="iconfont iconkuaijin" />
+              <i class="iconfont iconnext" />
             </div>
             <div class="icon">
               <i class="iconfont iconxiai" />
@@ -58,12 +59,14 @@
       @canplay="ready"
       @error="error"
       @timeupdate="timeUpdate"
+      @ended="next"
     ></audio>
   </div>
 </template>
 
 <script>
 import { mapGetters, mapMutations } from "vuex";
+import progressBar from "base/progress-bar/progress-bar";
 export default {
   data() {
     return {
@@ -80,13 +83,16 @@ export default {
       "currentIndex"
     ]),
     playIcon() {
-      return this.playingState ? "iconbofang2" : "iconzanting";
+      return this.playingState ? "iconplay" : "iconpause";
     },
     rotate() {
       return this.playingState ? "play" : "";
     },
     disableCls() {
       return this.songReady ? "" : "disable";
+    },
+    percent(){
+        return (this.currentTime)/(this.currentSong.duration)
     }
   },
   methods: {
@@ -135,10 +141,21 @@ export default {
     },
     format(time) {
       let minute = Math.floor(time / 60);
-      minute = minute < 10 ? "0" + minute : minute;
       let second = Math.round(time % 60);
+      if(second==60){
+          second='00';
+          minute+=1;
+      }
       second = second < 10 ? "0" + second : second;
       return minute + ":" + second;
+    },
+    progressBarChange(percent){
+        const currentTime=this.currentSong.duration*percent;
+        this.$refs.audio.currentTime=currentTime;
+        this.currentTime=currentTime;
+        if(!this.playingState){
+            this.togglePlaying();
+        }
     },
     ...mapMutations({
       setFullScreen: "SET_FULL_SCREEN",
@@ -158,6 +175,9 @@ export default {
         newP ? audio.play() : audio.pause();
       });
     }
+  },
+  components:{
+      progressBar
   }
 };
 </script>
@@ -200,16 +220,31 @@ export default {
         &.pause
           animation-play-state: paused
     .bottom
+      width 100%
+      position: absolute
+      bottom: 50px
+      .progress-wrapper
+          width 80%
+          height 30px
+          margin 0 auto
+          display flex
+          align-items center
+          .time
+              font-size 12px
+              width 30px
+          .timel
+              margin-right 10px
+          .timer
+              margin-left 10px
+          .progress-bar
+              flex 1   
       .operators
         width: 100%
         box-sizing: border-box
-        position: fixed
-        bottom: 0
-        left: 0
         display: flex
         flex-direction: row
         justify-content: space-between
-        padding: 10px 30px 60px 30px
+        padding: 10px 30px 0px 30px
         align-items: center
         .icon
           .iconfont
@@ -247,10 +282,7 @@ export default {
         line-height: 20px
     .iconfont
       padding: 0 10px
-    .iconbofang2, .iconzanting
       font-size: 30px
-    .iconliebiao
-      font-size: 22px
 @keyframes rotate
   0%
     transform: rotate(0)
