@@ -218,6 +218,7 @@ export default {
         newP ? audio.play() : audio.pause();
       });
     },
+    //从miniplay 到normalPlay 进度条不应该复原
     fullScreen(newF){
         if(newF){
             setTimeout(()=>{
