@@ -16,7 +16,7 @@
         <div class="bottom">
           <div class="progress-wrapper">
             <span class="time timel">{{format(currentTime)}}</span>
-            <progressBar :percent="percent" @progressBarChange="progressBarChange" />
+            <progressBar :percent="percent" @progressBarChange="progressBarChange" ref="progressBar"/>
             <span class="time timer">{{format(currentSong.duration)}}</span>
           </div>
           <div class="operators">
@@ -72,6 +72,7 @@ import progressBar from "base/progress-bar/progress-bar";
 import progressCircle from "base/progress-circle/progress-circle";
 import { playMode } from "common/js/config.js";
 import {shullfle} from "common/js/filter.js"
+import { setTimeout } from 'timers';
 export default {
   data() {
     return {
@@ -216,6 +217,13 @@ export default {
       this.$nextTick(() => {
         newP ? audio.play() : audio.pause();
       });
+    },
+    fullScreen(newF){
+        if(newF){
+            setTimeout(()=>{
+                this.$refs.progressBar.setProgressOffset(this.percent)
+            },20)
+        }
     }
   },
   components: {

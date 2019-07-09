@@ -23,8 +23,7 @@ export default {
   watch: {
     percent(newP) {
       if (newP >= 0&&!this.touch.initialed) {
-        let width = this.$refs.progressBar.clientWidth * newP;
-        this._offset(width);
+        this.setProgressOffset(newP)
       }
     }
   },
@@ -54,6 +53,10 @@ export default {
         let width=e.pageX-this.$refs.progressBar.getBoundingClientRect().left;
         this._offset(width);
         this._trigerPercent();
+    },
+    setProgressOffset(percent){
+      let width = this.$refs.progressBar.clientWidth * percent;
+        this._offset(width);
     },
     _offset(width) {
       this.$refs.progress.style.width = width + "px";
