@@ -22,8 +22,8 @@ export default {
   },
   watch: {
     percent(newP) {
-      if (newP >= 0&&!this.touch.initialed) {
-        this.setProgressOffset(newP)
+      if (newP >= 0 && !this.touch.initialed) {
+        this.setProgressOffset(newP);
       }
     }
   },
@@ -43,28 +43,27 @@ export default {
         Math.max(0, this.touch.left + delta)
       );
       this._offset(offsetWidth);
-        this._trigerPercent();
+      this.touch.percent =
+        this.$refs.progress.clientWidth / this.$refs.barInner.clientWidth;
     },
     progressTouchend() {
-        this.touch.initialed=false;
-        // this._trigerPercent();
+      this.touch.initialed = false;
+      this.$emit("progressBarChange", this.touch.percent);
     },
-    progressClick(e){
-        let width=e.pageX-this.$refs.progressBar.getBoundingClientRect().left;
-        this._offset(width);
-        this._trigerPercent();
+    progressClick(e) {
+      let width = e.pageX - this.$refs.progressBar.getBoundingClientRect().left;
+      this._offset(width);
+      this.touch.percent =
+        this.$refs.progress.clientWidth / this.$refs.barInner.clientWidth;
+      this.$emit("progressBarChange", this.touch.percent);
     },
-    setProgressOffset(percent){
+    setProgressOffset(percent) {
       let width = this.$refs.progressBar.clientWidth * percent;
-        this._offset(width);
+      this._offset(width);
     },
     _offset(width) {
       this.$refs.progress.style.width = width + "px";
       this.$refs.btn.style.left = width + "px";
-    },
-    _trigerPercent(){
-        let percent=this.$refs.progress.clientWidth/this.$refs.barInner.clientWidth;
-        this.$emit('progressBarChange',percent)
     }
   }
 };

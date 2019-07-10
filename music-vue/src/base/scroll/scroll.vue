@@ -23,9 +23,9 @@ export default {
       default: null
     },
     //是否监听滚动事件
-    listenScroll:{
-      type:Boolean,
-      default:false
+    listenScroll: {
+      type: Boolean,
+      default: false
     }
   },
   mounted() {
@@ -42,21 +42,27 @@ export default {
         probeType: this.probeType,
         click: this.click
       });
-      if(this.listenScroll){
-        const that=this;
-        this.scroll.on('scroll',(pos)=>{
-          that.$emit('scroll',pos)
-        })
+      if (this.listenScroll) {
+        const that = this;
+        this.scroll.on("scroll", pos => {
+          that.$emit("scroll", pos);
+        });
       }
+    },
+    disable() {
+      this.scroll && this.scroll.disable();
+    },
+    enable() {
+      this.scroll && this.scroll.enable();
     },
     refresh() {
       this.scroll && this.scroll.refresh();
     },
-    scrollTo(){
-      this.scroll&&this.scroll.scrollTo.apply(this.scroll,arguments);
+    scrollTo() {
+      this.scroll && this.scroll.scrollTo.apply(this.scroll, arguments);
     },
-    scrollToElement(){
-      this.scroll&&this.scroll.scrollToElement.apply(this.scroll,arguments);
+    scrollToElement() {
+      this.scroll && this.scroll.scrollToElement.apply(this.scroll, arguments);
     }
   },
   watch: {

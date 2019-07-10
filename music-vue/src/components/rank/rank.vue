@@ -1,28 +1,30 @@
 <template>
-  <scroll class="rank">
-    <div class="container">
-      <div class="list-group" v-for="(item,index) in rank" :key="index">
-        <div class="left">
-          <img class="pic" :src="item.picUrl" />
-          <span class="listenCount">
-            <i class="iconfont iconerji" />
-            <span>{{normalizeNum(item.listenCount)}}</span>
-          </span>
-        </div>
-        <div class="right">
-          <div class="title">{{item.topTitle}}</div>
-          <ul class="songList" v-for="(song,index) in item.songList" :key="index">
-            <ol class="song">
-              {{index+1}}
-              <span class="songname">{{song.songname}}</span>
-              -{{song.songname}}
-            </ol>
-          </ul>
-          <i class="iconfont iconxiayige" />
+  <div class="rank" ref="rank">
+    <scroll class="rank-scroll" ref="scroll" :data="rank">
+      <div class="container">
+        <div class="list-group" v-for="(item,index) in rank" :key="index">
+          <div class="left">
+            <img class="pic" :src="item.picUrl" />
+            <span class="listenCount">
+              <i class="iconfont iconerji" />
+              <span>{{normalizeNum(item.listenCount)}}</span>
+            </span>
+          </div>
+          <div class="right">
+            <div class="title">{{item.topTitle}}</div>
+            <ul class="songList" v-for="(song,index) in item.songList" :key="index">
+              <ol class="song">
+                {{index+1}}
+                <span class="songname">{{song.songname}}</span>
+                -{{song.songname}}
+              </ol>
+            </ul>
+            <i class="iconfont iconxiayige" />
+          </div>
         </div>
       </div>
-    </div>
-  </scroll>
+    </scroll>
+  </div>
 </template>
 
 <script>
@@ -30,7 +32,9 @@ import { getRank } from "api/rank.js";
 import { ERR_OK } from "api/config.js";
 import scroll from "base/scroll/scroll";
 import { normalizeNum } from "common/js/filter.js";
+import { playlistMixin } from "common/js/mixin.js";
 export default {
+  mixins: [playlistMixin],
   data() {
     return {
       rank: []
@@ -40,6 +44,11 @@ export default {
     this._initedRank();
   },
   methods: {
+    handlePlaylist(playList) {
+      const bottom = playList.length > 0 ? "60px" : "";
+      this.$refs.rank.style.bottom = bottom;
+      this.$refs.scroll.refresh();
+    },
     normalizeNum(num) {
       return normalizeNum(num);
     },
@@ -65,60 +74,62 @@ export default {
   top: 44px
   width: 100%
   bottom: 0
-  overflow: hidden
   background: $color-background-dd
-  .container
-    margin: 0 10px
-    padding: 10px 0
-    .list-group
-      width: 100%
-      font-size: 0px
-      margin-bottom: 10px
-      background: $color-background
-      display: flex
-      .left
-        width: 100px
-        position: relative
-        .pic
-          height: 100px
+  .rank-scroll
+    height 100%
+    overflow hidden
+    .container
+      margin: 0 10px
+      padding: 10px 0
+      .list-group
+        width: 100%
+        font-size: 0px
+        margin-bottom: 10px
+        background: $color-background
+        display: flex
+        .left
           width: 100px
-        .listenCount
-          position: absolute
-          bottom: 8px
-          left: 5px
-          color: $color-background
-          display flex
-          align-items center
-          .iconerji
-            font-size: 10px
-            margin-right: 3px
-          span 
-            font-size: 9px
-      .right
-        flex: 1
-        padding: 4px 10px 4px 15px
-        position: relative
-        .title
-          font-size: 16px
-          line-height: 24px
-          margin-bottom: 5px
-          color: $color-theme
-        .iconxiayige
-          color: $color-text-lll
-          position: absolute
-          right: 10px
-          bottom: 40px
-        .songList
-          display: flex
-          flex-direction: column
-          .song
-            line-height: 21px
-            font-size: 14px
+          position: relative
+          .pic
+            height: 100px
+            width: 100px
+          .listenCount
+            position: absolute
+            bottom: 8px
+            left: 5px
+            color: $color-background
+            display: flex
+            align-items: center
+            .iconerji
+              font-size: 10px
+              margin-right: 3px
+            span
+              font-size: 9px
+        .right
+          flex: 1
+          padding: 4px 10px 4px 15px
+          position: relative
+          .title
+            font-size: 16px
+            line-height: 24px
+            margin-bottom: 5px
+            color: $color-theme
+          .iconxiayige
             color: $color-text-lll
-            overflow: hidden
-            white-space: nowrap
-            text-overflow: ellipsis
-            .songname
-              color: $color-theme
-              margin: 0 5px 0 8px
+            position: absolute
+            right: 10px
+            bottom: 40px
+          .songList
+            display: flex
+            flex-direction: column
+            .song
+              line-height: 21px
+              font-size: 14px
+              color: $color-text-lll
+              overflow: hidden
+              white-space: nowrap
+              text-overflow: ellipsis
+              .songname
+                color: $color-theme
+                margin: 0 5px 0 8px
 </style>

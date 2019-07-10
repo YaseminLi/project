@@ -1,5 +1,5 @@
 <template>
-  <div class="recommend">
+  <div class="recommend" ref="recommend">
     <scroll class="recommend-content" :data="discList" ref="scroll">
       <div>
         <slider v-if="slider.length>0" :slider="slider" @loadImg="loadImg" />
@@ -32,7 +32,9 @@ import scroll from "base/scroll/scroll.vue";
 import loading from "base/loading/loading.vue";
 import { setTimeout } from "timers";
 import { normalizeNum } from "common/js/filter.js";
+import { playlistMixin } from "common/js/mixin.js";
 export default {
+  mixins: [playlistMixin],
   data() {
     return {
       slider: [],
@@ -58,7 +60,7 @@ export default {
       getDiscList().then(res => {
         if (res.code === ERR_OK) {
           console.log(res.data.list);
-          
+
           this.discList = res.data.list;
         }
       });
@@ -71,6 +73,11 @@ export default {
           this.$refs.scroll.refresh();
         }, 20);
       }
+    },
+    handlePlaylist(playList) {
+      const bottom = playList.length > 0 ? '60px' : ''
+        this.$refs.recommend.style.bottom = bottom
+        this.$refs.scroll.refresh()
     }
   },
   components: {
@@ -83,52 +90,54 @@ export default {
 
 <style scoped lang="stylus" rel="stylesheet/stylus">
 @import '~common/stylus/variable.styl'
-.recommend-content
+.recommend
   position: fixed
+  width: 100%
   top: 44px
   bottom: 0
-  width: 100%
-  overflow: hidden
-  .discList-wrapper
-    margin: 0 15px
-    .title
-      margin: 25px 0 20px 5px
-      font-size: 16px
-      color: $color-theme
-    .discList
-      display: flex
-      flex-wrap: wrap
-      .item
-        width: 105px
-        margin: 0 5px 10px 5px
-        position: relative
-        img
-          height: 105px
+  .recommend-content
+    height: 100%
+    overflow: hidden
+    .discList-wrapper
+      margin: 0 15px
+      .title
+        margin: 25px 0 20px 5px
+        font-size: 16px
+        color: $color-theme
+      .discList
+        display: flex
+        flex-wrap: wrap
+        .item
           width: 105px
-          border-radius: 5px
-        .dissname
-          padding: 6px 0
-          font-size: 10px
-          line-height: 14px
-          color: $color-theme
-          overflow: hidden
-          text-overflow: ellipsis
-          display: -webkit-box
-          -webkit-box-orient: vertical
-          -webkit-line-clamp: 2
-        .listennum
-          position: absolute
-          top: 6px
-          right: 6px
-          color: white
-          font-size: 10px
-          display flex
-          align-items center
-          .iconbofang
-            font-size 14px
-.loading-container
-  width: 100%
-  position: absolute
-  top: 50%
+          margin: 0 5px 10px 5px
+          position: relative
+          img
+            height: 105px
+            width: 105px
+            border-radius: 5px
+          .dissname
+            padding: 6px 0
+            font-size: 10px
+            line-height: 14px
+            color: $color-theme
+            overflow: hidden
+            text-overflow: ellipsis
+            display: -webkit-box
+            -webkit-box-orient: vertical
+            -webkit-line-clamp: 2
+          .listennum
+            position: absolute
+            top: 6px
+            right: 6px
+            color: white
+            font-size: 10px
+            display: flex
+            align-items: center
+            .iconbofang
+              font-size: 14px
+  .loading-container
+    width: 100%
+    position: absolute
+    top: 50%
 </style>
 

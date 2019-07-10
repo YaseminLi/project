@@ -77,6 +77,11 @@ export default {
     }
   },
   methods: {
+    refresh(){
+      console.log('list');
+      
+      this.$refs.singerWrapper.refresh()
+    },
     onShortcutTouchStart(e) {
       //点击了哪个tag
       let anchorIndex = getData(e.target, "index");
@@ -152,63 +157,63 @@ export default {
 
 <style lang='stylus'  scoped>
 @import '~common/stylus/variable'
-.title
-  width: 100%
-  box-sizing: border-box
-  height: 30px
-  line-height: 30px
-  padding-left: 20px
-  background: $color-background-dd
-  color: $color-text
-  font-size: 12px
-  &.fixed-title
-    position: absolute
-    top: 0
-    left: 0
-.singer-wrapper
-  position: fixed
-  top: 44px
-  bottom: 0
-  width: 100%
-  overflow: hidden
-  .singer-group
-    padding-bottom: 30px
-    .singer-item
-      width: 100%
-      box-sizing: border-box
-      padding: 20px 0 0 30px
-      display: flex
-      align-items: center
-      .avatar
-        border-radius: 50%
-        width: 50px
-        height: 50px
-      .name
-        font-size: 14px
-        color: $color-text
-        margin-left: 20px
-  .list-shortcut
-    position: absolute
-    right: 0
-    bottom: 50px
-    width: 20px
-    padding: 20px 0
-    border-radius: 10px
+.listview
+  height 100%
+  overflow hidden
+  .title
+    width: 100%
+    box-sizing: border-box
+    height: 30px
+    line-height: 30px
+    padding-left: 20px
     background: $color-background-dd
-    display: flex
-    flex-direction: column
-    .item
-      font-size: 12px
-      height: 12px
-      width: 14px
-      color: $color-text
-      padding: 3px
+    color: $color-text
+    font-size: 12px
+    &.fixed-title
+      position: absolute
+      top: 0
+      left: 0
+  .singer-wrapper
+    height 100%
+    overflow: hidden
+    .singer-group
+      padding-bottom: 30px
+      .singer-item
+        width: 100%
+        box-sizing: border-box
+        padding: 20px 0 0 30px
+        display: flex
+        align-items: center
+        .avatar
+          border-radius: 50%
+          width: 50px
+          height: 50px
+        .name
+          font-size: 14px
+          color: $color-text
+          margin-left: 20px
+    .list-shortcut
+      position: absolute
+      right: 0
+      bottom: 50px
+      width: 20px
+      padding: 20px 0
+      border-radius: 10px
       background: $color-background-dd
-      color: $color-text
-      text-align: center
-      &.current
-        color: $color-theme-d
-  .loading
-    position fixed
-    top 50%
+      display: flex
+      flex-direction: column
+      .item
+        font-size: 12px
+        height: 12px
+        width: 14px
+        color: $color-text
+        padding: 3px
+        background: $color-background-dd
+        color: $color-text
+        text-align: center
+        &.current
+          color: $color-theme-d
+    .loading
+      position fixed
+      top 50%
 </style>

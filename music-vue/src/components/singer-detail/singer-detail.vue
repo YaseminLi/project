@@ -138,7 +138,7 @@ export default {
   transition: all 0.8s
 .singer-detail
   background: white
-  position: absolute
+  position: fixed
   top: 0
   width: 100%
   bottom: 0
