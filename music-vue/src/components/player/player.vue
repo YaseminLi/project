@@ -9,14 +9,40 @@
           <div class="songname">{{currentSong.songname}}</div>
           <div class="singer">{{currentSong.singer}}</div>
         </div>
-
-        <div class="middle">
-          <img :src="currentSong.image" :class="rotate" />
+        <div
+          class="middle"
+          ref="middle"
+          @touchstart="touchstart"
+          @touchmove="touchmove"
+          @touchend="touchend"
+        >
+          <div class="middle-l" ref="cd">
+            <img :src="currentSong.image" :class="rotate" />
+          </div>
+          <scroll class="middle-r" :data="currentLyric&&currentLyric.lines" ref="lyric">
+            <div class="lyric-wrapper">
+              <div
+                ref="lyricLine"
+                class="text"
+                :class="{'current':currentLineNum==index}"
+                v-for="(item,index) in currentLyric.lines"
+                :key="index"
+              >{{item.txt}}</div>
+            </div>
+          </scroll>
         </div>
         <div class="bottom">
+          <div class="dots">
+            <div class="dot" :class="{'current':currentShow=='cd'}"></div>
+            <div class="dot" :class="{'current':currentShow=='lyric'}"></div>
+          </div>
           <div class="progress-wrapper">
             <span class="time timel">{{format(currentTime)}}</span>
-            <progressBar :percent="percent" @progressBarChange="progressBarChange" ref="progressBar"/>
+            <progressBar
+              :percent="percent"
+              @progressBarChange="progressBarChange"
+              ref="progressBar"
+            />
             <span class="time timer">{{format(currentSong.duration)}}</span>
           </div>
           <div class="operators">
@@ -71,14 +97,25 @@ import { mapGetters, mapMutations } from "vuex";
 import progressBar from "base/progress-bar/progress-bar";
 import progressCircle from "base/progress-circle/progress-circle";
 import { playMode } from "common/js/config.js";
-import {shullfle} from "common/js/filter.js"
-import { setTimeout } from 'timers';
+import { shullfle } from "common/js/filter.js";
+import { setTimeout } from "timers";
+import Lyric from "lyric-parser";
+import scroll from "base/scroll/scroll";
+import { prefixStyle } from "common/js/dom.js";
+const transform = prefixStyle("transform");
+const transitionDuration = prefixStyle("transitionDuration");
 export default {
   data() {
     return {
       songReady: false,
-      currentTime: 0
+      currentTime: 0,
+      currentLyric: {},
+      currentLineNum: 0,
+      currentShow: "cd"
     };
+  },
+  created() {
+    this.touch = {};
   },
   computed: {
     ...mapGetters([
@@ -112,6 +149,63 @@ export default {
     }
   },
   methods: {
+    touchstart(e) {
+      this.touch.initialed = true;
+      this.touch.starX = e.touches[0].pageX;
+      this.touch.starY = e.touches[0].pageY;
+    },
+    touchmove(e) {
+      if (!this.touch.initialed) {
+        return;
+      }
+      let deltaX = e.touches[0].pageX - this.touch.starX;
+      let deltaY = e.touches[0].pageX - this.touch.starX;
+      if (Math.abs(deltaY) > Math.abs(deltaX)) {
+        return;
+      }
+      let left = this.currentShow == "cd" ? 0 : -window.innerWidth;
+      let offsetWidth = Math.min(
+        0,
+        Math.max(-window.innerWidth, deltaX + left)
+      );
+      this.touch.percent = Math.abs(offsetWidth) / window.innerWidth;
+      this.$refs.lyric.$el.style[
+        transform
+      ] = `translate3d(${offsetWidth}px,0,0)`;
+      this.$refs.lyric.$el.style[transitionDuration] = 0;
+      this.$refs.cd.style.opacity = 1 - this.touch.percent;
+      this.$refs.cd.style[transitionDuration] = 300;
+    },
+    touchend() {
+      let offsetWidth;
+      let opacity;
+      let percent = this.touch.percent;
+      if (this.currentShow == "cd") {
+        if (percent < 0.1) {
+          offsetWidth = 0;
+          opacity = 1;
+        } else {
+          offsetWidth = -window.innerWidth;
+          opacity = 0;
+          this.currentShow = "lyric";
+        }
+      }else{
+          if(percent<0.9){
+              offsetWidth=0;
+              opacity=1
+              this.currentShow="cd"
+          }else{
+              offsetWidth=-window.innerWidth;
+              opacity=0
+          }
+      }
+      const time = 300
+        this.$refs.lyric.$el.style[transform] = `translate3d(${offsetWidth}px,0,0)`
+        this.$refs.lyric.$el.style[transitionDuration] = `${time}ms`
+        this.$refs.cd.style.opacity = opacity
+        this.$refs.cd.style[transitionDuration] = `${time}ms`
+        this.touch.initiated = false
+    },
     back() {
       this.setFullScreen(false);
     },
@@ -185,31 +279,51 @@ export default {
       let mode = 0;
       this.mode == 2 ? (mode = 0) : (mode = this.mode + 1);
       this.setMode(mode);
-      if(this.mode==playMode.random){
-          this.setPlayList(shullfle(this.playList))
-          let currentIndex=this.playList.findIndex(item=>{
-              return item.id==this.currentSong.id
-          });
-          console.log(currentIndex);
-          
-          this._resetCurrentIndex(currentIndex);
+      if (this.mode == playMode.random) {
+        this.setPlayList(shullfle(this.playList));
+        let currentIndex = this.playList.findIndex(item => {
+          return item.id == this.currentSong.id;
+        });
+        console.log(currentIndex);
+
+        this._resetCurrentIndex(currentIndex);
       }
     },
-      _resetCurrentIndex(index){
-          this.setCurrentIndex(index);
-      },
+    _resetCurrentIndex(index) {
+      this.setCurrentIndex(index);
+    },
+    _getLyric() {
+      this.currentSong.getLyric().then(lyric => {
+        this.currentLyric = new Lyric(lyric, this.handleLyric);
+        //歌曲是播放状态时，歌词滚动
+        if (this.playingState) {
+          this.currentLyric.play();
+        }
+      });
+    },
+    //歌词改变时
+    handleLyric({ lineNum }) {
+      this.currentLineNum = lineNum;
+      if (lineNum > 5) {
+        let el = this.$refs.lyricLine[lineNum - 5];
+        this.$refs.lyric.scrollToElement(el, 1000);
+      } else {
+        this.$refs.lyric.scrollTo(0, 0, 1000);
+      }
+    },
     ...mapMutations({
       setFullScreen: "SET_FULL_SCREEN",
       setPlayingState: "SET_PLAYING_STATE",
       setCurrentIndex: "SET_CURRENT_INDEX",
       setMode: "SET_MODE",
-      setPlayList:"SET_PLAY_LIST"
+      setPlayList: "SET_PLAY_LIST"
     })
   },
   watch: {
     currentSong() {
       this.$nextTick(() => {
         this.$refs.audio.play();
+        this._getLyric();
       });
     },
     playingState(newP) {
@@ -219,17 +333,18 @@ export default {
       });
     },
     //从miniplay 到normalPlay 进度条不应该复原
-    fullScreen(newF){
-        if(newF){
-            setTimeout(()=>{
-                this.$refs.progressBar.setProgressOffset(this.percent)
-            },20)
-        }
+    fullScreen(newF) {
+      if (newF) {
+        setTimeout(() => {
+          this.$refs.progressBar.setProgressOffset(this.percent);
+        }, 20);
+      }
     }
   },
   components: {
     progressBar,
-    progressCircle
+    progressCircle,
+    scroll
   }
 };
 </script>
@@ -259,22 +374,56 @@ export default {
         font-size: 14px
         line-height: 20px
     .middle
-      margin-top: 50px
-      text-align: center
-      img
-        border: 10px solid $color-theme-d
-        border-radius: 50%
-        width: 300px
-        height: 300px
-        box-shadow: 0 0 32px $color-theme-d
-        &.play
-          animation: rotate 30s linear infinite
-        &.pause
-          animation-play-state: paused
+      position: fixed
+      width: 200%
+      top: 80px
+      bottom: 170px
+      display: flex
+      flex-direction: row
+      flex-wrap: nowrap
+      .middle-l
+        width: 50%
+        height: 100%
+        text-align: center
+        img
+          margin-top: 30px
+          border-radius: 50%
+          width: 300px
+          height: 300px
+          border: 10px solid $color-theme-d
+          &.play
+            animation: rotate 30s linear infinite
+          &.pause
+            animation-play-state: paused
+      .middle-r
+        width: 50%
+        height: 100%
+        overflow: hidden
+        .lyric-wrapper
+          width: 80%
+          margin: 0 auto
+        .text
+          font-size: 15px
+          line-height: 30px
+          text-align: center
+          &.current
+            color: $color-theme-d
+            font-size: 16px
     .bottom
       width: 100%
       position: absolute
       bottom: 50px
+      .dots
+        text-align: center
+        .dot
+          display: inline-block
+          width: 6px
+          height: 6px
+          background: $color-theme-d
+          border-radius: 3px
+          margin: 0 3px
+          &.current
+            width: 12px
       .progress-wrapper
         width: 80%
         height: 30px

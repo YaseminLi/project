@@ -2,7 +2,24 @@ import { getUid } from 'common/js/uid';
 import { commonParams } from './config'
 import axios from 'axios'
 import { ERR_OK } from 'api/config'
+// import { Base64 } from 'js-base64'
+export function getLyric(mid){
+    const url="/api/lyric";
+    const data = Object.assign({}, commonParams, {
+        platform: 'yqq.json',
+        needNewCode: 0,
+        songmid: mid,
+        hostUin: 0,
+        format:'json',
+        g_tk: 1433327100
+      });
+      return axios.get(url, {
+        params: data
+      }).then((res) => { 
+        return Promise.resolve(res.data)
+      })
 
+}
 //拿到key=songmid  value=url的对象集合
 export function getSongsUrl(songs) {
     const url = '/api/getPurlUrl';

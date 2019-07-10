@@ -23,32 +23,34 @@ export function getData(el,name,val){
     }
 }
 
-let elementstyle=document.createElement('div').style;
-let vendor=(()=>{
-    let transformNames = {
-        webkit: 'webkitTransform',
-        Moz: 'MozTransform',
-        O: 'OTransform',
-        ms: 'msTransform',
-        standard: 'transform'
-      }
+let elementStyle = document.createElement('div').style
 
-      for(let key in transformNames){
-          if(elementstyle[transformNames[key]]!==undefined){
-              return key
-          }
-      }
-      return false
-})();
+let vendor = (() => {
+  let transformNames = {
+    webkit: 'webkitTransform',
+    Moz: 'MozTransform',
+    O: 'OTransform',
+    ms: 'msTransform',
+    standard: 'transform'
+  }
 
-export function prefix(style){
-    if(vendor==false){
-        return false;
+  for (let key in transformNames) {
+    if (elementStyle[transformNames[key]] !== undefined) {
+      return key
     }
+  }
 
-    if(vendor==='standard'){
-        return style
-    }
+  return false
+})()
 
-    return vendor+style.charAt(0).toUpperCase() + style.substr(1);
+export function prefixStyle (style) {
+  if (vendor === false) {
+    return false
+  }
+
+  if (vendor === 'standard') {
+    return style
+  }
+
+  return vendor + style.charAt(0).toUpperCase() + style.substr(1)
 }
