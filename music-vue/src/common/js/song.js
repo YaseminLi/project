@@ -31,8 +31,7 @@ class Song {
     }
 }
 
-export function createSong(data) {
-    const musicData = data.musicData;
+export function createSong(musicData) {
     return new Song({
         id: musicData.songid,
         mid: musicData.songmid,

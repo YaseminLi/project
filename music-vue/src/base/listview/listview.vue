@@ -78,8 +78,6 @@ export default {
   },
   methods: {
     refresh(){
-      console.log('list');
-      
       this.$refs.singerWrapper.refresh()
     },
     onShortcutTouchStart(e) {

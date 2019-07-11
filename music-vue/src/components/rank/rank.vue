@@ -6,19 +6,16 @@
           <div class="left">
             <img class="pic" :src="item.picUrl" />
             <span class="listenCount">
-              <i class="iconfont iconerji" />
+              <i class="iconfont iconlisten" />
               <span>{{normalizeNum(item.listenCount)}}</span>
             </span>
           </div>
           <div class="right">
-            <div class="title">{{item.topTitle}}</div>
-            <ul class="songList" v-for="(song,index) in item.songList" :key="index">
-              <ol class="song">
+            <div class="song" v-for="(song,index) in item.songList" :key="index">
                 {{index+1}}
                 <span class="songname">{{song.songname}}</span>
-                -{{song.songname}}
-              </ol>
-            </ul>
+                -{{song.singername}}
+            </div>
             <i class="iconfont iconxiayige" />
           </div>
         </div>
@@ -88,8 +85,8 @@ export default {
         background: $color-background
         display: flex
         .left
-          width: 100px
-          position: relative
+          flex: 0 0 100px
+          position relative
           .pic
             height: 100px
             width: 100px
@@ -100,29 +97,24 @@ export default {
             color: $color-background
             display: flex
             align-items: center
-            .iconerji
+            .iconlisten
               font-size: 10px
               margin-right: 3px
             span
               font-size: 9px
         .right
           flex: 1
-          padding: 4px 10px 4px 15px
-          position: relative
-          .title
-            font-size: 16px
-            line-height: 24px
-            margin-bottom: 5px
-            color: $color-theme
+          padding: 20px 30px 20px 15px
+          display: flex
+          flex-direction: column
+          overflow: hidden
+          position relative
           .iconxiayige
             color: $color-text-lll
             position: absolute
             right: 10px
-            bottom: 40px
-          .songList
-            display: flex
-            flex-direction: column
-            .song
+            bottom: 44px
+          .song
               line-height: 21px
               font-size: 14px
               color: $color-text-lll

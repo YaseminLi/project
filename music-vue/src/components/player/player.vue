@@ -128,7 +128,8 @@ export default {
       "playList",
       "currentSong",
       "currentIndex",
-      "mode"
+      "mode",
+      "sequenceList"
     ]),
     playIcon() {
       return this.playingState ? "iconplay" : "iconpause";
@@ -302,20 +303,28 @@ export default {
       }
     },
     modeChange() {
-      let mode = 0;
-      this.mode == 2 ? (mode = 0) : (mode = this.mode + 1);
+      const mode=(this.mode+1)%3;
       this.setMode(mode);
-      if (this.mode == playMode.random) {
-        this.setPlayList(shullfle(this.playList));
-        let currentIndex = this.playList.findIndex(item => {
-          return item.id == this.currentSong.id;
-        });
-        console.log(currentIndex);
-
-        this._resetCurrentIndex(currentIndex);
+      let list=[];
+      if(mode==playMode.random){
+        list=shullfle(this.sequenceList)
+      }else{
+        list=this.sequenceList
       }
+      this._resetCurrentIndex(list)
+      this.setPlayList(list)
+      // if (this.mode == playMode.random) {
+      //   this.setPlayList(shullfle(this.playList));
+      //   let currentIndex = this.playList.findIndex(item => {
+      //     return item.id === this.currentSong.id;
+      //   });
+      //   this._resetCurrentIndex(currentIndex);
+      // }
     },
-    _resetCurrentIndex(index) {
+    _resetCurrentIndex(list) {
+      let index=list.findIndex(item=>{
+        return item.id === this.currentSong.id;
+      })
       this.setCurrentIndex(index);
     },
     _getLyric() {
@@ -348,6 +357,7 @@ export default {
   },
   watch: {
     currentSong(newSong, oldSong) {
+      //暂停时，切换模式会改变currentSong，但歌曲没变
       if (newSong.id == oldSong.id) {
         return;
       }
@@ -438,7 +448,7 @@ export default {
           width: 80%
           margin: 0 auto
         .text
-          font-size: 15px
+          font-size: 14px
           line-height: 30px
           text-align: center
           &.current

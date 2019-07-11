@@ -6,7 +6,7 @@
         <div class="discList-wrapper">
           <h1 class="title">推荐歌单</h1>
           <div class="discList">
-            <div class="item" v-for="(item,index) in discList" :key="index">
+            <div class="item" v-for="(item,index) in discList" :key="index" @click="selectDisc(item)">
               <img v-lazy="item.imgurl" />
               <p class="dissname">{{item.dissname}}</p>
               <div class="listennum">
@@ -21,6 +21,7 @@
     <div class="loading-container" v-show="!discList.length">
       <loading />
     </div>
+    <router-view></router-view>
   </div>
 </template>
 
@@ -33,6 +34,7 @@ import loading from "base/loading/loading.vue";
 import { setTimeout } from "timers";
 import { normalizeNum } from "common/js/filter.js";
 import { playlistMixin } from "common/js/mixin.js";
+import {mapMutations} from "vuex"
 export default {
   mixins: [playlistMixin],
   data() {
@@ -46,6 +48,12 @@ export default {
     this._getDiscList();
   },
   methods: {
+    selectDisc(item){
+      this.$router.push({
+        path:`/recommend/${item.dissid}`
+      });
+      this.setDisc(item)
+    },
     normalizeNum(num) {
       return normalizeNum(num);
     },
@@ -59,8 +67,6 @@ export default {
     _getDiscList() {
       getDiscList().then(res => {
         if (res.code === ERR_OK) {
-          console.log(res.data.list);
-
           this.discList = res.data.list;
         }
       });
@@ -78,7 +84,10 @@ export default {
       const bottom = playList.length > 0 ? '60px' : ''
         this.$refs.recommend.style.bottom = bottom
         this.$refs.scroll.refresh()
-    }
+    },
+    ...mapMutations({
+      setDisc:"SET_DISC"
+    })
   },
   components: {
     slider,

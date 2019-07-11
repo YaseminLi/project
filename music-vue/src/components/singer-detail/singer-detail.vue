@@ -1,6 +1,6 @@
 <template>
   <transition appear name="slide">
-    <div class="singer-detail">
+    <div class="singer-detail" ref="detail">
       <i @click="back" class="iconfont iconreturn" />
       <div class="head" ref="singerHead" :style="{zIndex:0}">
         <img class="avatar" :src="singerInfo.avatar" />
@@ -18,6 +18,7 @@
       <loading v-show="songs.length==0" />
       <scroll
         class="list"
+        ref="list"
         :data="songs"
         :probeTybe="probeType"
         :listenScroll="listenScroll"
@@ -45,7 +46,9 @@ import songList from "base/song-list/song-list";
 import scroll from "base/scroll/scroll";
 import { createSong, processSongsUrl } from "common/js/song.js";
 import loading from "base/loading/loading";
+import { playlistMixin } from "common/js/mixin.js";
 export default {
+  mixins: [playlistMixin],
   data() {
     return {
       singerInfo: {},
@@ -62,6 +65,11 @@ export default {
     ...mapGetters(["singer"])
   },
   methods: {
+     handlePlaylist(playList) {
+      const bottom = playList.length > 0 ? "60px" : "";
+      this.$refs.detail.style.bottom = bottom;
+      this.$refs.list.refresh();
+    },
     _getSingerDetail() {
       if (!this.singer.id) {
         this.$router.push("/singer");
@@ -77,8 +85,10 @@ export default {
     _normalizeSingerDetail(data) {
       let musicList = [];
       let list = data.list;
+      console.log(list);
+      
       for (let i = 0; i < list.length; i++) {
-        musicList.push(createSong(list[i]));
+        musicList.push(createSong(list[i].musicData));
       }
       let singerInfo = Object.assign({}, this.singer, {
         fans: data.fans,
@@ -112,8 +122,6 @@ export default {
     scrollY(newY) {
       let zIndex = 0;
       if (newY < -304) {
-        console.log("zindex");
-
         this.$refs.singerHead.style.zIndex = 10;
         this.$refs.singerHead.style.height = `35px`;
       } else {
@@ -142,6 +150,7 @@ export default {
   top: 0
   width: 100%
   bottom: 0
+  overflow hidden
   .iconreturn
     color: $color-theme-d
     position: fixed
@@ -193,7 +202,7 @@ export default {
       .iconbofang
         font-size: 24px
   .list
-    position: fixed
+    position: absolute
     bottom: 0
     width: 100%
     top: 381px

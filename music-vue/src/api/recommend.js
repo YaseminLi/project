@@ -14,8 +14,6 @@ export function getDiscList() {
     const url = '/api/getDiscList';
     const data = Object.assign({}, commonParams, {
         picmid: 1,
-        g_tk: 1433327100,
-        loginUin: 2608438541,
         hostUin: 0,
         format: 'json',
         inCharset: 'utf8',
@@ -36,3 +34,22 @@ export function getDiscList() {
     })
 
 }       
+
+export function getSongList(id) {
+    const url = '/api/getSongList';
+    const data = Object.assign({}, commonParams, {
+        hostUin: 0,
+        format: 'json',
+        notice: 0,
+        platform: 'yqq.json',
+        needNewCode: 0,
+        type:1,
+        disstid:id
+
+    });
+    return axios.get(url, {
+        params: data
+    }).then((res) => {
+        return Promise.resolve(res.data)
+    })
+}
