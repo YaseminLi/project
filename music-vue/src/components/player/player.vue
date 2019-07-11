@@ -82,6 +82,7 @@
         </div>
 
         <i class="iconfont iconliebiao" />
+        <playlist />
       </div>
     </transition>
     <audio
@@ -105,6 +106,7 @@ import { setTimeout } from "timers";
 import Lyric from "lyric-parser";
 import scroll from "base/scroll/scroll";
 import { prefixStyle } from "common/js/dom.js";
+import playlist from "components/playlist/playlist";
 const transform = prefixStyle("transform");
 const transitionDuration = prefixStyle("transitionDuration");
 export default {
@@ -303,28 +305,21 @@ export default {
       }
     },
     modeChange() {
-      const mode=(this.mode+1)%3;
+      const mode = (this.mode + 1) % 3;
       this.setMode(mode);
-      let list=[];
-      if(mode==playMode.random){
-        list=shullfle(this.sequenceList)
-      }else{
-        list=this.sequenceList
+      let list = [];
+      if (mode == playMode.random) {
+        list = shullfle(this.sequenceList);
+      } else {
+        list = this.sequenceList;
       }
-      this._resetCurrentIndex(list)
-      this.setPlayList(list)
-      // if (this.mode == playMode.random) {
-      //   this.setPlayList(shullfle(this.playList));
-      //   let currentIndex = this.playList.findIndex(item => {
-      //     return item.id === this.currentSong.id;
-      //   });
-      //   this._resetCurrentIndex(currentIndex);
-      // }
+      this._resetCurrentIndex(list);
+      this.setPlayList(list);
     },
     _resetCurrentIndex(list) {
-      let index=list.findIndex(item=>{
+      let index = list.findIndex(item => {
         return item.id === this.currentSong.id;
-      })
+      });
       this.setCurrentIndex(index);
     },
     _getLyric() {
@@ -387,7 +382,8 @@ export default {
   components: {
     progressBar,
     progressCircle,
-    scroll
+    scroll,
+    playlist
   }
 };
 </script>
@@ -439,7 +435,7 @@ export default {
           &.pause
             animation-play-state: paused
         .playingLyric
-            line-height 50px
+          line-height: 50px
       .middle-r
         width: 50%
         height: 100%

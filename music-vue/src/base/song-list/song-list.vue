@@ -1,8 +1,14 @@
 <template>
   <div class="song-list">
     <div class="item" v-for="(item,index) in songs" :key="index" @click="selectItem(item,index)">
-      <div class="name">{{item.songname}}</div>
-      <div class="album">{{songDesc(item)}}</div>
+      <div class="rank" v-show="rank&&index>2">{{index}}</div>
+      <div class="rank" v-show="rank&&index<3">
+        <i class="iconfont" :class="rankNum(index)"></i>
+      </div>
+      <div class="content">
+        <div class="name">{{item.songname}}</div>
+        <div class="album">{{songDesc(item)}}</div>
+      </div>
     </div>
   </div>
 </template>
@@ -10,7 +16,11 @@
 <script>
 export default {
   props: {
-    songs: Array
+    songs: Array,
+    rank: {
+      type: Boolean,
+      default: false
+    }
   },
   methods: {
     songDesc(song) {
@@ -25,6 +35,9 @@ export default {
     },
     selectItem(item, index) {
       this.$emit("selectItem", item, index);
+    },
+    rankNum(index) {
+      return `iconrank${index + 1}`;
     }
   }
 };
@@ -38,15 +51,28 @@ export default {
   margin: 0 16px
   .item
     padding: 10px 0
-    .name
-      font-size: 14px
-      color: $color-text
-      line-height: 21px
-    .album
-      font-size: 12px
-      color: $color-text-lll
-      line-height: 18px
-      overflow: hidden
-      white-space: nowrap
-      text-overflow: ellipsis
+    display: flex
+    flex-direction: row
+    flex-wrap: nowrap
+    .rank
+      flex: 0 0 20px
+      line-height: 39px
+      margin-right 10px
+      color: $color-theme-d
+      text-align center
+      .iconfont
+        font-size 20px
+    .content
+      flex: 1
+      .name
+        font-size: 14px
+        color: $color-text
+        line-height: 21px
+      .album
+        font-size: 12px
+        color: $color-text-lll
+        line-height: 18px
+        overflow: hidden
+        white-space: nowrap
+        text-overflow: ellipsis
 </style>

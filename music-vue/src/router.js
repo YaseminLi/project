@@ -6,7 +6,7 @@ import Search from './components/search/search.vue'
 import Singer from './components/singer/singer.vue'
 import singerDetail from './components/singer-detail/singer-detail.vue'
 import disc from "./components/disc/disc.vue"
-
+import topList from "./components/top-list/top-list.vue"
 Vue.use(Router)
 
 export default new Router({
@@ -19,7 +19,11 @@ export default new Router({
     {
       path: '/rank',
       name: 'rank',
-      component: Rank
+      component: Rank,
+      children:[{
+        path:":id",
+        component:topList
+      }]
     },
     {
       path: '/recommend',

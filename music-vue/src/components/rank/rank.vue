@@ -2,7 +2,7 @@
   <div class="rank" ref="rank">
     <scroll class="rank-scroll" ref="scroll" :data="rank">
       <div class="container">
-        <div class="list-group" v-for="(item,index) in rank" :key="index">
+        <div class="list-group" v-for="(item,index) in rank" :key="index" @click="selectItem(item)">
           <div class="left">
             <img class="pic" :src="item.picUrl" />
             <span class="listenCount">
@@ -12,15 +12,16 @@
           </div>
           <div class="right">
             <div class="song" v-for="(song,index) in item.songList" :key="index">
-                {{index+1}}
-                <span class="songname">{{song.songname}}</span>
-                -{{song.singername}}
+              {{index+1}}
+              <span class="songname">{{song.songname}}</span>
+              -{{song.singername}}
             </div>
             <i class="iconfont iconxiayige" />
           </div>
         </div>
       </div>
     </scroll>
+    <router-view></router-view>
   </div>
 </template>
 
@@ -30,6 +31,7 @@ import { ERR_OK } from "api/config.js";
 import scroll from "base/scroll/scroll";
 import { normalizeNum } from "common/js/filter.js";
 import { playlistMixin } from "common/js/mixin.js";
+import { mapMutations } from "vuex";
 export default {
   mixins: [playlistMixin],
   data() {
@@ -53,10 +55,18 @@ export default {
       getRank().then(res => {
         if (res.code == ERR_OK) {
           this.rank = res.data.topList;
-          console.log(res.data);
         }
       });
-    }
+    },
+    selectItem(item) {
+      this.$router.push({
+        path: `/rank/${item.id}`
+      });
+      this.setTopList(item);
+    },
+    ...mapMutations({
+      setTopList: "SET_TOP_LIST"
+    })
   },
   components: {
     scroll
@@ -73,8 +83,8 @@ export default {
   bottom: 0
   background: $color-background-dd
   .rank-scroll
-    height 100%
-    overflow hidden
+    height: 100%
+    overflow: hidden
     .container
       margin: 0 10px
       padding: 10px 0
@@ -86,7 +96,7 @@ export default {
         display: flex
         .left
           flex: 0 0 100px
-          position relative
+          position: relative
           .pic
             height: 100px
             width: 100px
@@ -108,20 +118,20 @@ export default {
           display: flex
           flex-direction: column
           overflow: hidden
-          position relative
+          position: relative
           .iconxiayige
             color: $color-text-lll
             position: absolute
             right: 10px
             bottom: 44px
           .song
-              line-height: 21px
-              font-size: 14px
-              color: $color-text-lll
-              overflow: hidden
-              white-space: nowrap
-              text-overflow: ellipsis
-              .songname
-                color: $color-theme
-                margin: 0 5px 0 8px
+            line-height: 21px
+            font-size: 14px
+            color: $color-text-lll
+            overflow: hidden
+            white-space: nowrap
+            text-overflow: ellipsis
+            .songname
+              color: $color-theme
+              margin: 0 5px 0 8px
 </style>
