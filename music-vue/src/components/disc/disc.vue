@@ -168,6 +168,7 @@ export default {
   width: 100%
   bottom: 0
   overflow: hidden
+  z-index 10
   .back
     position: fixed
     width: 100%

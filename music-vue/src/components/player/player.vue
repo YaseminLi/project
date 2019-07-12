@@ -81,8 +81,9 @@
           </progressCircle>
         </div>
 
-        <i class="iconfont iconliebiao" />
-        <playlist />
+        <i class="iconfont iconliebiao"  @click.stop="showPlaylist"/>
+        <playlist v-show="playlistShow" @closePlaylist="closePlaylist" @modeChange="modeChange" ref="playlist" :playlistShow="playlistShow"/>
+        <div class="layer" v-show="playlistShow" @click.stop="closePlaylist"></div>
       </div>
     </transition>
     <audio
@@ -117,7 +118,8 @@ export default {
       currentLyric: null,
       currentLineNum: 0,
       currentShow: "cd",
-      playingLyric: ""
+      playingLyric: "",
+      playlistShow:false
     };
   },
   created() {
@@ -156,6 +158,13 @@ export default {
     }
   },
   methods: {
+    showPlaylist(){
+      this.playlistShow=true;
+      this.$refs.playlist.scrollToCurrent(this.currentSong)
+    },
+    closePlaylist(){
+      this.playlistShow=false;
+    },
     touchstart(e) {
       this.touch.initialed = true;
       this.touch.starX = e.touches[0].pageX;
@@ -353,12 +362,17 @@ export default {
   watch: {
     currentSong(newSong, oldSong) {
       //暂停时，切换模式会改变currentSong，但歌曲没变
-      if (newSong.id == oldSong.id) {
+      if (!newSong.id||newSong.id == oldSong.id) {
         return;
       }
       if (this.currentLyric) {
         this.currentLyric.stop();
       }
+      // //清空播放列表后newSong为{}
+      // if(!newSong.id){
+      //   return
+      // }
+      
       this.$nextTick(() => {
         this.$refs.audio.play();
         this._getLyric();
@@ -390,6 +404,7 @@ export default {
 
 <style lang='stylus' >
 @import '~common/stylus/variable'
+  @import "~common/stylus/mixin"
 .player
   .normal-player
     position: fixed
@@ -400,16 +415,20 @@ export default {
     z-index: 150
     background: $color-background
     .top
+      padding 0 30px
       text-align: center
       .xiala
         position: absolute
-        padding: 10px 0 0 20px
+        top 10px
+        left 10px
         .iconxiala
           font-size: 20px
       .songname
         font-size: 18px
         line-height: 40px
+        no-wrap()
       .singer
+        no-wrap()
         font-size: 14px
         line-height: 20px
     .middle
@@ -425,7 +444,7 @@ export default {
         height: 100%
         text-align: center
         img
-          margin-top: 30px
+          margin-top: 20px
           border-radius: 50%
           width: 300px
           height: 300px
@@ -436,6 +455,8 @@ export default {
             animation-play-state: paused
         .playingLyric
           line-height: 50px
+          padding 0 30px
+          no-wrap()
       .middle-r
         width: 50%
         height: 100%
@@ -533,6 +554,13 @@ export default {
       .iconfont
         position: absolute
         font-size: 32px
+    .layer
+      position fixed
+      top 0
+      bottom 0
+      width 100%
+      background $color-background-d
+      z-index 15
 @keyframes rotate
   0%
     transform: rotate(0)

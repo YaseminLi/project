@@ -1,6 +1,6 @@
 <template>
   <transition appear name="slide">
-    <div class="topList" ref="topList">
+    <div class="topList" ref="top">
       <div class="back" ref="back">
         <i @click.stop="back" class="iconfont iconreturn" />
         <span>{{title}}</span>
@@ -64,7 +64,7 @@ export default {
   methods: {
     handlePlaylist(playList) {
       const bottom = playList.length > 0 ? "60px" : "";
-      this.$refs.topList.style.bottom = bottom;
+      this.$refs.top.style.bottom = bottom;
       this.$refs.list.refresh();
     },
     _getTopList() {
@@ -134,6 +134,7 @@ export default {
 
 <style lang='stylus' scoped>
 @import '~common/stylus/variable'
+@import '~common/stylus/mixin'
 .slide-enter, .slide-leave-to
   transform: translate3d(100%, 0, 0)
 .slide-enter-active, .slide-leave-active
@@ -161,6 +162,7 @@ export default {
     span
       font-size: 16px
       line-height: 30px
+      no-wrap()
   .head
     position relative
     width 100%

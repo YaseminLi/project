@@ -45,6 +45,7 @@ export default {
 
 <style lang='stylus' >
 @import '~common/stylus/variable'
+  @import '~common/stylus/mixin'
 .song-list
   display: flex
   flex-direction: column
@@ -54,6 +55,7 @@ export default {
     display: flex
     flex-direction: row
     flex-wrap: nowrap
+    overflow hidden
     .rank
       flex: 0 0 20px
       line-height: 39px
@@ -64,15 +66,15 @@ export default {
         font-size 20px
     .content
       flex: 1
+      overflow hidden
       .name
         font-size: 14px
         color: $color-text
         line-height: 21px
+        no-wrap()
       .album
         font-size: 12px
         color: $color-text-lll
         line-height: 18px
-        overflow: hidden
-        white-space: nowrap
-        text-overflow: ellipsis
+        no-wrap()
 </style>
