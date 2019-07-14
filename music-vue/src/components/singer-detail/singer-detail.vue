@@ -1,6 +1,6 @@
 <template>
   <transition appear name="slide">
-    <div class="singer-detail" ref="detail">
+    <div class="singer-detail" ref="detail" >
       <i @click="back" class="iconfont iconreturn" />
       <div class="head" ref="singerHead" :style="{zIndex:0}">
         <img class="avatar" :src="singerInfo.avatar" />
@@ -59,7 +59,10 @@ export default {
     };
   },
   created() {
-    this._getSingerDetail();
+    this._getSingerDetail(
+    );
+    console.log("created");
+    
   },
   computed: {
     ...mapGetters(["singer"])
@@ -74,6 +77,8 @@ export default {
       if (!this.singer.id) {
         this.$router.push("/singer");
       }
+      console.log("detail");
+      
       getSingerDetail(this.singer).then(res => {
         if (res.code == ERR_OK) {
           processSongsUrl(this._normalizeSingerDetail(res.data)).then(songs => {
@@ -99,7 +104,7 @@ export default {
       return musicList;
     },
     back() {
-      this.$router.push("/singer");
+      this.$router.back();
     },
     scroll(pos) {
       this.scrollY = pos.y;

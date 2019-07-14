@@ -36,22 +36,3 @@ export function getSingerDetail(singer){
     return Promise.resolve(res.data)
   })
 }
-// export function getSingerDetail(id) {
-//   const url = '/api/getSingerDetail';
-//   const data = Object.assign({}, commonParams, {
-//     myid: id,
-//     hostUin: 0,
-//     platform: 'yqq.json',
-//     needNewCode: 0,
-//     g_tk: 1433327100,
-//     loginUin: 2608438541,
-//     notice: 0,
-//     data: {"comm":{"ct":24,"cv":0},"singer":{"method":"get_singer_detail_info","param":{"sort":5,"singermid":id,"sin":0,"num":10},"module":"music.web_singer_info_svr"}}
-//   });
-//   return axios.get(url, {
-//     params: data
-//   }).then((res) => { 
-//     return Promise.resolve(res.data)
-//   })
-
-// }

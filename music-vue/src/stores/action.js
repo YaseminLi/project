@@ -9,6 +9,7 @@ function indexFind(list,song){
 }
  //点击歌曲播放
 export const selectPlay=function({commit,state},{list,index}){
+
     commit(types.SET_SEQUENCE_LIST,list)
     if(state.mode==playMode.random){
         let randomList=shullfle(list);

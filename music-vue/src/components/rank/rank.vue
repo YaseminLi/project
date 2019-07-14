@@ -4,7 +4,7 @@
       <div class="container">
         <div class="list-group" v-for="(item,index) in rank" :key="index" @click="selectItem(item)">
           <div class="left">
-            <img class="pic" :src="item.picUrl" />
+            <img class="pic" v-lazy="item.picUrl" />
             <span class="listenCount">
               <i class="iconfont iconlisten" />
               <span>{{normalizeNum(item.listenCount)}}</span>
@@ -21,6 +21,10 @@
         </div>
       </div>
     </scroll>
+    <div class="loading-container" v-show="rank.length==0">
+      <loading />
+    </div>
+    
     <router-view></router-view>
   </div>
 </template>
@@ -32,6 +36,7 @@ import scroll from "base/scroll/scroll";
 import { normalizeNum } from "common/js/filter.js";
 import { playlistMixin } from "common/js/mixin.js";
 import { mapMutations } from "vuex";
+import loading from "base/loading/loading"
 export default {
   mixins: [playlistMixin],
   data() {
@@ -69,7 +74,8 @@ export default {
     })
   },
   components: {
-    scroll
+    scroll,
+    loading
   }
 };
 </script>
@@ -134,4 +140,9 @@ export default {
             .songname
               color: $color-theme
               margin: 0 5px 0 8px
+  .loading-container
+    width 100%
+    position fixed
+    top 50%
+    transform translateY(-50%)
 </style>
