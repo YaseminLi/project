@@ -1,21 +1,26 @@
 <template>
   <div class="search">
-    <searchBox @beginSearch="beginSearch" @clearInput="clearInput" @input="search" ref="serach-box"/>
-    <div class="hotkeys" v-show="!isSearching">
+    <searchBox @query="queryChange" ref="box" />
+    <div class="hotkeys">
       <div class="title">热门搜索</div>
       <div class="container">
-        <span class="key" v-for="(item,index) in hotkeys" :key="index">{{item.k}}</span>
+        <span
+          class="key"
+          v-for="(item,index) in hotkeys"
+          :key="index"
+          @click.stop="searchHotKey(item.k)"
+        >{{item.k}}</span>
       </div>
     </div>
-    <div class="search-result" v-show="suggest.length>0">
-      <suggest :suggest="suggest" @clearInput="clearInput"/>
+    <div class="search-result" v-show="query">
+      <suggest :query="query"  ref="suggest"/>
     </div>
     <router-view></router-view>
   </div>
 </template>
 
 <script>
-import { getHotKey, getSearchResult } from "api/search.js";
+import { getHotKey } from "api/search.js";
 import { ERR_OK } from "api/config.js";
 import searchBox from "base/search-box/search-box";
 import suggest from "base/suggest/suggest";
@@ -24,61 +29,29 @@ export default {
   data() {
     return {
       hotkeys: [],
-      isSearching: false,
-      inputValue: "",
-      suggest: []
+      query: ""
     };
   },
   created() {
     this._initHotKey();
   },
   methods: {
-    beginSearch() {
-      this.isSearching = true;
+    queryChange(query) {
+      this.query = query;
     },
-    clearInput() {
-      this.isSearching = false;
-      this.inputValue = "";
-      this.suggest=[]
-    },
-    search(value) {
-      getSearchResult(value).then(res => {
-        if (res.code == ERR_OK) {
-          console.log(res.code);
-          
-          this._normalizeResult(res.data);
-        }
-      });
+    searchHotKey(query){
+      this.$refs.box.setQuery(query)
     },
     _initHotKey() {
       getHotKey().then(res => {
         if (res.code == ERR_OK)
           this.hotkeys = res.data.hotkey.slice(0, HOTKEYS_NUM);
       });
-    },
-    _normalizeResult(result) {
-      let arr = [];
-      if (result.singer) {
-        result.singer.itemlist.forEach(item => {
-          arr.push({
-            name: item.name,
-            mid: item.mid,
-            id: item.id,
-            type:"singer"
-          });
-        });
-      }
-      if (result.song) {
-        result.song.itemlist.forEach(item => {
-          arr.push({
-            name: item.name,
-            mid: item.mid,
-            id: item.id,
-            type:"song"
-          });
-        });
-      }
-      this.suggest=arr;
+    }
+  },
+  watch: {
+    query(newQuery) {
+      this.query = newQuery;
     }
   },
   components: {

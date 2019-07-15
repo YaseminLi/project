@@ -88,6 +88,7 @@ export default {
   width: 100%
   bottom: 0
   background: $color-background-dd
+  overflow hidden
   .rank-scroll
     height: 100%
     overflow: hidden

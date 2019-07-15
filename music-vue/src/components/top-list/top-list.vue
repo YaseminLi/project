@@ -6,10 +6,12 @@
         <span>{{title}}</span>
       </div>
       <div class="head" ref="head" :style="{zIndex:0}">
-          <img class="avatar" :src="top.logo" />
-          <div class="updateTime">最近更新：{{top.updateTime}}</div>
-      </div> 
-      <loading v-show="songs.length==0" />
+        <img class="avatar" :src="top.logo" />
+        <div class="updateTime">最近更新：{{top.updateTime}}</div>
+      </div>
+      <div class="loading-container" v-show="songs.length==0">
+        <loading />
+      </div>
       <scroll
         class="list"
         ref="list"
@@ -27,7 +29,7 @@
           <div class="play" v-show="songs.length==0">
             <span>暂时没有歌曲信息</span>
           </div>
-          <songList :songs="songs" @selectItem="selectItem" :rank="true"/>
+          <songList :songs="songs" @selectItem="selectItem" :rank="true" />
         </div>
       </scroll>
     </div>
@@ -59,7 +61,7 @@ export default {
     this._getTopList();
   },
   computed: {
-    ...mapGetters(["topList"]),
+    ...mapGetters(["topList"])
   },
   methods: {
     handlePlaylist(playList) {
@@ -72,7 +74,7 @@ export default {
         this.$router.push("/rank");
       }
       getTopList(this.topList.id).then(res => {
-        if (res.code == ERR_OK) { 
+        if (res.code == ERR_OK) {
           processSongsUrl(this._normalizeTop(res)).then(songs => {
             this.songs = songs;
           });
@@ -82,14 +84,14 @@ export default {
     _normalizeTop(top) {
       let songs = [];
       top.songlist.forEach(song => {
-          if(song.data.songid&&song.data.songmid){
-              songs.push(createSong(song.data));
-          }
+        if (song.data.songid && song.data.songmid) {
+          songs.push(createSong(song.data));
+        }
       });
       let info = {
         logo: top.topinfo.pic_h5,
         name: top.topinfo.ListName,
-        updateTime: top.update_time,
+        updateTime: top.update_time
       };
       this.top = info;
       return songs;
@@ -115,12 +117,12 @@ export default {
     scrollY(newY) {
       if (newY < -90) {
         this.title = this.top.name;
-        this.$refs.back.style.background=`white`
-        this.$refs.back.style.color=`#333333`
+        this.$refs.back.style.background = `white`;
+        this.$refs.back.style.color = `#333333`;
       } else {
         this.title = "";
-        this.$refs.back.style.background=``
-        this.$refs.back.style.color=`white`
+        this.$refs.back.style.background = ``;
+        this.$refs.back.style.color = `white`;
       }
     }
   },
@@ -164,36 +166,41 @@ export default {
       line-height: 30px
       no-wrap()
   .head
-    position relative
-    width 100%
-    height 0
-    padding-bottom 46.875%
-    background $color-theme-d
+    position: relative
+    width: 100%
+    height: 0
+    padding-bottom: 46.875%
+    background: $color-theme-d
     .avatar
-        position absolute
-        width: 100%
-        height 100%
-        top 0
-        left 0
+      position: absolute
+      width: 100%
+      height: 100%
+      top: 0
+      left: 0
     .updateTime
-      width 100%
-      position absolute
-      color white
-      text-align center
-      bottom 30px
+      width: 100%
+      position: absolute
+      color: white
+      text-align: center
+      bottom: 30px
       font-size: 12px
-      margin-bottom: 12px  
+      margin-bottom: 12px
+  .loading-container
+      position fixed
+      width 100%
+      top 50%
+      transform translateY(-50%)
   .list
-    border-radius 10px
+    border-radius: 10px
     position: absolute
     bottom: 0
     width: 100%
     top: 140px
     .list-content
       background: white
-      border-radius 10px
+      border-radius: 10px
       .play
-        padding-left 16px
+        padding-left: 16px
         height: 38px
         color: $color-theme
         display: flex

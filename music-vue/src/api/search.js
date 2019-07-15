@@ -1,8 +1,10 @@
 import jsonp from 'common/js/jsonp.js';
 import { commonParams, options } from 'api/config.js';
+import axios from "axios"
 
 export function getHotKey() {
   const url = 'https://c.y.qq.com/splcloud/fcgi-bin/gethotkey.fcg'
+  
 
   const data = Object.assign({}, commonParams, {
     channel: 'singer',
@@ -16,11 +18,10 @@ export function getHotKey() {
   })
   return jsonp(url, data, options)
 }
-export function getSearchResult(query, page, zhida, perpage) {
-  const url = 'https://c.y.qq.com/soso/fcgi-bin/search_for_qq_cp'
-
+export function getSearchResult(search, page, zhida, perpage) {
+  const url = '/api/getSearchResult'
   const data = Object.assign({}, commonParams, {
-    w: query,
+    w: search,
     p: page,
     perpage,
     n: perpage,
@@ -34,10 +35,15 @@ export function getSearchResult(query, page, zhida, perpage) {
     remoteplace: 'txt.mqq.all',
     uin: 0,
     needNewCode: 1,
-    platform: 'h5'
+    platform: 'h5',
+    format: 'json'
   })
 
-  return jsonp(url, data, options)
+  return axios.get(url, {
+    params: data
+  }).then((res) => { 
+    return Promise.resolve(res.data)
+  })
 }
 // export function getSearchResult(key) {
 //   const url = 'https://c.y.qq.com/splcloud/fcgi-bin/smartbox_new.fcg'
@@ -49,3 +55,4 @@ export function getSearchResult(query, page, zhida, perpage) {
 //     key: key
 //   })
 //   return jsonp(url, data, options)
+// }
