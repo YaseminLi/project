@@ -75,7 +75,7 @@ export default {
     },
     _getSingerDetail() {
       if (!this.singer.id) {
-        this.$router.push("/singer");
+        this.$router.back();
       }
       console.log("detail");
       

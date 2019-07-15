@@ -5,7 +5,7 @@
         v-for="(item,index) in suggest"
         :key="index"
         class="item"
-        @click.stop="selectItem(item,item.type)"
+        @click.stop="selectItem(item)"
       >
         <i :class="iconClass(item.type)"></i>
         <span class="text">{{text(item)}}</span>
@@ -20,6 +20,7 @@ import { mapMutations, mapActions } from "vuex";
 import { getSearchResult } from "api/search.js";
 import { ERR_OK } from "api/config.js";
 import { createSong, processSongsUrl } from "common/js/song.js";
+import Singer from "common/js/singer.js";
 const TYPE_SINGER = "singer";
 const perpage = 20;
 export default {
@@ -36,7 +37,7 @@ export default {
   methods: {
     text(item) {
       if (item.type == TYPE_SINGER) {
-        return item.singername;
+        return item.name;
       } else {
         return `${item.songname}-${item.singer}`;
       }
@@ -44,15 +45,14 @@ export default {
     iconClass(type) {
       return type == TYPE_SINGER ? "iconfont iconsinger" : "iconfont iconsong";
     },
-    selectItem(item, type) {
-      if (type == "singer") {
+    selectItem(item) {
+      if (item.type == TYPE_SINGER) {
         this.$router.push({
-          path: `/search/${item.mid}`
+          path: `/search/${item.singermid}`
         });
         this.setSinger(item);
         this.$emit("clearInput");
-      }
-      if (type == "song") {
+      }else {
         let array = [];
         array.push(item);
         this.selectPlay({
@@ -65,7 +65,6 @@ export default {
     search(query) {
       getSearchResult(query, this.page, this.showSinger, perpage).then(res => {
         if (res.code == ERR_OK) {
-          console.log(res);
           this._normalizeResult(res.data);
         }
       });
@@ -73,13 +72,16 @@ export default {
     _normalizeResult(data) {
       let arr = [];
       if (data.zhida && data.zhida.singerid) {
-        arr.push({ ...data.zhida, ...{ type: TYPE_SINGER } });
+        const singer=new Singer({
+          id:data.zhida.singerid,
+          mid:data.zhida.singermid,
+          name:data.zhida.singername,
+        })
+        singer.type=TYPE_SINGER;
+        arr.push(singer)
       }
       processSongsUrl(this._normalizeSongs(data.song.list)).then(songs => {
-        console.log(songs);
-
         arr = arr.concat(songs);
-        console.log(arr);
         this.suggest = arr;
       });
     },
