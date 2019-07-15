@@ -61,8 +61,6 @@ export default {
   created() {
     this._getSingerDetail(
     );
-    console.log("created");
-    
   },
   computed: {
     ...mapGetters(["singer"])
@@ -77,8 +75,6 @@ export default {
       if (!this.singer.id) {
         this.$router.back();
       }
-      console.log("detail");
-      
       getSingerDetail(this.singer).then(res => {
         if (res.code == ERR_OK) {
           processSongsUrl(this._normalizeSingerDetail(res.data)).then(songs => {
@@ -90,8 +86,6 @@ export default {
     _normalizeSingerDetail(data) {
       let musicList = [];
       let list = data.list;
-      console.log(list);
-      
       for (let i = 0; i < list.length; i++) {
         musicList.push(createSong(list[i].musicData));
       }

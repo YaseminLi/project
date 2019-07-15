@@ -1,12 +1,7 @@
 <template>
   <scroll class="suggest">
     <div>
-      <div
-        v-for="(item,index) in suggest"
-        :key="index"
-        class="item"
-        @click.stop="selectItem(item)"
-      >
+      <div v-for="(item,index) in suggest" :key="index" class="item" @click.stop="selectItem(item)">
         <i :class="iconClass(item.type)"></i>
         <span class="text">{{text(item)}}</span>
       </div>
@@ -21,6 +16,7 @@ import { getSearchResult } from "api/search.js";
 import { ERR_OK } from "api/config.js";
 import { createSong, processSongsUrl } from "common/js/song.js";
 import Singer from "common/js/singer.js";
+import { saveToLocal, loadFromLocal } from "common/js/storage.js";
 const TYPE_SINGER = "singer";
 const perpage = 20;
 export default {
@@ -46,13 +42,21 @@ export default {
       return type == TYPE_SINGER ? "iconfont iconsinger" : "iconfont iconsong";
     },
     selectItem(item) {
+      //判断是否在搜索历史中，如果不在，存入local
+      let searchList = loadFromLocal("_search_");
+      let localQuery = searchList.findIndex(item => item == this.query);
+      if (localQuery == -1) {
+        saveToLocal("_search_", this.query);
+      }
+
       if (item.type == TYPE_SINGER) {
         this.$router.push({
           path: `/search/${item.singermid}`
         });
         this.setSinger(item);
+
         this.$emit("clearInput");
-      }else {
+      } else {
         let array = [];
         array.push(item);
         this.selectPlay({
@@ -72,13 +76,13 @@ export default {
     _normalizeResult(data) {
       let arr = [];
       if (data.zhida && data.zhida.singerid) {
-        const singer=new Singer({
-          id:data.zhida.singerid,
-          mid:data.zhida.singermid,
-          name:data.zhida.singername,
-        })
-        singer.type=TYPE_SINGER;
-        arr.push(singer)
+        const singer = new Singer({
+          id: data.zhida.singerid,
+          mid: data.zhida.singermid,
+          name: data.zhida.singername
+        });
+        singer.type = TYPE_SINGER;
+        arr.push(singer);
       }
       processSongsUrl(this._normalizeSongs(data.song.list)).then(songs => {
         arr = arr.concat(songs);
@@ -122,8 +126,8 @@ export default {
   background: white
   overflow: hidden
   .item
-    width 100%
-    padding 0 20px
+    width: 100%
+    padding: 0 20px
     box-sizing: border-box
     line-height: 30px
     font-size: 14px
