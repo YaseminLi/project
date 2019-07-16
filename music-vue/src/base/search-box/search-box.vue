@@ -32,7 +32,7 @@ export default {
   },
   watch: {
     query(newQuery) {
-      this.$emit("query", newQuery);
+      this.$emit("query", newQuery.trim());
     }
   }
 };

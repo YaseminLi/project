@@ -1,8 +1,8 @@
 <template>
-  <div class="search" ref="search">
+  <div class="search">
     <searchBox @query="queryChange" ref="box" />
     <div class="search-wrapper" ref="wrapper">
-      <scroll ref="scroll" class="scroll">
+      <scroll ref="scroll" class="scroll" :data="keyHistory">
         <div>
           <div class="hotkeys">
             <div class="title">热门搜索</div>
@@ -59,7 +59,10 @@ export default {
     };
   },
   computed: {
-    ...mapGetters["playList"]
+    ...mapGetters["playList"],
+    keyHistory(){
+      return this.hotkeys.concat(this.searchList)
+    }
   },
   created() {
     this._initHotKey();
@@ -68,10 +71,10 @@ export default {
   methods: {
     handlePlaylist(playList) {
       const bottom = playList.length > 0 ? `60px` : `0`;
-      this.$refs.search.style.bottom = bottom;
       this.$refs.wrapper.style.bottom = bottom;
       this.$refs.result.style.bottom = bottom;
       this.$refs.scroll.refresh();
+      this.$refs.suggest.refresh();
     },
     queryChange(query) {
       this.query = query;
@@ -158,5 +161,4 @@ export default {
     bottom: 0
     width: 100%
     overflow: hidden
-    margin-top 10px
 </style>

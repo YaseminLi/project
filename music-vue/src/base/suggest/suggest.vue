@@ -1,15 +1,15 @@
 <template>
-  <scroll class="suggest" :data="suggest" :pullup="true" @scrollToEnd="searchMore">
+  <scroll class="suggest" :data="suggest" :pullup="true" @scrollToEnd="searchMore" ref="scroll">
     <div>
       <div v-for="(item,index) in suggest" :key="index" class="item" @click.stop="selectItem(item)">
         <i :class="iconClass(item.type)"></i>
         <span class="text">{{text(item)}}</span>
       </div>
       <div class="load" v-show="hasMore">
-        <loading />
+        <loading title=""/>
       </div>
-      <div v-show="!hasMore && !suggest.length" class="no-result-wrapper">
-        <noResult title=""/>
+      <div v-show="!hasMore && suggest.length==0" class="no-result-wrapper">
+        <noResult />
       </div>
     </div>
   </scroll>
@@ -50,8 +50,6 @@ export default {
       return type == TYPE_SINGER ? "iconfont iconsinger" : "iconfont iconsong";
     },
     selectItem(item) {
-      this.$emit("saveSearch");
-
       if (item.type == TYPE_SINGER) {
         this.$router.push({
           path: `/search/${item.singermid}`
@@ -60,12 +58,8 @@ export default {
 
         this.$emit("clearInput");
       } else {
-        let array = [];
-        array.push(item);
-        this.selectPlay({
-          list: array,
-          index: 0
-        });
+        this.insertSong(item)
+         this.$emit("saveSearch");
         this.$emit("clearInput");
       }
     },
@@ -84,6 +78,9 @@ export default {
       }
       this.page += 1;
       this.search(this.query);
+    },
+    refresh(){
+      this.$refs.scroll.refresh()
     },
     _checkMore(data) {
       if (
@@ -125,7 +122,8 @@ export default {
       setSinger: "SET_SINGER"
     }),
     ...mapActions({
-      selectPlay: "selectPlay"
+      selectPlay: "selectPlay",
+      insertSong:"insertSong"
     })
   },
   watch: {

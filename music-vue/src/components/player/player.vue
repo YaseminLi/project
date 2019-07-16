@@ -541,9 +541,11 @@ export default {
         animation-play-state: paused
     .title
       flex: 1
+      overflow hidden
       .songname
         font-size: 14px
         line-height: 20px
+        no-wrap()
       .singer
         font-size: 12px
         line-height: 20px
