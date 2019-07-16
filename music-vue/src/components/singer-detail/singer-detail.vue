@@ -1,13 +1,13 @@
 <template>
   <transition appear name="slide">
     <div class="singer-detail" ref="detail" >
-      <i @click="back" class="iconfont iconreturn" />
+      <i @click.stop="back" class="iconfont iconreturn" />
       <div class="head" ref="singerHead" :style="{zIndex:0}">
         <img class="avatar" :src="singerInfo.avatar" />
         <div class="name">{{singerInfo.name}}</div>
         <div class="fans">粉丝 {{normalizeNum(singerInfo.fans)}}</div>
         <div class="desc">{{singerInfo.desc}}</div>
-        <div class="play" v-show="songs.length>0" @click="random">
+        <div class="play" v-show="songs.length>0" @click.stop="random">
           <i class="iconfont iconbofang" />
           <span>随机播放全部</span>
         </div>

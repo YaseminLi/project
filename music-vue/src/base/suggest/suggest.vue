@@ -1,9 +1,15 @@
 <template>
-  <scroll class="suggest">
+  <scroll class="suggest" :data="suggest" :pullup="true" @scrollToEnd="searchMore">
     <div>
       <div v-for="(item,index) in suggest" :key="index" class="item" @click.stop="selectItem(item)">
         <i :class="iconClass(item.type)"></i>
         <span class="text">{{text(item)}}</span>
+      </div>
+      <div class="load" v-show="hasMore">
+        <loading />
+      </div>
+      <div v-show="!hasMore && !suggest.length" class="no-result-wrapper">
+        <noResult title=""/>
       </div>
     </div>
   </scroll>
@@ -16,7 +22,8 @@ import { getSearchResult } from "api/search.js";
 import { ERR_OK } from "api/config.js";
 import { createSong, processSongsUrl } from "common/js/song.js";
 import Singer from "common/js/singer.js";
-import { saveToLocal, loadFromLocal } from "common/js/storage.js";
+import loading from "base/loading/loading";
+import noResult from "base/no-result/no-result"
 const TYPE_SINGER = "singer";
 const perpage = 20;
 export default {
@@ -27,7 +34,8 @@ export default {
     return {
       suggest: [],
       page: 1,
-      showSinger: true
+      showSinger: true,
+      hasMore: true
     };
   },
   methods: {
@@ -42,12 +50,7 @@ export default {
       return type == TYPE_SINGER ? "iconfont iconsinger" : "iconfont iconsong";
     },
     selectItem(item) {
-      //判断是否在搜索历史中，如果不在，存入local
-      let searchList = loadFromLocal("_search_");
-      let localQuery = searchList.findIndex(item => item == this.query);
-      if (localQuery == -1) {
-        saveToLocal("_search_", this.query);
-      }
+      this.$emit("saveSearch");
 
       if (item.type == TYPE_SINGER) {
         this.$router.push({
@@ -67,22 +70,42 @@ export default {
       }
     },
     search(query) {
+      this.hasMore = true;
       getSearchResult(query, this.page, this.showSinger, perpage).then(res => {
         if (res.code == ERR_OK) {
+          this._checkMore(res.data);
           this._normalizeResult(res.data);
         }
       });
     },
+    searchMore() {
+      if (!this.hasMore) {
+        return;
+      }
+      this.page += 1;
+      this.search(this.query);
+    },
+    _checkMore(data) {
+      if (
+        !data.song.list.length ||
+        (data.song.curpage - 1) * perpage + data.song.curnum >=
+          data.song.totalnum
+      ) {
+        this.hasMore = false;
+      }
+    },
     _normalizeResult(data) {
-      let arr = [];
-      if (data.zhida && data.zhida.singerid) {
-        const singer = new Singer({
-          id: data.zhida.singerid,
-          mid: data.zhida.singermid,
-          name: data.zhida.singername
-        });
-        singer.type = TYPE_SINGER;
-        arr.push(singer);
+      let arr = this.suggest;
+      if (arr.length == 0) {
+        if (data.zhida && data.zhida.singerid) {
+          const singer = new Singer({
+            id: data.zhida.singerid,
+            mid: data.zhida.singermid,
+            name: data.zhida.singername
+          });
+          singer.type = TYPE_SINGER;
+          arr.push(singer);
+        }
       }
       processSongsUrl(this._normalizeSongs(data.song.list)).then(songs => {
         arr = arr.concat(songs);
@@ -92,7 +115,9 @@ export default {
     _normalizeSongs(list) {
       let arr = [];
       list.forEach(item => {
-        arr.push(createSong(item));
+        if (item.songid && item.albumid) {
+          arr.push(createSong(item));
+        }
       });
       return arr;
     },
@@ -108,11 +133,14 @@ export default {
       if (!newQuery) {
         return;
       }
+      this.suggest = [];
       this.search(newQuery);
     }
   },
   components: {
-    scroll
+    scroll,
+    loading,
+    noResult
   }
 };
 </script>
@@ -124,7 +152,6 @@ export default {
   width: 100%
   height: 100%
   background: white
-  overflow: hidden
   .item
     width: 100%
     padding: 0 20px
@@ -135,4 +162,6 @@ export default {
     .iconfont
       color: $color-theme
       margin-right: 10px
+  .load
+    text-align: center
 </style>

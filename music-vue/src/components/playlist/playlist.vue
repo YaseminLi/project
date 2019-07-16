@@ -32,7 +32,7 @@
     </div>
 
     <div class="close" @click.stop="close">关闭</div>
-    <confirm ref="confirm" @clearPlaylist="clearList"/>
+    <confirm ref="confirm" @clear="clearList"/>
   </div>
 </template>
 

@@ -1,14 +1,14 @@
 <template>
   <div class="loading">
     <img src="./loading.gif">
-    <p class="text">{{data}}</p>
+    <p class="text">{{title}}</p>
   </div>
 </template>
 
 <script>
 export default {
   props: {
-    data: {
+    title: {
       type: String,
       default: "正在载入……"
     }

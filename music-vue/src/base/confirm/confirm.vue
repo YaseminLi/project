@@ -42,7 +42,8 @@ export default {
         this.showConfirm=false
     },
     confirm(){
-        this.$emit('clearPlaylist')
+        this.$emit('clear')
+        this.showConfirm=false
     }
   }
 };
@@ -55,6 +56,7 @@ export default {
   position: fixed
   top: 0
   bottom: 0
+  left 0
   width: 100%
   background: $color-background-d
   .confirm-wrapper
