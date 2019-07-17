@@ -15,9 +15,9 @@
               >{{item.k}}</span>
             </div>
           </div>
-          <div class="serach-history" v-show="searchList.length>0">
+          <div class="serach-history" v-show="searchHistory.length">
             <searchList
-              :searchList="searchList"
+              :searchList="searchHistory"
               @clear="clearSearchList"
               @remove="removeSearchItem"
               @addSearch="search"
@@ -41,32 +41,24 @@ import suggest from "base/suggest/suggest";
 import searchList from "base/search-list/search-list";
 import scroll from "base/scroll/scroll";
 import { playlistMixin } from "common/js/mixin.js";
-import { mapGetters } from "vuex";
-import {
-  saveToLocal,
-  loadFromLocal,
-  removeLocalAll,
-  removeLocalItem
-} from "common/js/storage.js";
+import { mapGetters, mapActions } from "vuex";
 const HOTKEYS_NUM = 9;
 export default {
   mixins: [playlistMixin],
   data() {
     return {
       hotkeys: [],
-      query: "",
-      searchList: []
+      query: ""
     };
   },
   computed: {
-    ...mapGetters["playList"],
-    keyHistory(){
-      return this.hotkeys.concat(this.searchList)
+    ...mapGetters(['playList','searchHistory']),
+    keyHistory() {
+      return this.hotkeys.concat(this.searchHistory);
     }
   },
   created() {
     this._initHotKey();
-    this.searchList = loadFromLocal("_search_");
   },
   methods: {
     handlePlaylist(playList) {
@@ -83,23 +75,25 @@ export default {
       this.$refs.box.setQuery(query);
     },
     saveSearch() {
-      saveToLocal("_search_", this.query.trim());
-      this.searchList = loadFromLocal("_search_");
+      this.saveSearchHistory(this.query);
     },
     clearSearchList() {
-      removeLocalAll("_search_");
-      this.searchList = loadFromLocal("_search_");
+      this.clearSearchHistory()
     },
-    removeSearchItem(value) {
-      removeLocalItem("_search_", value);
-      this.searchList = loadFromLocal("_search_");
+    removeSearchItem(item) {
+      this.removeSearchHistory(item)
     },
     _initHotKey() {
       getHotKey().then(res => {
         if (res.code == ERR_OK)
           this.hotkeys = res.data.hotkey.slice(0, HOTKEYS_NUM);
       });
-    }
+    },
+    ...mapActions([
+      "saveSearchHistory",
+      "clearSearchHistory",
+      "removeSearchHistory"
+    ])
   },
   watch: {
     query(newQuery) {

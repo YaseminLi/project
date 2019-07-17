@@ -25,7 +25,7 @@
         @scroll="scroll"
         v-show="songs.length>0"
       >
-        <div class="list-content">
+        <div class="list-content" v-show="searchHistory.length">
           <div class="total">
             歌曲共
             <span class="num">{{singerInfo.total_song}}首</span>
@@ -63,7 +63,7 @@ export default {
     );
   },
   computed: {
-    ...mapGetters(["singer"])
+    ...mapGetters(["singer","searchHistory"])
   },
   methods: {
      handlePlaylist(playList) {

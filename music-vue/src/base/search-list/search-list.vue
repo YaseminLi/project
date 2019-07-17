@@ -1,5 +1,5 @@
 <template>
-  <div class="search-list">
+  <div class="search-list" v-show="searchList.length">
     <div class="title">
       <span class="text">搜索历史</span>
       <i class="iconfont iconclear" @click.stop="showConfirm" @clear="clear"></i>
