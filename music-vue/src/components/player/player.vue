@@ -82,7 +82,7 @@
         </div>
 
         <i class="iconfont iconliebiao"  @click.stop="showPlaylist"/>
-        <playlist ref="playlist"  @modeChange="modeChange" />
+        <playlist ref="playlist" />
       </div>
     </transition>
     <audio
@@ -98,18 +98,20 @@
 
 <script>
 import { mapGetters, mapMutations } from "vuex";
+import Lyric from "lyric-parser";
+import { setTimeout } from "timers";
+import { playMode } from "common/js/config.js";
+import { prefixStyle } from "common/js/dom.js";
+import {playerMixin} from "common/js/mixin.js"
 import progressBar from "base/progress-bar/progress-bar";
 import progressCircle from "base/progress-circle/progress-circle";
-import { playMode } from "common/js/config.js";
-import { shullfle } from "common/js/filter.js";
-import { setTimeout } from "timers";
-import Lyric from "lyric-parser";
 import scroll from "base/scroll/scroll";
-import { prefixStyle } from "common/js/dom.js";
 import playlist from "components/playlist/playlist";
+
 const transform = prefixStyle("transform");
 const transitionDuration = prefixStyle("transitionDuration");
 export default {
+  mixins:[playerMixin],
   data() {
     return {
       songReady: false,
@@ -127,11 +129,7 @@ export default {
     ...mapGetters([
       "playingState",
       "fullScreen",
-      "playList",
-      "currentSong",
       "currentIndex",
-      "mode",
-      "sequenceList"
     ]),
     playIcon() {
       return this.playingState ? "iconplay" : "iconpause";
@@ -144,15 +142,6 @@ export default {
     },
     percent() {
       return this.currentTime / this.currentSong.duration;
-    },
-    modeIcon() {
-      let mode = "";
-      for (var key in playMode) {
-        if (playMode[key] === this.mode) {
-          mode = key;
-        }
-      }
-      return `iconfont icon${mode}`;
     }
   },
   methods: {
@@ -307,24 +296,6 @@ export default {
         this.currentLyric.seek(currentTime * 1000);
       }
     },
-    modeChange() {
-      const mode = (this.mode + 1) % 3;
-      this.setMode(mode);
-      let list = [];
-      if (mode == playMode.random) {
-        list = shullfle(this.sequenceList);
-      } else {
-        list = this.sequenceList;
-      }
-      this._resetCurrentIndex(list);
-      this.setPlayList(list);
-    },
-    _resetCurrentIndex(list) {
-      let index = list.findIndex(item => {
-        return item.id === this.currentSong.id;
-      });
-      this.setCurrentIndex(index);
-    },
     _getLyric() {
       this.currentSong.getLyric().then(lyric => {
         this.currentLyric = new Lyric(lyric, this.handleLyric);
@@ -347,10 +318,7 @@ export default {
     },
     ...mapMutations({
       setFullScreen: "SET_FULL_SCREEN",
-      setPlayingState: "SET_PLAYING_STATE",
-      setCurrentIndex: "SET_CURRENT_INDEX",
       setMode: "SET_MODE",
-      setPlayList: "SET_PLAY_LIST"
     })
   },
   watch: {

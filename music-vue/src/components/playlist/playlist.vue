@@ -1,9 +1,9 @@
 <template>
   <div class="playlist" v-show="playlistShow" @click.stop="close">
     <div class="container" @click.stop>
-      <div class="head border-1px">
-        <i class="iconfont" :class="modeIcon" @click.stop="modeChange"></i>
-        <span class="mode" @click.stop="modeChange">{{modeContent}}</span>
+      <div class="head border-1px" @click.stop="modeChange">
+        <i :class="modeIcon"></i>
+        <span class="mode">{{modeContent}}</span>
         <i class="iconfont iconclear" @click.stop="clear"></i>
       </div>
       <scroll class="list" :data="sequenceList" ref="list">
@@ -31,38 +31,33 @@
         </div>
       </scroll>
       <div class="operate border-1px">
-        <div class="add">
+        <div class="add" @click.stop="addSong">
           <i class="iconfont iconadd"></i>
           <span class="text">添加歌曲到队列</span>
         </div>
       </div>
-
       <div class="close" @click.stop="close">关闭</div>
       <confirm ref="confirm" @clear="clearList" />
+      <addSong ref="addSong" />
     </div>
   </div>
 </template>
 
 <script>
-import { mapGetters, mapMutations, mapActions } from "vuex";
+import { mapMutations, mapActions } from "vuex";
 import { playMode } from "common/js/config.js";
 import scroll from "base/scroll/scroll.vue";
 import confirm from "base/confirm/confirm";
+import { playerMixin } from "common/js/mixin.js";
+import addSong from "components/add-song/add-song";
 export default {
+  mixins: [playerMixin],
   data() {
     return {
       playlistShow: false
     };
   },
   computed: {
-    ...mapGetters(["sequenceList", "mode", "currentSong", "playList"]),
-    modeIcon() {
-      return this.mode == playMode.random
-        ? "iconrandom"
-        : this.mode == playMode.loop
-        ? "iconloop"
-        : "iconsequence";
-    },
     modeContent() {
       return this.mode == playMode.random
         ? "随机播放"
@@ -93,8 +88,8 @@ export default {
     },
     remove(item) {
       this.removeSong(item);
-      if(this.playList==0){
-        this.playlistShow=false
+      if (this.playList == 0) {
+        this.playlistShow = false;
       }
     },
     selectItem(item, index) {
@@ -108,11 +103,11 @@ export default {
       const index = this.sequenceList.findIndex(song => current.id === song.id);
       this.$refs.list.scrollToElement(this.$refs.item[index], 300);
     },
+    addSong() {
+      this.$refs.addSong.show();
+    },
     ...mapMutations({
-      setPlaylist: "SET_PLAY_LIST",
-      setSequenceList: "SET_SEQUENCE_LIST",
-      setCurrentIndex: "SET_CURRENT_INDEX",
-      setPlayingState: "SET_PLAYING_STATE"
+      setSequenceList: "SET_SEQUENCE_LIST"
     }),
     ...mapActions(["clearPlaylist", "removeSong"])
   },
@@ -128,7 +123,8 @@ export default {
   },
   components: {
     scroll,
-    confirm
+    confirm,
+    addSong
   }
 };
 </script>
