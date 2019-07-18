@@ -362,11 +362,6 @@ export default {
       if (this.currentLyric) {
         this.currentLyric.stop();
       }
-      // //清空播放列表后newSong为{}
-      // if(!newSong.id){
-      //   return
-      // }
-      
       this.$nextTick(() => {
         this.$refs.audio.play();
         this._getLyric();

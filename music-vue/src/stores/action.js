@@ -1,7 +1,7 @@
 import * as types from './mutation-types';
 import { shullfle } from "common/js/filter.js";
 import { playMode } from "common/js/config.js";
-import {saveSearch,clearSearch,removeSearch} from "common/js/cache.js"
+import { saveSearch, clearSearch, removeSearch } from "common/js/cache.js"
 
 function indexFind(list, song) {
     return list.findIndex(item => {
@@ -44,19 +44,25 @@ export const clearPlaylist = function ({ commit }) {
 
 //删除播放列表的某一首歌
 /* eslint-disable */
-export const removeSong = function ({ commit, state }, { item, index }) {
+export const removeSong = function ({ commit, state }, item) {
     let sequenceList = state.sequenceList.slice();
+    let fdSIndex = sequenceList.findIndex(song => song.id == item.id)
+    sequenceList.splice(fdSIndex, 1)
+
     let playList = state.playList.slice();
-    sequenceList.splice(index, 1);
-    playList = playList.filter(song => song.id !== item.id)
-    let indexNew = playList.findIndex(song => song.id == state.playList[state.currentIndex].id);
-    if (indexNew == -1) {
-        indexNew = index
+    let currentIndex = state.currentIndex
+    let fdIndex = playList.findIndex(song => song.id == item.id)
+    playList.splice(fdIndex, 1)
+    if (fdIndex < currentIndex) {
+        currentIndex--
+    }
+    if (playList.length == 0) {
+        currentIndex = -1
     }
 
     commit(types.SET_SEQUENCE_LIST, sequenceList)
     commit(types.SET_PLAY_LIST, playList)
-    commit(types.SET_CURRENT_INDEX, indexNew)
+    commit(types.SET_CURRENT_INDEX, currentIndex)
     if (!playList.length) {
         commit(types.SET_PLAYING_STATE, false)
     } else {
@@ -65,7 +71,7 @@ export const removeSong = function ({ commit, state }, { item, index }) {
 }
 
 //从搜索结果中点击歌曲进行播放，加入播放列表
-export const insertSong = function ({ commit, state }, { song }) {
+export const insertSong = function ({ commit, state }, song) {
     let playList = state.playList.slice()
     let sequenceList = state.sequenceList.slice()
     let currentIndex = state.currentIndex
@@ -84,21 +90,21 @@ export const insertSong = function ({ commit, state }, { song }) {
             currentIndex--
         } else {
             //fdIndex在currentIndex后，删掉fdIndex+1位置上的歌曲
-            playList.splice(fdIndex+1,1)
+            playList.splice(fdIndex + 1, 1)
         }
     }
 
     //再操作有序播放列表……
-    let currentSIndex=sequenceList.findIndex(item=>item.id==currentSong.id)
-    currentSIndex+=1
-    let fdSIndex=sequenceList.findIndex(item=>item.id==song.id)
-    sequenceList.splice(currentSIndex,0,song)
-    if(fdSIndex>-1){
-        if(fdSIndex<currentSIndex){
-            sequenceList.splice(fdSIndex,1)
+    let currentSIndex = sequenceList.findIndex(item => item.id == currentSong.id)
+    currentSIndex += 1
+    let fdSIndex = sequenceList.findIndex(item => item.id == song.id)
+    sequenceList.splice(currentSIndex, 0, song)
+    if (fdSIndex > -1) {
+        if (fdSIndex < currentSIndex) {
+            sequenceList.splice(fdSIndex, 1)
             currentSIndex--;
-        }else{
-            sequenceList.splice(fdSIndex+1,1)
+        } else {
+            sequenceList.splice(fdSIndex + 1, 1)
         }
     }
     commit(types.SET_PLAY_LIST, playList)
@@ -108,12 +114,12 @@ export const insertSong = function ({ commit, state }, { song }) {
     commit(types.SET_FULL_SCREEN, true)
 }
 
-export const saveSearchHistory=function({commit},query){
-    commit(types.SET_SEARCH_HISTORY,saveSearch(query))
+export const saveSearchHistory = function ({ commit }, query) {
+    commit(types.SET_SEARCH_HISTORY, saveSearch(query))
 }
-export const clearSearchHistory=function({commit}){
-    commit(types.SET_SEARCH_HISTORY,clearSearch())
+export const clearSearchHistory = function ({ commit }) {
+    commit(types.SET_SEARCH_HISTORY, clearSearch())
 }
-export const removeSearchHistory=function({commit},query){
-    commit(types.SET_SEARCH_HISTORY,removeSearch(query))
+export const removeSearchHistory = function ({ commit }, query) {
+    commit(types.SET_SEARCH_HISTORY, removeSearch(query))
 }

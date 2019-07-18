@@ -58,7 +58,9 @@ export default {
 
         this.$emit("clearInput");
       } else {
-        this.insertSong({song:item})
+        console.log("insert");
+        
+        this.insertSong(item)
          this.$emit("saveSearch");
         this.$emit("clearInput");
       }

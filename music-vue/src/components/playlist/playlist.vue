@@ -91,8 +91,11 @@ export default {
     clearList() {
       this.clearPlaylist();
     },
-    remove(item, index) {
-      this.removeSong({ item, index });
+    remove(item) {
+      this.removeSong(item);
+      if(this.playList==0){
+        this.playlistShow=false
+      }
     },
     selectItem(item, index) {
       if (this.mode == playMode.random) {
