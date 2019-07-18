@@ -27,7 +27,7 @@ export default {
   },
   methods: {
     showConfirm() {
-      this.$refs.confirm.show();
+      this.$refs.confirm.show();8
     },
     clear() {
       this.$emit("clear");

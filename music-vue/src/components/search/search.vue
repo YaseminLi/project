@@ -18,8 +18,8 @@
           <div class="serach-history" v-show="searchHistory.length">
             <searchList
               :searchList="searchHistory"
-              @clear="clearSearchList"
-              @remove="removeSearchItem"
+              @clear="clearSearchHistory"
+              @remove="removeSearchHistory"
               @addSearch="search"
             />
           </div>
@@ -76,12 +76,6 @@ export default {
     },
     saveSearch() {
       this.saveSearchHistory(this.query);
-    },
-    clearSearchList() {
-      this.clearSearchHistory()
-    },
-    removeSearchItem(item) {
-      this.removeSearchHistory(item)
     },
     _initHotKey() {
       getHotKey().then(res => {

@@ -82,8 +82,7 @@
         </div>
 
         <i class="iconfont iconliebiao"  @click.stop="showPlaylist"/>
-        <playlist v-show="playlistShow" @closePlaylist="closePlaylist" @modeChange="modeChange" ref="playlist" :playlistShow="playlistShow"/>
-        <div class="layer" v-show="playlistShow" @click.stop="closePlaylist"></div>
+        <playlist ref="playlist"  @modeChange="modeChange" />
       </div>
     </transition>
     <audio
@@ -118,8 +117,7 @@ export default {
       currentLyric: null,
       currentLineNum: 0,
       currentShow: "cd",
-      playingLyric: "",
-      playlistShow:false
+      playingLyric: ""
     };
   },
   created() {
@@ -159,11 +157,7 @@ export default {
   },
   methods: {
     showPlaylist(){
-      this.playlistShow=true;
-      this.$refs.playlist.scrollToCurrent(this.currentSong)
-    },
-    closePlaylist(){
-      this.playlistShow=false;
+      this.$refs.playlist.show();
     },
     touchstart(e) {
       this.touch.initialed = true;
@@ -556,13 +550,7 @@ export default {
       .iconfont
         position: absolute
         font-size: 32px
-    .layer
-      position fixed
-      top 0
-      bottom 0
-      width 100%
-      background $color-background-d
-      z-index 15
+    
 @keyframes rotate
   0%
     transform: rotate(0)

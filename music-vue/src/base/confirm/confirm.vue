@@ -52,7 +52,7 @@ export default {
 <style lang='stylus'  scoped>
 @import '~common/stylus/variable'
 .confirm
-  z-index: 99
+  z-index: 200
   position: fixed
   top: 0
   bottom: 0

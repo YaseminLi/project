@@ -28,9 +28,9 @@ export default {
       default: false
     },
     //下拉刷新
-    pullup:{
-      type:Boolean,
-      default:false
+    pullup: {
+      type: Boolean,
+      default: false
     }
   },
   mounted() {
@@ -53,12 +53,12 @@ export default {
           that.$emit("scroll", pos);
         });
       }
-      if(this.pullup){
-        this.scroll.on("scrollEnd",()=>{
-          if(this.scroll.y<this.scroll.maxScrollY+50){
-            this.$emit("scrollToEnd")
+      if (this.pullup) {
+        this.scroll.on("scrollEnd", () => {
+          if (this.scroll.y < this.scroll.maxScrollY + 50) {
+            this.$emit("scrollToEnd");
           }
-        })
+        });
       }
     },
     disable() {
@@ -75,7 +75,7 @@ export default {
     },
     scrollToElement() {
       this.scroll && this.scroll.scrollToElement.apply(this.scroll, arguments);
-    },
+    }
   },
   watch: {
     data() {
