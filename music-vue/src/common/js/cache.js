@@ -1,7 +1,13 @@
 
 import storage from 'good-storage'
 const SEARCH_KEY = "_search_"
-const SEARCH_MAX_LENGTH = 15
+const SEARCH_MAX_LEN = 15
+
+const PLAY_KEY = '__play__'
+const PLAY_MAX_LEN = 200
+
+const FAVORITE_KEY = '__favorite__'
+const FAVORITE_MAX_LEN = 200
 //用storage库写
 
 function insertArray(arr, val, compare, maxLen) {
@@ -21,10 +27,10 @@ function deleteFromArray(arr, compare) {
     }
 }
 export function saveSearch(query) {
-    let seraches = storage.get(SEARCH_KEY, [])
-    insertArray(seraches, query, (item) => item == query, SEARCH_MAX_LENGTH)
-    storage.set(SEARCH_KEY, seraches)
-    return seraches
+    let searches = storage.get(SEARCH_KEY, [])
+    insertArray(searches, query, (item) => item == query, SEARCH_MAX_LEN)
+    storage.set(SEARCH_KEY, searches)
+    return searches
 }
 
 export function loadSearch() {
@@ -41,6 +47,31 @@ export function removeSearch(query) {
     return searches
 }
 
+export function savePlay(song){
+    let playes = storage.get(PLAY_KEY, [])
+    insertArray(playes, song, (item) => item.id == song.id, PLAY_MAX_LEN)
+    storage.set(PLAY_KEY, playes)
+    return playes
+}
+export function loadHistory() {
+    return storage.get(PLAY_KEY, [])
+}
+
+export function saveFavoriteItem(song){
+    let favorites = storage.get(FAVORITE_KEY, [])
+    insertArray(favorites, song, (item) => item.id == song.id, FAVORITE_MAX_LEN)
+    storage.set(FAVORITE_KEY, favorites)
+    return favorites
+}
+export function removeFavoriteItem(song){
+    let favorites = storage.get(FAVORITE_KEY, [])
+    deleteFromArray(favorites,item=>item.id==song.id)
+    storage.set(FAVORITE_KEY, favorites)
+    return favorites
+}
+export function loadFavorite() {
+    return storage.get(FAVORITE_KEY, [])
+}
 // export function saveSearch(key, value) {
 //     let list = JSON.parse(localStorage.getItem(key));
 //     if (!list) {

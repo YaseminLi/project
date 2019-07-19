@@ -1,6 +1,6 @@
 <template>
   <div class="search-list" v-show="searchList.length">
-    <div class="title" v-show="title">
+    <div class="title" v-if="title">
       <span class="text">搜索历史</span>
       <i class="iconfont iconclear" @click.stop="showConfirm" @clear="clear"></i>
     </div>
@@ -49,12 +49,12 @@ export default {
 };
 </script>
 
-<style lang='stylus' >
+<style lang='stylus' scoped>
 @import '~common/stylus/variable'
 @import '~common/stylus/mixin'
 .search-list
   width: 100%
-  padding: 20px
+  padding: 10px 16px
   box-sizing: border-box
   font-size: 14px
   .title

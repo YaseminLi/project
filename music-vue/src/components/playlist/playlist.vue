@@ -25,7 +25,7 @@
               :class="{'current':currentSong.id==item.id}"
               @click.stop="selectItem(item,index)"
             >{{item.songname}}</span>
-            <i class="iconfont iconxiai"></i>
+            <i  :class="favoriteIcon(item)" @click.stop="toggleFavorite(item)"/>
             <i class="iconfont iconremove" @click.stop="remove(item,index)"></i>
           </div>
         </div>
@@ -129,7 +129,7 @@ export default {
 };
 </script>
 
-<style lang='stylus' >
+<style lang='stylus' scoped>
 @import '~common/stylus/variable'
 @import '~common/stylus/mixin'
 .playlist
@@ -185,9 +185,11 @@ export default {
           no-wrap()
         .iconpause
           margin-right: 5px
-        .iconxiai
+        .iconlike,.icondislike
           position: absolute
           right: 45px
+          &.iconlike
+            color red
         .iconremove
           position: absolute
           right: 20px

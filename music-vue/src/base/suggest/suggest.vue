@@ -28,13 +28,16 @@ const TYPE_SINGER = "singer";
 const perpage = 20;
 export default {
   props: {
-    query: String
+    query: String,
+    showSinger:{
+      type:Boolean,
+      default:true
+    }
   },
   data() {
     return {
       suggest: [],
       page: 1,
-      showSinger: true,
       hasMore: true
     };
   },
@@ -58,8 +61,6 @@ export default {
 
         this.$emit("clearInput");
       } else {
-        console.log("insert");
-        
         this.insertSong(item)
          this.$emit("saveSearch");
         this.$emit("clearInput");

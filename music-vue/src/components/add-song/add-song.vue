@@ -5,21 +5,32 @@
       <i class="iconfont iconremove" @click.stop="close"></i>
     </div>
     <div class="search-box-wrapper">
-      <searchBox />
+      <searchBox :placeholder="searchBoxTitle" @query="queryChange" ref="box" />
     </div>
     <div class="shortcut">
-      <span class="switch" :class="activeSwitch('play')" @click.stop="switchItem">最近播放</span>
-      <span class="switch" :class="activeSwitch('search')" @click.stop="switchItem">搜索历史</span>
+      <switches @switchItem="switchItem" :switches="switches" :currentIndex="switchesCurrentIndex" />
     </div>
-    <div class="content">
-      <scroll class="play">
-        <div>a</div>
-      </scroll>
-      <scroll class="search">
+    <div class="play contentList" v-show="switchesCurrentIndex==0">
+      <scroll>
         <div>
-          <searchList :searchList="searchHistory" :title="false" />
+          <songList :songs="playHistory" @selectItem="selectSong"/>
         </div>
       </scroll>
+    </div>
+    <div class="history contentList" v-show="switchesCurrentIndex==1">
+      <scroll v-show="searchHistory">
+        <div>
+          <searchList
+            :searchList="searchHistory"
+            :title="false"
+            @remove="removeSearchHistory"
+            @addSearch="search"
+          />
+        </div>
+      </scroll>
+    </div>
+    <div class="search-result" v-show="query">
+      <suggest :query="query" :showSinger="false" @saveSearch="saveSearch" />
     </div>
   </div>
 </template>
@@ -28,16 +39,25 @@
 import searchBox from "base/search-box/search-box";
 import scroll from "base/scroll/scroll";
 import searchList from "base/search-list/search-list";
-import { mapGetters } from "vuex";
+import songList from "base/song-list/song-list";
+import suggest from "base/suggest/suggest";
+import { searchMixin } from "common/js/mixin.js";
+import {mapGetters, mapActions} from "vuex"
+import {Song} from "common/js/song.js"
+import switches from "base/switches/switches.vue"
 export default {
+  mixins: [searchMixin],
   data() {
     return {
       showing: false,
-      switch: "play"
+      showPlay: true,
+      searchBoxTitle: "搜索歌曲",
+      switches:["最近播放","历史搜索"],
+      switchesCurrentIndex:0
     };
   },
-  computed: {
-    ...mapGetters(["searchHistory"])
+  computed:{
+...mapGetters(["playHistory"])
   },
   methods: {
     show() {
@@ -46,17 +66,31 @@ export default {
     close() {
       this.showing = false;
     },
-    switchItem() {
-      this.switch = this.switch == "play" ? "search" : "play";
+    showPlayList() {
+      this.showPlay = true;
     },
-    activeSwitch(item) {
-      return this.switch == item ? "active" : "";
-    }
+    showSearchList() {
+      this.showPlay = false;
+    },
+    selectSong(song,index){
+      if(index!==0){
+        this.insertSong(new Song(song))
+      }
+    },
+    switchItem(index){
+      this.switchesCurrentIndex=index;
+    },
+    ...mapActions({
+      insertSong:"insertSong"
+    })
   },
   components: {
     searchBox,
     scroll,
-    searchList
+    searchList,
+    songList,
+    suggest,
+    switches
   }
 };
 </script>
@@ -71,6 +105,8 @@ export default {
   overflow: hidden
   background: white
   z-index: 200
+  display: flex
+  flex-direction: column
   .header
     text-align: center
     font-size: 18px
@@ -81,20 +117,17 @@ export default {
       position: absolute
       right: 20px
       font-size: 16px
-  .shortcut
-    width: 240px
-    border: 1px solid $color-background-d
-    border-radius: 5px
-    font-size: 14px
-    margin: 10px auto
-    color: $color-background-d
+  .contentList
+    width: 100%
+    height: 100%
+    position: fixed
+    top: 152px
+    bottom: 0
     overflow: hidden
-    .switch
-      display: inline-block
-      text-align: center
-      line-height: 30px
-      width: 120px
-      &.active
-        color: white
-        background: $color-background-d
+  .search-result
+    position: fixed
+    width: 100%
+    top: 100px
+    bottom: 0
+    overflow: hidden
 </style>

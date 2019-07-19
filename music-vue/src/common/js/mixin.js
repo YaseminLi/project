@@ -1,33 +1,38 @@
-import {mapGetters,mapMutations} from "vuex";
+import { mapGetters, mapMutations, mapActions } from "vuex";
 import { shullfle } from "common/js/filter.js";
 import { playMode } from "common/js/config.js";
-export  const playlistMixin={
-    computed: {
-        ...mapGetters([
-          'playList'
-        ])
-      },
-      mounted () {
-        this.handlePlaylist(this.playList)
-      },
-      activated () {
-        this.handlePlaylist(this.playList)
-      },
-      watch: {
-        playList (newVal) {
-          this.handlePlaylist(newVal)
-        }
-      },
-      methods: {
-        handlePlaylist () {
-          throw new Error('component must implement handlePlaylist method')
-        }
-      }
+export const playlistMixin = {
+  computed: {
+    ...mapGetters([
+      'playList'
+    ])
+  },
+  mounted() {
+    this.handlePlaylist(this.playList)
+  },
+  activated() {
+    this.handlePlaylist(this.playList)
+  },
+  watch: {
+    playList(newVal) {
+      this.handlePlaylist(newVal)
     }
+  },
+  methods: {
+    handlePlaylist() {
+      throw new Error('component must implement handlePlaylist method')
+    }
+  }
+}
 
-export const playerMixin={
-  computed:{
-    ...mapGetters(["sequenceList", "mode", "currentSong", "playList"]),
+export const playerMixin = {
+  data(){
+    return{
+      currentFavorite:null
+    }
+  },
+  computed: {
+    ...mapGetters(["sequenceList", "mode", "currentSong", "playList",  "favoriteList"]),
     modeIcon() {
       let mode = "";
       for (var key in playMode) {
@@ -38,7 +43,7 @@ export const playerMixin={
       return `iconfont icon${mode}`;
     }
   },
-  methods:{
+  methods: {
     modeChange() {
       const mode = (this.mode + 1) % 3;
       this.setMode(mode);
@@ -57,10 +62,52 @@ export const playerMixin={
       });
       this.setCurrentIndex(index);
     },
+    toggleFavorite(song){
+      let index=this.favoriteList.findIndex(item=>item.id==song.id)
+      if(index>-1){
+        this.removeFavorite(song)
+      }else{
+        this.saveFavorite(song)
+      }
+      
+    },
+    favoriteIcon(song){
+      let index=this.favoriteList.findIndex(item=>item.id==song.id)
+      return index>-1?"iconfont iconlike":"iconfont icondislike"
+    },
     ...mapMutations({
       setPlaylist: "SET_PLAY_LIST",
       setCurrentIndex: "SET_CURRENT_INDEX",
       setPlayingState: "SET_PLAYING_STATE"
     }),
+    ...mapActions({
+      saveFavorite:"saveFavorite",
+      removeFavorite:"removeFavorite"
+    })
+  }
+}
+export const searchMixin = {
+  data() {
+    return {
+      query: ""
+    }
+  },
+  computed: {
+    ...mapGetters(["searchHistory"])
+  },
+  methods: {
+    queryChange(query) {
+      this.query = query;
+    },
+    search(query) {
+      this.$refs.box.setQuery(query);
+    }, 
+    saveSearch() {
+      this.saveSearchHistory(this.query);
+    },
+    ...mapActions([
+      "removeSearchHistory",
+      "saveSearchHistory",
+    ])
   }
 }

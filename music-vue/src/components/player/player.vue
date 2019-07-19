@@ -61,8 +61,8 @@
             <div class="icon" @click="next" :class="disableCls">
               <i class="iconfont iconnext" />
             </div>
-            <div class="icon">
-              <i class="iconfont iconxiai" />
+            <div class="icon" @click.stop="toggleFavorite(currentSong)">
+              <i  :class="favoriteIcon(currentSong)"/>
             </div>
           </div>
         </div>
@@ -97,7 +97,7 @@
 </template>
 
 <script>
-import { mapGetters, mapMutations } from "vuex";
+import { mapGetters, mapMutations, mapActions } from "vuex";
 import Lyric from "lyric-parser";
 import { setTimeout } from "timers";
 import { playMode } from "common/js/config.js";
@@ -129,7 +129,7 @@ export default {
     ...mapGetters([
       "playingState",
       "fullScreen",
-      "currentIndex",
+      "currentIndex"
     ]),
     playIcon() {
       return this.playingState ? "iconplay" : "iconpause";
@@ -268,6 +268,7 @@ export default {
     },
     ready() {
       this.songReady = true;
+      this.savePlayHistory(this.currentSong)
     },
     error() {
       this.songReady = true;
@@ -316,9 +317,13 @@ export default {
         this.$refs.lyric.scrollTo(0, 0, 1000);
       }
     },
+   
     ...mapMutations({
       setFullScreen: "SET_FULL_SCREEN",
       setMode: "SET_MODE",
+    }),
+    ...mapActions({
+      savePlayHistory:"savePlayHistory"
     })
   },
   watch: {
@@ -469,7 +474,10 @@ export default {
         .icon
           .iconfont
             font-size: 30px
-          .iconxiai
+          .iconlike
+            font-size: 25px
+            color red
+          .icondislike
             font-size: 25px
     &.normal-enter, .normal-leave-to
       opacity: 0

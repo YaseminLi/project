@@ -1,7 +1,7 @@
 import { getSongsUrl, getLyric } from 'api/song';
 import { ERR_OK } from "api/config.js";
 import {Base64 } from 'js-base64';
-class Song {
+export class Song {
     constructor({ id, mid, singer, songname, album, albumdesc, duration, image, url }) {
         this.id = id;
         this.mid = mid;
@@ -45,6 +45,9 @@ export function createSong(musicData) {
     })
 }
 function filterSinger(singer) {
+    if(typeof(singer)=="string"){
+        return singer
+    }
     if (!singer) {
         return '';
     }

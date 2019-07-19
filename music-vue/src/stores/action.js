@@ -1,7 +1,7 @@
 import * as types from './mutation-types';
 import { shullfle } from "common/js/filter.js";
 import { playMode } from "common/js/config.js";
-import { saveSearch, clearSearch, removeSearch } from "common/js/cache.js"
+import { saveSearch, clearSearch, removeSearch ,savePlay,saveFavoriteItem,removeFavoriteItem} from "common/js/cache.js"
 
 function indexFind(list, song) {
     return list.findIndex(item => {
@@ -122,4 +122,16 @@ export const clearSearchHistory = function ({ commit }) {
 }
 export const removeSearchHistory = function ({ commit }, query) {
     commit(types.SET_SEARCH_HISTORY, removeSearch(query))
+}
+
+export const savePlayHistory=function({commit},song){
+    commit(types.SET_PLAY_HISTORY,savePlay(song))
+}
+
+export const saveFavorite=function({commit},song){
+    commit(types.SET_FAVORITE_LIST,saveFavoriteItem(song))
+}
+
+export const removeFavorite=function({commit},song){
+    commit(types.SET_FAVORITE_LIST,removeFavoriteItem(song))
 }
