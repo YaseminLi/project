@@ -62,7 +62,7 @@
               <i class="iconfont iconnext" />
             </div>
             <div class="icon" @click.stop="toggleFavorite(currentSong)">
-              <i  :class="favoriteIcon(currentSong)"/>
+              <i :class="favoriteIcon(currentSong)" />
             </div>
           </div>
         </div>
@@ -81,10 +81,10 @@
           </progressCircle>
         </div>
 
-        <i class="iconfont iconliebiao"  @click.stop="showPlaylist"/>
-        <playlist ref="playlist" />
+        <i class="iconfont iconliebiao" @click.stop="showPlaylist" />
       </div>
     </transition>
+    <playlist ref="playlist" />
     <audio
       ref="audio"
       :src="currentSong.url"
@@ -102,7 +102,7 @@ import Lyric from "lyric-parser";
 import { setTimeout } from "timers";
 import { playMode } from "common/js/config.js";
 import { prefixStyle } from "common/js/dom.js";
-import {playerMixin} from "common/js/mixin.js"
+import { playerMixin } from "common/js/mixin.js";
 import progressBar from "base/progress-bar/progress-bar";
 import progressCircle from "base/progress-circle/progress-circle";
 import scroll from "base/scroll/scroll";
@@ -111,7 +111,7 @@ import playlist from "components/playlist/playlist";
 const transform = prefixStyle("transform");
 const transitionDuration = prefixStyle("transitionDuration");
 export default {
-  mixins:[playerMixin],
+  mixins: [playerMixin],
   data() {
     return {
       songReady: false,
@@ -126,11 +126,7 @@ export default {
     this.touch = {};
   },
   computed: {
-    ...mapGetters([
-      "playingState",
-      "fullScreen",
-      "currentIndex"
-    ]),
+    ...mapGetters(["playingState", "fullScreen", "currentIndex"]),
     playIcon() {
       return this.playingState ? "iconplay" : "iconpause";
     },
@@ -145,7 +141,7 @@ export default {
     }
   },
   methods: {
-    showPlaylist(){
+    showPlaylist() {
       this.$refs.playlist.show();
     },
     touchstart(e) {
@@ -268,7 +264,7 @@ export default {
     },
     ready() {
       this.songReady = true;
-      this.savePlayHistory(this.currentSong)
+      this.savePlayHistory(this.currentSong);
     },
     error() {
       this.songReady = true;
@@ -317,19 +313,19 @@ export default {
         this.$refs.lyric.scrollTo(0, 0, 1000);
       }
     },
-   
+
     ...mapMutations({
       setFullScreen: "SET_FULL_SCREEN",
-      setMode: "SET_MODE",
+      setMode: "SET_MODE"
     }),
     ...mapActions({
-      savePlayHistory:"savePlayHistory"
+      savePlayHistory: "savePlayHistory"
     })
   },
   watch: {
     currentSong(newSong, oldSong) {
       //暂停时，切换模式会改变currentSong，但歌曲没变
-      if (!newSong.id||newSong.id == oldSong.id) {
+      if (!newSong.id || newSong.id == oldSong.id) {
         return;
       }
       if (this.currentLyric) {
@@ -366,7 +362,7 @@ export default {
 
 <style lang='stylus' >
 @import '~common/stylus/variable'
-  @import "~common/stylus/mixin"
+@import '~common/stylus/mixin'
 .player
   .normal-player
     position: fixed
@@ -377,12 +373,12 @@ export default {
     z-index: 150
     background: $color-background
     .top
-      padding 0 30px
+      padding: 0 30px
       text-align: center
       .xiala
         position: absolute
-        top 10px
-        left 10px
+        top: 10px
+        left: 10px
         .iconxiala
           font-size: 20px
       .songname
@@ -417,7 +413,7 @@ export default {
             animation-play-state: paused
         .playingLyric
           line-height: 50px
-          padding 0 30px
+          padding: 0 30px
           no-wrap()
       .middle-r
         width: 50%
@@ -476,7 +472,7 @@ export default {
             font-size: 30px
           .iconlike
             font-size: 25px
-            color red
+            color: red
           .icondislike
             font-size: 25px
     &.normal-enter, .normal-leave-to
@@ -506,7 +502,7 @@ export default {
         animation-play-state: paused
     .title
       flex: 1
-      overflow hidden
+      overflow: hidden
       .songname
         font-size: 14px
         line-height: 20px
@@ -521,7 +517,6 @@ export default {
       .iconfont
         position: absolute
         font-size: 32px
-    
 @keyframes rotate
   0%
     transform: rotate(0)

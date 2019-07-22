@@ -28,6 +28,7 @@
     <div class="search-result" v-show="query">
       <suggest :query="query" :showSinger="false" @saveSearch="saveSearch" />
     </div>
+    <topTip :text="topTip" ref="topTip"/>
   </div>
 </template>
 
@@ -41,6 +42,7 @@ import { searchMixin } from "common/js/mixin.js";
 import {mapGetters, mapActions} from "vuex"
 import {Song} from "common/js/song.js"
 import switches from "base/switches/switches.vue"
+import topTip from "base/top-tip/top-tip.vue"
 export default {
   mixins: [searchMixin],
   data() {
@@ -49,7 +51,8 @@ export default {
       showPlay: true,
       searchBoxTitle: "搜索歌曲",
       switches:["最近播放","历史搜索"],
-      switchesCurrentIndex:0
+      switchesCurrentIndex:0,
+      topTip:"1首歌曲已添加到播放列表"
     };
   },
   computed:{
@@ -71,6 +74,7 @@ export default {
     selectSong(song,index){
       if(index!==0){
         this.insertSong(new Song(song))
+        this.$refs.topTip.show()
       }
     },
     switchItem(index){
@@ -86,7 +90,8 @@ export default {
     searchList,
     songList,
     suggest,
-    switches
+    switches,
+    topTip
   }
 };
 </script>
@@ -94,15 +99,12 @@ export default {
 <style lang='stylus' scoped>
 @import '~common/stylus/variable'
 .add-song
-  width: 100%
   position: fixed
   top: 0
   bottom: 0
-  overflow: hidden
   background: white
+  width: 100%
   z-index: 200
-  display: flex
-  flex-direction: column
   .header
     text-align: center
     font-size: 18px

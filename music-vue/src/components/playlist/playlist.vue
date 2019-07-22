@@ -8,11 +8,12 @@
       </div>
       <scroll class="list" :data="sequenceList" ref="list">
         <div ref="wrapper">
+          <transition-group name="list" tag="ul">
           <div
             ref="item"
             class="item"
             v-for="(item,index) in sequenceList"
-            :key="index"
+            :key="item.id"
             :class="{'currentItem':currentSong.id==item.id}"
           >
             <i
@@ -28,6 +29,7 @@
             <i  :class="favoriteIcon(item)" @click.stop="toggleFavorite(item)"/>
             <i class="iconfont iconremove" @click.stop="remove(item,index)"></i>
           </div>
+          </transition-group>
         </div>
       </scroll>
       <div class="operate border-1px">
@@ -38,8 +40,9 @@
       </div>
       <div class="close" @click.stop="close">关闭</div>
       <confirm ref="confirm" @clear="clearList" />
-      <addSong ref="addSong" />
+      
     </div>
+    <addSong ref="addSong" />
   </div>
 </template>
 
@@ -138,7 +141,7 @@ export default {
   position: fixed
   top: 0
   bottom: 0
-  z-index: 20
+  z-index: 200
   background: $color-background-d
   color: $color-theme
   .container
@@ -178,6 +181,10 @@ export default {
         flex-direction: row
         align-items: center
         position: relative
+        &.list-enter-active,&.list-leave-active
+          transition all 0.1s
+        &.list-enter,&.list-leave-to
+          height 0px
         .current
           color: $color-theme-d
         .songname

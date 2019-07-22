@@ -1,6 +1,6 @@
 <template>
   <div class="song-list">
-    <div class="item" v-for="(item,index) in songs" :key="index" @click="selectItem(item,index)">
+    <div class="item" v-for="(item,index) in songs" :key="item.id" @click.stop="selectItem(item,index)">
       <div class="rank" v-show="rank&&index>2">{{index}}</div>
       <div class="rank" v-show="rank&&index<3">
         <i class="iconfont" :class="rankNum(index)"></i>
@@ -10,6 +10,7 @@
         <div class="album">{{songDesc(item)}}</div>
       </div>
     </div>
+    
   </div>
 </template>
 
@@ -56,6 +57,8 @@ export default {
     flex-direction: row
     flex-wrap: nowrap
     overflow hidden
+    height 61px
+    box-sizing border-box
     .rank
       flex: 0 0 20px
       line-height: 39px
