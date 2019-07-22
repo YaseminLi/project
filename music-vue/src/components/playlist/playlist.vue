@@ -85,6 +85,7 @@ export default {
     },
     clearList() {
       this.clearPlaylist();
+      this.playlistShow = false;
     },
     remove(item) {
       this.removeSong(item);

@@ -10,15 +10,12 @@
     <div class="shortcut">
       <switches @switchItem="switchItem" :switches="switches" :currentIndex="switchesCurrentIndex" />
     </div>
-    <div class="play contentList" v-show="switchesCurrentIndex==0">
-      <scroll>
+      <scroll :data="playHistory" ref="playList" class="play contentList" v-show="switchesCurrentIndex==0">
         <div>
           <songList :songs="playHistory" @selectItem="selectSong"/>
         </div>
       </scroll>
-    </div>
-    <div class="history contentList" v-show="switchesCurrentIndex==1">
-      <scroll v-show="searchHistory">
+      <scroll  :data="searchHistory" ref="searchList" class="history contentList" v-show="switchesCurrentIndex==1">
         <div>
           <searchList
             :searchList="searchHistory"
@@ -28,7 +25,6 @@
           />
         </div>
       </scroll>
-    </div>
     <div class="search-result" v-show="query">
       <suggest :query="query" :showSinger="false" @saveSearch="saveSearch" />
     </div>
@@ -71,7 +67,7 @@ export default {
     },
     showSearchList() {
       this.showPlay = false;
-    },
+    }, 
     selectSong(song,index){
       if(index!==0){
         this.insertSong(new Song(song))
@@ -119,7 +115,6 @@ export default {
       font-size: 16px
   .contentList
     width: 100%
-    height: 100%
     position: fixed
     top: 152px
     bottom: 0

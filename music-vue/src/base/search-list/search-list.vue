@@ -5,10 +5,12 @@
       <i class="iconfont iconclear" @click.stop="showConfirm" @clear="clear"></i>
     </div>
     <div class="container">
-      <div class="item" v-for="(item,index) in searchList" :key="index">
+      <transition-group name="list" tag="div">
+      <div class="item" v-for="item in searchList" :key="item">
         <span class="text" @click.stop="addSearch(item)">{{item}}</span>
         <i class="iconfont iconremove" @click.stop="remove(item)"></i>
       </div>
+      </transition-group>
     </div>
     <confirm :text="confirmText" ref="confirm" @clear="clear"/>
   </div>
@@ -71,9 +73,13 @@ export default {
       display: flex
       align-items: center
       justify-content: space-between
+      height 30px
+      &.list-enter,&.list-leave-to
+        height 0
+      &.list-enter-active,&.list-leave-active
+        transition all 0.1s
       .text
         flex: 1
-        line-height: 30px
         no-wrap()
       .iconremove
         margin-left: 10px

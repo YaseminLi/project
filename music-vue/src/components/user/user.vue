@@ -5,19 +5,21 @@
       <i class="iconfont iconbofang"></i>
       <span class="text">随机播放全部</span>
     </div>
-    <div class="list favourite" v-show="switchesCurrentIndex==0">
-      <scroll>
+    <div class="list favorite" v-show="switchesCurrentIndex==0" ref="favorite">
+      <scroll :data="favoriteList" ref="scroll" class="scroll" v-show="favoriteList.length>0">
         <div>
           <songList :songs="favoriteList" @selectItem="selectSong" />
         </div>
       </scroll>
+      <div class="no-favoriteList">暂时没有收藏</div>
     </div>
-    <div class="list play" v-show="switchesCurrentIndex==1">
-      <scroll>
+    <div class="list play" v-show="switchesCurrentIndex==1" ref="play">
+      <scroll :data="playHistory" ref="scroll" class="scroll" v-show="playHistory.length>0">
         <div>
           <songList :songs="playHistory" @selectItem="selectSong" />
         </div>
       </scroll>
+      <div class="no-playHistory">你还没有听过歌曲～</div>
     </div>
   </div>
 </template>
@@ -28,7 +30,9 @@ import { Song } from "common/js/song.js";
 import { mapGetters, mapActions } from "vuex";
 import scroll from "base/scroll/scroll";
 import songList from "base/song-list/song-list";
+import { playlistMixin } from "common/js/mixin";
 export default {
+  mixins: [playlistMixin],
   data() {
     return {
       switches: ["我喜欢的", "最近听的"],
@@ -39,6 +43,12 @@ export default {
     ...mapGetters(["playHistory", "favoriteList"])
   },
   methods: {
+    handlePlaylist(playList) {
+      const bottom = playList.length > 0 ? `60px` : `0`;
+      this.$refs.favorite.style.bottom = bottom;
+      this.$refs.play.style.bottom = bottom;
+      this.$refs.scroll.refresh();
+    },
     switchItem(index) {
       this.switchesCurrentIndex = index;
     },
@@ -46,9 +56,12 @@ export default {
       this.insertSong(new Song(song));
     },
     playRandom() {
-      let list =
+      let list = [];
+      let arr =
         this.switchesCurrentIndex == 0 ? this.favoriteList : this.playHistory;
-      list.forEach(item => {return new Song(item)});
+      arr.forEach(item => {
+        list.push(new Song(item));
+      });
       this.randomPlay({
         list
       });
@@ -81,5 +94,8 @@ export default {
     top: 136px
     bottom: 0
     width: 100%
-    overflow: hidden
+    .scroll
+      width: 100%
+      height: 100%
+      overflow: hidden
 </style>
