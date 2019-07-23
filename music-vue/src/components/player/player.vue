@@ -1,6 +1,12 @@
 <template>
   <div class="player" v-show="playList.length>0">
-    <transition name="normal">
+    <transition
+      name="normal"
+      @enter="enter"
+      @after-enter="afterEnter"
+      @leave="leave"
+      @after-leave="afterLeave"
+    >
       <div class="normal-player" v-show="fullScreen">
         <div class="top">
           <div class="xiala" @click.stop="back">
@@ -16,11 +22,13 @@
           @touchmove="touchmove"
           @touchend="touchend"
         >
-          <div class="middle-l" ref="cd">
-            <img :src="currentSong.image" :class="rotate" />
-            <img :src="currentSong.image" class="background" />
+          <div class="middle-l">
+            <div :class="rotate" ref="cd">
+              <img :src="currentSong.image" />
+            </div>
             <div class="playingLyric">{{playingLyric}}</div>
           </div>
+
           <scroll class="middle-r" :data="currentLyric&&currentLyric.lines" ref="lyric">
             <div class="lyric-wrapper">
               <div v-if="currentLyric">
@@ -69,7 +77,7 @@
         </div>
       </div>
     </transition>
-    <transition appear name="mini-move">
+    <transition appear name="mini">
       <div class="mini-player" v-show="!fullScreen" @click="open">
         <img :src="currentSong.image" :class="rotate" />
         <div class="title">
@@ -108,7 +116,7 @@ import progressBar from "base/progress-bar/progress-bar";
 import progressCircle from "base/progress-circle/progress-circle";
 import scroll from "base/scroll/scroll";
 import playlist from "components/playlist/playlist";
-
+import animations from "create-keyframe-animation";
 const transform = prefixStyle("transform");
 const transitionDuration = prefixStyle("transitionDuration");
 export default {
@@ -317,7 +325,77 @@ export default {
         this.$refs.lyric.scrollTo(0, 0, 1000);
       }
     },
+    //el:动画作用的DOM
+    //done:结束后跳到下一个钩子函数
+    enter(el, done) {
+      const { x, y, scale } = this._getPosAndScale();
+      //从隐藏到显示，0，60%，100%时的动画状态
+      let animation = {
+        0: {
+          transform: `translate3d(${x}px,${y}px,0) scale(${scale})`
+        },
+        60: {
+          transform: `translate3d(0,0,0) scale(1.1)`
+        },
+        100: {
+          transform: `translate3d(0,0,0) scale(1)`
+        }
+      };
 
+      animations.registerAnimation({
+        name: "move",
+        animation,
+        presets: {
+          duration: 400,
+          easing: "linear"
+        }
+      });
+
+      animations.runAnimation(this.$refs.cd, "move", done);
+    },
+    afterEnter() {
+      animations.unregisterAnimation("move");
+      this.$refs.cd.style.animation = "";
+    },
+    leave(el, done) {
+      this.$refs.cd.style.transition = "all .4s";
+      const { x, y, scale } = this._getPosAndScale();
+      this.$refs.cd.style[
+        transform
+      ] = `translate3d(${x}px,${y}px,0) scale(${scale})`;
+      const timer = setTimeout(done, 400);
+      this.$refs.cd.addEventListener("transitionend", () => {
+        clearTimeout(timer);
+        done();
+      });
+    },
+    afterLeave() {
+      this.$refs.cd.style.transition = "";
+      this.$refs.cd.style[transform] = "";
+    },
+    _getPosAndScale() {
+      //底部小图片的尺寸们……
+      const targetWidth = 40;
+      const paddingLeft = 20;
+      const paddingBottom = 10;
+
+      //中部大图片的尺寸们……
+      const paddingTop = 80;
+      const width = 300;
+      const scale = targetWidth / width;
+      const x = -(window.innerWidth / 2 - paddingLeft - targetWidth / 2);
+      const y =
+        window.innerHeight -
+        paddingTop -
+        width / 2 -
+        paddingBottom -
+        targetWidth / 2;
+      return {
+        x,
+        y,
+        scale
+      };
+    },
     ...mapMutations({
       setFullScreen: "SET_FULL_SCREEN",
       setMode: "SET_MODE"
@@ -405,6 +483,8 @@ export default {
         width: 50%
         height: 100%
         text-align: center
+        display flex
+        flex-direction column
         img
           margin-top: 20px
           border-radius: 50%
@@ -414,15 +494,6 @@ export default {
             animation: rotate 30s linear infinite
           &.pause
             animation-play-state: paused
-         .background
-          filter blur(20px)
-          width 320px
-          height 320px
-          position absolute
-          top -5px
-          left 25%
-          transform translateX(-50%)
-          z-index -1
         .playingLyric
           line-height: 50px
           padding: 20px 30px
@@ -487,11 +558,16 @@ export default {
             color: red
           .icondislike
             font-size: 25px
-    &.normal-enter, .normal-leave-to
+    &.normal-enter-active, &.normal-leave-active
+      transition: all 4s
+      .top, .bottom
+        transition: all 4s cubic-bezier(0.86, 0.18, 0.82, 1.32)
+    &.normal-enter, &.normal-leave-to
       opacity: 0
-      transform: translate3d(0, -100px, 0)
-    &.normal-enter-active, .normal-leave-active
-      transition: all 0.4s
+      .top
+        transform: translate3d(0, -100px, 0)
+      .bottom
+        transform: translate3d(0, 100px, 0)
   .mini-player
     height: 60px
     position: fixed
@@ -528,13 +604,13 @@ export default {
     .controls
       .iconfont
         position: absolute
-        font-size 20px
-        top 6px
-        left 6px
+        font-size: 20px
+        top: 6px
+        left: 6px
         &.iconplay1
-          font-size 12px
-          top 10px
-          left 10px
+          font-size: 12px
+          top: 10px
+          left: 10px
 @keyframes rotate
   0%
     transform: rotate(0)
