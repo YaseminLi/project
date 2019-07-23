@@ -27,7 +27,7 @@
       </scroll>
     </div>
     <div class="search-result" v-show="query" ref="result">
-      <suggest :query="query" ref="suggest" @saveSearch="saveSearch" />
+      <suggest :query="query" ref="suggest" @selectItem="saveSearch" />
     </div>
     <router-view></router-view>
   </div>

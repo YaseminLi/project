@@ -6,7 +6,7 @@
         <span class="text">{{text(item)}}</span>
       </div>
       <div class="load" v-show="hasMore">
-        <loading title=""/>
+        <loading title />
       </div>
       <div v-show="!hasMore && suggest.length==0" class="no-result-wrapper">
         <noResult />
@@ -23,15 +23,15 @@ import { ERR_OK } from "api/config.js";
 import { createSong, processSongsUrl } from "common/js/song.js";
 import Singer from "common/js/singer.js";
 import loading from "base/loading/loading";
-import noResult from "base/no-result/no-result"
+import noResult from "base/no-result/no-result";
 const TYPE_SINGER = "singer";
 const perpage = 20;
 export default {
   props: {
     query: String,
-    showSinger:{
-      type:Boolean,
-      default:true
+    showSinger: {
+      type: Boolean,
+      default: true
     }
   },
   data() {
@@ -58,20 +58,18 @@ export default {
           path: `/search/${item.singermid}`
         });
         this.setSinger(item);
-
-        this.$emit("clearInput");
       } else {
-        this.insertSong(item)
-         this.$emit("saveSearch");
-        this.$emit("clearInput");
+        this.insertSong(item);
       }
+      this.$emit("clearInput");
+      this.$emit("selectItem");
     },
     search(query) {
       this.hasMore = true;
       getSearchResult(query, this.page, this.showSinger, perpage).then(res => {
         if (res.code == ERR_OK) {
-          this._checkMore(res.data);
           this._normalizeResult(res.data);
+          this._checkMore(res.data);
         }
       });
     },
@@ -82,11 +80,22 @@ export default {
       this.page += 1;
       this.search(this.query);
     },
-    refresh(){
-      this.$refs.scroll.refresh()
+    refresh() {
+      this.$refs.scroll.refresh();
     },
+    //没有剔除付费歌曲，hasMore一直为true
+    // _checkMore(data) {
+    //   if (
+    //     !data.song.list.length ||
+    //     (data.song.curpage - 1) * perpage + data.song.curnum >=
+    //       data.song.totalnum
+    //   ) {
+    //     this.hasMore = false;
+    //   }
+    // },
     _checkMore(data) {
       if (
+        !this.suggest.length ||
         !data.song.list.length ||
         (data.song.curpage - 1) * perpage + data.song.curnum >=
           data.song.totalnum
@@ -126,7 +135,7 @@ export default {
     }),
     ...mapActions({
       selectPlay: "selectPlay",
-      insertSong:"insertSong"
+      insertSong: "insertSong"
     })
   },
   watch: {

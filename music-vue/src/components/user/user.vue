@@ -11,7 +11,7 @@
           <songList :songs="favoriteList" @selectItem="selectSong" />
         </div>
       </scroll>
-      <div class="no-favoriteList">暂时没有收藏</div>
+      <noResult :title="noResult[switchesCurrentIndex]" v-show="favoriteList.length==0"/>
     </div>
     <div class="list play" v-show="switchesCurrentIndex==1" ref="play">
       <scroll :data="playHistory" ref="scroll" class="scroll" v-show="playHistory.length>0">
@@ -19,7 +19,7 @@
           <songList :songs="playHistory" @selectItem="selectSong" />
         </div>
       </scroll>
-      <div class="no-playHistory">你还没有听过歌曲～</div>
+      <noResult :title="noResult[switchesCurrentIndex]" v-show="playHistory.length==0"/>
     </div>
   </div>
 </template>
@@ -31,12 +31,14 @@ import { mapGetters, mapActions } from "vuex";
 import scroll from "base/scroll/scroll";
 import songList from "base/song-list/song-list";
 import { playlistMixin } from "common/js/mixin";
+import noResult from "base/no-result/no-result.vue"
 export default {
   mixins: [playlistMixin],
   data() {
     return {
       switches: ["我喜欢的", "最近听的"],
-      switchesCurrentIndex: 0
+      switchesCurrentIndex: 0,
+      noResult:["暂时没有收藏","你还没有听过歌曲"]
     };
   },
   computed: {
@@ -56,12 +58,8 @@ export default {
       this.insertSong(new Song(song));
     },
     playRandom() {
-      let list = [];
-      let arr =
-        this.switchesCurrentIndex == 0 ? this.favoriteList : this.playHistory;
-      arr.forEach(item => {
-        list.push(new Song(item));
-      });
+      let list = this.switchesCurrentIndex == 0 ? this.favoriteList : this.playHistory;
+      list.map(item =>new Song(item));
       this.randomPlay({
         list
       });
@@ -74,7 +72,8 @@ export default {
   components: {
     switches,
     scroll,
-    songList
+    songList,
+    noResult
   }
 };
 </script>

@@ -63,17 +63,19 @@ export const playerMixin = {
       this.setCurrentIndex(index);
     },
     toggleFavorite(song){
-      let index=this.favoriteList.findIndex(item=>item.id==song.id)
-      if(index>-1){
+     
+      if(this.isFavorite(song)){
         this.removeFavorite(song)
       }else{
         this.saveFavorite(song)
       }
-      
     },
     favoriteIcon(song){
+      return this.isFavorite(song)?"iconfont iconlike":"iconfont icondislike"
+    },
+    isFavorite(song){
       let index=this.favoriteList.findIndex(item=>item.id==song.id)
-      return index>-1?"iconfont iconlike":"iconfont icondislike"
+      return index>-1
     },
     ...mapMutations({
       setPlaylist: "SET_PLAY_LIST",

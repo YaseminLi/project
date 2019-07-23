@@ -10,25 +10,35 @@
     <div class="shortcut">
       <switches @switchItem="switchItem" :switches="switches" :currentIndex="switchesCurrentIndex" />
     </div>
-      <scroll :data="playHistory" ref="playList" class="play contentList" v-show="switchesCurrentIndex==0">
-        <div>
-          <songList :songs="playHistory" @selectItem="selectSong"/>
-        </div>
-      </scroll>
-      <scroll  :data="searchHistory" ref="searchList" class="history contentList" v-show="switchesCurrentIndex==1">
-        <div>
-          <searchList
-            :searchList="searchHistory"
-            :title="false"
-            @remove="removeSearchHistory"
-            @addSearch="search"
-          />
-        </div>
-      </scroll>
+    <scroll
+      :data="playHistory"
+      ref="playList"
+      class="play contentList"
+      v-show="switchesCurrentIndex==0"
+    >
+      <div>
+        <songList :songs="playHistory" @selectItem="selectSong" />
+      </div>
+    </scroll>
+    <scroll
+      :data="searchHistory"
+      ref="searchList"
+      class="history contentList"
+      v-show="switchesCurrentIndex==1"
+    >
+      <div>
+        <searchList
+          :searchList="searchHistory"
+          :title="false"
+          @remove="removeSearchHistory"
+          @addSearch="search"
+        />
+      </div>
+    </scroll>
     <div class="search-result" v-show="query">
-      <suggest :query="query" :showSinger="false" @saveSearch="saveSearch" />
+      <suggest :query="query" :showSinger="false" @selectItem="selectSuggest" />
     </div>
-    <topTip :text="topTip" ref="topTip"/>
+    <topTip :text="topTip" ref="topTip" />
   </div>
 </template>
 
@@ -39,10 +49,10 @@ import searchList from "base/search-list/search-list";
 import songList from "base/song-list/song-list";
 import suggest from "base/suggest/suggest";
 import { searchMixin } from "common/js/mixin.js";
-import {mapGetters, mapActions} from "vuex"
-import {Song} from "common/js/song.js"
-import switches from "base/switches/switches.vue"
-import topTip from "base/top-tip/top-tip.vue"
+import { mapGetters, mapActions } from "vuex";
+import { Song } from "common/js/song.js";
+import switches from "base/switches/switches.vue";
+import topTip from "base/top-tip/top-tip.vue";
 export default {
   mixins: [searchMixin],
   data() {
@@ -50,13 +60,13 @@ export default {
       showing: false,
       showPlay: true,
       searchBoxTitle: "搜索歌曲",
-      switches:["最近播放","历史搜索"],
-      switchesCurrentIndex:0,
-      topTip:"1首歌曲已添加到播放列表"
+      switches: ["最近播放", "历史搜索"],
+      switchesCurrentIndex: 0,
+      topTip: "1首歌曲已添加到播放列表"
     };
   },
-  computed:{
-...mapGetters(["playHistory"])
+  computed: {
+    ...mapGetters(["playHistory"])
   },
   methods: {
     show() {
@@ -70,18 +80,25 @@ export default {
     },
     showSearchList() {
       this.showPlay = false;
-    }, 
-    selectSong(song,index){
-      if(index!==0){
-        this.insertSong(new Song(song))
-        this.$refs.topTip.show()
+    },
+    selectSuggest() {
+      this.saveSearch();
+      this.showTip()
+    },
+    selectSong(song, index) {
+      if (index !== 0) {
+        this.insertSong(new Song(song));
+        this.showTip()
       }
     },
-    switchItem(index){
-      this.switchesCurrentIndex=index;
+    showTip() {
+      this.$refs.topTip.show();
+    },
+    switchItem(index) {
+      this.switchesCurrentIndex = index;
     },
     ...mapActions({
-      insertSong:"insertSong"
+      insertSong: "insertSong"
     })
   },
   components: {

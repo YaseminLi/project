@@ -1,10 +1,10 @@
 <template>
-<transition name="move">
-  <div class="top-tip" v-show="showState" @click.stop="hide">
-    <i class="iconfont iconsuccess"></i>
-    <span class="text">{{text}}</span>
-  </div>
-</transition>
+  <transition name="move">
+    <div class="top-tip" v-show="showState" @click.stop="hide">
+      <i class="iconfont iconsuccess"></i>
+      <span class="text">{{text}}</span>
+    </div>
+  </transition>
 </template>
 
 <script>
@@ -16,22 +16,21 @@ export default {
   },
   props: {
     text: String,
-    delay:{
-      type:Number,
-      default:3000
+    delay: {
+      type: Number,
+      default: 3000
     }
   },
   methods: {
     show() {
       this.showState = true;
-      console.log("show");
-      setTimeout(() => {
-      this.hide()
-    }, this.delay);
+      clearTimeout(this.timer);
+      this.timer = setTimeout(() => {
+        this.hide();
+      }, this.delay);
     },
     hide() {
       this.showState = false;
-      console.log("hide");
     }
   }
 };
@@ -48,10 +47,10 @@ export default {
   display: flex
   justify-content: center
   align-items: center
-  &.move-enter-active,&.move-leave-active
-    transition all 1s
-  &.move-enter,&.move-leave-to
-    transform translateY(-44px)
+  &.move-enter-active, &.move-leave-active
+    transition: all 1s
+  &.move-enter, &.move-leave-to
+    transform: translateY(-100%)
   .iconfont
     color: $color-theme-d
     font-size: 18px

@@ -3,7 +3,7 @@
     <transition name="normal">
       <div class="normal-player" v-show="fullScreen">
         <div class="top">
-          <div class="xiala" @click="back">
+          <div class="xiala" @click.stop="back">
             <i class="iconfont iconxiala" />
           </div>
           <div class="songname">{{currentSong.songname}}</div>
