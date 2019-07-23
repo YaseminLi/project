@@ -1,5 +1,7 @@
 <template>
+<transition name="move">
   <div class="playlist" v-show="playlistShow" @click.stop="close">
+    
     <div class="container" @click.stop>
       <div class="head border-1px" @click.stop="modeChange">
         <i :class="modeIcon"></i>
@@ -40,10 +42,10 @@
       </div>
       <div class="close" @click.stop="close">关闭</div>
       <confirm ref="confirm" @clear="clearList" />
-      
-    </div>
+    </div> 
     <addSong ref="addSong" />
   </div>
+ </transition>
 </template>
 
 <script>
@@ -220,4 +222,12 @@ export default {
       line-height: 50px
       text-align: center
       color: $color-theme-d
+  &.move-enter-active,&.move-leave-active
+    transition: opacity 0.4s
+    .container
+      transition all 0.4s
+  &.move-enter,&.move-leave-to
+    opacity 0
+    .container
+       transform translateY(100%)
 </style>

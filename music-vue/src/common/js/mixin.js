@@ -78,7 +78,7 @@ export const playerMixin = {
       return index>-1
     },
     ...mapMutations({
-      setPlaylist: "SET_PLAY_LIST",
+      setPlayList: "SET_PLAY_LIST",
       setCurrentIndex: "SET_CURRENT_INDEX",
       setPlayingState: "SET_PLAYING_STATE"
     }),

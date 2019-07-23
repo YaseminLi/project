@@ -58,7 +58,7 @@
             <span class="time timer">{{format(currentSong.duration)}}</span>
           </div>
           <div class="operators">
-            <div class="icon" @click="modeChange">
+            <div class="icon" @click.stop="modeChange">
               <i :class="modeIcon" />
             </div>
             <div class="icon" @click="prev" :class="disableCls">
@@ -490,9 +490,9 @@ export default {
           border-radius: 50%
           width: 300px
           height: 300px
-          &.play
+        .play
             animation: rotate 30s linear infinite
-          &.pause
+        .pause
             animation-play-state: paused
         .playingLyric
           line-height: 50px
