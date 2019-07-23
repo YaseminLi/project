@@ -18,6 +18,7 @@
         >
           <div class="middle-l" ref="cd">
             <img :src="currentSong.image" :class="rotate" />
+            <img :src="currentSong.image" class="background" />
             <div class="playingLyric">{{playingLyric}}</div>
           </div>
           <scroll class="middle-r" :data="currentLyric&&currentLyric.lines" ref="lyric">
@@ -56,7 +57,7 @@
               <i class="iconfont iconprev" />
             </div>
             <div class="icon" @click="togglePlaying" :class="disableCls">
-              <i class="iconfont" :class="playIcon" />
+              <i class="iconfont" :class="playIconNormal" />
             </div>
             <div class="icon" @click="next" :class="disableCls">
               <i class="iconfont iconnext" />
@@ -77,7 +78,7 @@
         </div>
         <div class="controls" @click.stop="togglePlaying">
           <progressCircle :radius="32" :percent="percent">
-            <i class="iconfont" :class="playIcon" />
+            <i :class="playIconMini" />
           </progressCircle>
         </div>
 
@@ -127,8 +128,11 @@ export default {
   },
   computed: {
     ...mapGetters(["playingState", "fullScreen", "currentIndex"]),
-    playIcon() {
-      return this.playingState ? "iconplay" : "iconpause";
+    playIconMini() {
+      return this.playingState ? "iconfont iconplay1" : "iconfont iconpause1";
+    },
+    playIconNormal() {
+      return this.playingState ? "iconfont iconplay" : "iconfont iconpause";
     },
     rotate() {
       return this.playingState ? "play" : "";
@@ -406,14 +410,22 @@ export default {
           border-radius: 50%
           width: 300px
           height: 300px
-          border: 10px solid $color-theme-d
           &.play
             animation: rotate 30s linear infinite
           &.pause
             animation-play-state: paused
+         .background
+          filter blur(20px)
+          width 320px
+          height 320px
+          position absolute
+          top -5px
+          left 25%
+          transform translateX(-50%)
+          z-index -1
         .playingLyric
           line-height: 50px
-          padding: 0 30px
+          padding: 20px 30px
           no-wrap()
       .middle-r
         width: 50%
@@ -516,7 +528,13 @@ export default {
     .controls
       .iconfont
         position: absolute
-        font-size: 32px
+        font-size 20px
+        top 6px
+        left 6px
+        &.iconplay1
+          font-size 12px
+          top 10px
+          left 10px
 @keyframes rotate
   0%
     transform: rotate(0)

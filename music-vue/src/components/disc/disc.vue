@@ -3,14 +3,14 @@
     <div class="disc" ref="disc">
       <div class="back">
         <i @click="back" class="iconfont iconreturn" />
-        <span>{{title}}</span>
+        <span v-html="title"></span>
       </div>
       <div class="head" ref="head" :style="{zIndex:0}">
         <div class="left">
           <img class="avatar" :src="discInfo.logo" />
         </div>
         <div class="right">
-          <div class="name">{{discInfo.name}}</div>
+          <div class="name"  v-html="discInfo.name"></div>
           <div class="tags desc">标签： {{tags}}</div>
           <div class="visitNum desc">播放量： {{normalizeVisitNum}}</div>
           <div class="play" v-show="songs.length>0" @click="random">

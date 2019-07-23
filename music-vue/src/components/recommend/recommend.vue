@@ -6,12 +6,22 @@
         <div class="discList-wrapper">
           <h1 class="title">推荐歌单</h1>
           <div class="discList">
-            <div class="item" v-for="(item,index) in discList" :key="index" @click="selectDisc(item)">
+            <div
+              class="item"
+              v-for="(item,index) in discList"
+              :key="index"
+              @click="selectDisc(item)"
+            >
               <img v-lazy="item.imgurl" />
-              <p class="dissname">{{item.dissname}}</p>
-              <div class="listennum">
-                <i class="iconfont iconbofang" />
-                <span>{{normalizeNum(item.listennum)}}</span>
+              <div class="desc">
+                <div class="dissname">{{item.dissname}}</div>
+                <div class="info">
+                  <span class="listennum">
+                    <i class="iconfont iconpause1" />
+                    <span>{{normalizeNum(item.listennum)}}</span>
+                  </span>
+                  <span class="creator">{{item.creator.name}}</span>
+                </div>
               </div>
             </div>
           </div>
@@ -34,7 +44,7 @@ import loading from "base/loading/loading.vue";
 import { setTimeout } from "timers";
 import { normalizeNum } from "common/js/filter.js";
 import { playlistMixin } from "common/js/mixin.js";
-import {mapMutations} from "vuex"
+import { mapMutations } from "vuex";
 export default {
   mixins: [playlistMixin],
   data() {
@@ -48,11 +58,11 @@ export default {
     this._getDiscList();
   },
   methods: {
-    selectDisc(item){
+    selectDisc(item) {
       this.$router.push({
-        path:`/recommend/${item.dissid}`
+        path: `/recommend/${item.dissid}`
       });
-      this.setDisc(item)
+      this.setDisc(item);
     },
     normalizeNum(num) {
       return normalizeNum(num);
@@ -81,12 +91,12 @@ export default {
       }
     },
     handlePlaylist(playList) {
-      const bottom = playList.length > 0 ? '60px' : ''
-        this.$refs.recommend.style.bottom = bottom
-        this.$refs.scroll.refresh()
+      const bottom = playList.length > 0 ? "60px" : "";
+      this.$refs.recommend.style.bottom = bottom;
+      this.$refs.scroll.refresh();
     },
     ...mapMutations({
-      setDisc:"SET_DISC"
+      setDisc: "SET_DISC"
     })
   },
   components: {
@@ -105,45 +115,50 @@ export default {
   top: 44px
   bottom: 0
   .recommend-content
+    width: 100%
     height: 100%
     overflow: hidden
     .discList-wrapper
-      margin: 0 15px
       .title
-        margin: 25px 0 20px 5px
+        margin: 20px
         font-size: 16px
         color: $color-theme
       .discList
         display: flex
-        flex-wrap: wrap
+        flex-direction: column
         .item
-          width: 105px
-          margin: 0 5px 10px 5px
-          position: relative
+          width: 100%
+          box-sizing: border-box
+          display: flex
+          flex-direction: row
+          padding: 0 20px 20px 20px
           img
-            height: 105px
-            width: 105px
+            height: 60px
+            width: 60px
             border-radius: 5px
-          .dissname
+            margin-right: 10px
+          .desc
+            flex: 1
             padding: 6px 0
-            font-size: 10px
-            line-height: 14px
+            font-size: 12px
+            line-height: 20px
             color: $color-theme
             overflow: hidden
             text-overflow: ellipsis
             display: -webkit-box
             -webkit-box-orient: vertical
             -webkit-line-clamp: 2
-          .listennum
-            position: absolute
-            top: 6px
-            right: 6px
-            color: white
-            font-size: 10px
-            display: flex
-            align-items: center
-            .iconbofang
-              font-size: 14px
+            .dissname
+              margin-bottom: 8px
+            .info
+              color: $color-text-l
+              display flex
+              .listennum
+                margin-right 10px
+                display: flex
+                align-items: center
+                .iconpause1
+                  font-size: 12px
   .loading-container
     width: 100%
     position: absolute

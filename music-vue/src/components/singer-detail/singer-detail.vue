@@ -11,11 +11,9 @@
           <i class="iconfont iconbofang" />
           <span>随机播放全部</span>
         </div>
-        <div class="play" v-show="songs.length==0">
-          <span>无法获取到歌曲！</span>
-        </div>
+        <noResult :title="noResult" v-show="songs.length==0" />
       </div>
-      <loading v-show="songs.length==0" />
+      <loading v-show="showLoading" />
       <scroll
         class="list"
         ref="list"
@@ -47,6 +45,7 @@ import scroll from "base/scroll/scroll";
 import { createSong, processSongsUrl } from "common/js/song.js";
 import loading from "base/loading/loading";
 import { playlistMixin } from "common/js/mixin.js";
+import noResult from "base/no-result/no-result"
 export default {
   mixins: [playlistMixin],
   data() {
@@ -55,7 +54,9 @@ export default {
       songs: [],
       probeType: 3,
       listenScroll: true,
-      scrollY: 0
+      scrollY: 0,
+      noResult:"暂时没有相关歌曲",
+      showLoading:true
     };
   },
   created() {
@@ -80,6 +81,7 @@ export default {
           processSongsUrl(this._normalizeSingerDetail(res.data)).then(songs => {
             this.songs = songs;
           });
+          this.showLoading=false
         }
       });
     },
@@ -132,7 +134,8 @@ export default {
   components: {
     songList,
     scroll,
-    loading
+    loading,
+    noResult
   }
 };
 </script>
