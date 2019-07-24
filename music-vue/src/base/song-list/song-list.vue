@@ -1,11 +1,11 @@
 <template>
   <div class="song-list">
-    <div class="item" v-for="(item,index) in songs" :key="item.id" @click.stop="selectItem(item,index)">
+    <div class="item" v-for="(item,index) in songs" :key="item.id" @click.stop="selectItem(item,index)" >
       <div class="rank" v-show="rank&&index>2">{{index}}</div>
       <div class="rank" v-show="rank&&index<3">
         <i class="iconfont" :class="rankNum(index)"></i>
       </div>
-      <div class="content">
+      <div class="content" :class="current(item)">
         <div class="name">{{item.songname}}</div>
         <div class="album">{{songDesc(item)}}</div>
       </div>
@@ -15,6 +15,7 @@
 </template>
 
 <script>
+import {mapGetters} from "vuex"
 export default {
   props: {
     songs: Array,
@@ -22,6 +23,9 @@ export default {
       type: Boolean,
       default: false
     }
+  },
+  computed:{
+    ...mapGetters(["currentSong"])
   },
   methods: {
     songDesc(song) {
@@ -39,6 +43,9 @@ export default {
     },
     rankNum(index) {
       return `iconrank${index + 1}`;
+    },
+     current(item){
+      return item.id==this.currentSong.id?"current":""
     }
   }
 };
@@ -80,4 +87,9 @@ export default {
         color: $color-text-lll
         line-height: 18px
         no-wrap()
+      &.current
+          .name,.album
+            color: $color-theme-d
+      
+    
 </style>

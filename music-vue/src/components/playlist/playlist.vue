@@ -3,9 +3,9 @@
   <div class="playlist" v-show="playlistShow" @click.stop="close">
     
     <div class="container" @click.stop>
-      <div class="head border-1px" @click.stop="modeChange">
+      <div class="head border-1px" >
         <i :class="modeIcon"></i>
-        <span class="mode">{{modeContent}}</span>
+        <span class="mode" @click.stop="modeChange">{{modeContent}}</span>
         <i class="iconfont iconclear" @click.stop="clear"></i>
       </div>
       <scroll class="list" :data="sequenceList" ref="list">

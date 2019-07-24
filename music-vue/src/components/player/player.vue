@@ -22,8 +22,8 @@
           @touchmove="touchmove"
           @touchend="touchend"
         >
-          <div class="middle-l">
-            <div :class="rotate" ref="cd">
+          <div class="middle-l" ref="cd">
+            <div :class="rotate" ref="cdWrapper" class="cd">
               <img :src="currentSong.image" />
             </div>
             <div class="playingLyric">{{playingLyric}}</div>
@@ -329,6 +329,7 @@ export default {
     //done:结束后跳到下一个钩子函数
     enter(el, done) {
       const { x, y, scale } = this._getPosAndScale();
+
       //从隐藏到显示，0，60%，100%时的动画状态
       let animation = {
         0: {
@@ -351,27 +352,37 @@ export default {
         }
       });
 
-      animations.runAnimation(this.$refs.cd, "move", done);
+      animations.runAnimation(this.$refs.cdWrapper, "move", done);
     },
     afterEnter() {
       animations.unregisterAnimation("move");
-      this.$refs.cd.style.animation = "";
+      this.$refs.cdWrapper.style.animation = "";
     },
     leave(el, done) {
-      this.$refs.cd.style.transition = "all .4s";
       const { x, y, scale } = this._getPosAndScale();
-      this.$refs.cd.style[
-        transform
-      ] = `translate3d(${x}px,${y}px,0) scale(${scale})`;
-      const timer = setTimeout(done, 400);
-      this.$refs.cd.addEventListener("transitionend", () => {
-        clearTimeout(timer);
-        done();
+      let animation = {
+        100: {
+          transform: `translate3d(${x}px,${y}px,0) scale(${scale})`
+        },
+        0: {
+          transform: `translate3d(0,0,0) scale(1)`
+        }
+      };
+
+      animations.registerAnimation({
+        name: "move",
+        animation,
+        presets: {
+          duration: 400,
+          easing: "linear"
+        }
       });
+
+      animations.runAnimation(this.$refs.cdWrapper, "move", done);
     },
     afterLeave() {
-      this.$refs.cd.style.transition = "";
-      this.$refs.cd.style[transform] = "";
+      animations.unregisterAnimation("move");
+      this.$refs.cdWrapper.style.animation = "";
     },
     _getPosAndScale() {
       //底部小图片的尺寸们……
@@ -482,18 +493,20 @@ export default {
       .middle-l
         width: 50%
         height: 100%
-        text-align: center
-        display flex
-        flex-direction column
-        img
+        display: flex
+        flex-direction: column
+        align-items: center
+        .cd
           margin-top: 20px
           border-radius: 50%
           width: 300px
           height: 300px
-        .play
-            animation: rotate 30s linear infinite
-        .pause
-            animation-play-state: paused
+          border: 10px solid $color-theme-d
+          animation: rotate 30s linear infinite
+          img
+            width: 100%
+            height: 100%
+            border-radius: 50%
         .playingLyric
           line-height: 50px
           padding: 20px 30px
@@ -559,9 +572,9 @@ export default {
           .icondislike
             font-size: 25px
     &.normal-enter-active, &.normal-leave-active
-      transition: all 4s
+      transition: all .4s
       .top, .bottom
-        transition: all 4s cubic-bezier(0.86, 0.18, 0.82, 1.32)
+        transition: all .4s cubic-bezier(0.86, 0.18, 0.82, 1.32)
     &.normal-enter, &.normal-leave-to
       opacity: 0
       .top

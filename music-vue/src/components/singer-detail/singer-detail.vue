@@ -24,10 +24,10 @@
         v-show="songs.length>0"
       >
         <div class="list-content" v-show="searchHistory.length">
-          <div class="total">
+          <!-- <div class="total">
             歌曲共
             <span class="num">{{singerInfo.total_song}}首</span>
-          </div>
+          </div> -->
           <songList :songs="songs" @selectItem="selectItem" />
         </div>
       </scroll>

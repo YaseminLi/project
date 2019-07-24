@@ -1,5 +1,6 @@
 <template>
-  <div class="add-song" v-show="showing">
+<transition name="move">
+  <div class="add-song" v-show="showing" @click.stop>
     <div class="header">
       添加歌曲到列表
       <i class="iconfont iconremove" @click.stop="close"></i>
@@ -40,6 +41,7 @@
     </div>
     <topTip :text="topTip" ref="topTip" />
   </div>
+</transition>
 </template>
 
 <script>
@@ -144,4 +146,8 @@ export default {
     top: 100px
     bottom: 0
     overflow: hidden
+  &.move-enter-active,&.move-leave-active
+    transition all .4s 
+  &.move-enter,&.move-leave-to
+    transform translateX(100%)
 </style>

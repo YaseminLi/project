@@ -3,7 +3,7 @@
     <div class="search-container">
       <i class="iconfont iconsousuo" />
       <input type="text" :placeholder="placeholder" v-model="query" />
-      <i v-show="query" class="iconfont iconquxiao" @click="clearInput"></i>
+      <i v-show="query" class="iconfont iconquxiao" @click.stop="clearInput"></i>
     </div>
   </div>
 </template>
