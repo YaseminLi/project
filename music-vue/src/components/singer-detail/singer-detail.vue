@@ -23,7 +23,7 @@
         @scroll="scroll"
         v-show="songs.length>0"
       >
-        <div class="list-content" v-show="searchHistory.length">
+        <div class="list-content" >
           <!-- <div class="total">
             歌曲共
             <span class="num">{{singerInfo.total_song}}首</span>
@@ -174,7 +174,7 @@ export default {
       height: 190px
       border-radius: 50%
       margin-bottom: 25px
-      box-shadow: 0 7px 13px rgba(0, 0, 0, 0.21)
+      box-shadow: 0 0 13px 4px rgba(0, 0, 0, 0.21)
     .name
       font-size: 18px
       color: $color-text
@@ -197,7 +197,6 @@ export default {
       border-radius: 20px
       color: white
       background: $color-theme-d
-      // box-shadow: 0 6px 32px rgba(24, 213, 156, 0.5)
       display: flex
       justify-content: center
       align-items: center

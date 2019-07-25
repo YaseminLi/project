@@ -45,8 +45,6 @@ export const playerMixin = {
   },
   methods: {
     modeChange() {
-      console.log("mode");
-      
       const mode = (this.mode + 1) % 3;
       this.setMode(mode);
       let list = [];
@@ -82,7 +80,8 @@ export const playerMixin = {
     ...mapMutations({
       setPlayList: "SET_PLAY_LIST",
       setCurrentIndex: "SET_CURRENT_INDEX",
-      setPlayingState: "SET_PLAYING_STATE"
+      setPlayingState: "SET_PLAYING_STATE",
+      setMode:"SET_MODE"
     }),
     ...mapActions({
       saveFavorite:"saveFavorite",

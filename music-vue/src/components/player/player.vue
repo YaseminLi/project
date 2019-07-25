@@ -492,15 +492,17 @@ export default {
       flex-wrap: nowrap
       .middle-l
         width: 50%
-        height: 100%
+        height: 0
+        padding-bottom 50%
+        position relative
         display: flex
         flex-direction: column
         align-items: center
         .cd
-          margin-top: 20px
+          position absolute
           border-radius: 50%
-          width: 300px
-          height: 300px
+          width: 80%
+          height: 80%
           border: 10px solid $color-theme-d
           animation: rotate 30s linear infinite
           img
@@ -508,8 +510,12 @@ export default {
             height: 100%
             border-radius: 50%
         .playingLyric
-          line-height: 50px
-          padding: 20px 30px
+          position absolute
+          top 100%
+          width 100%
+          box-sizing border-box
+          text-align center
+          padding: 0 30px
           no-wrap()
       .middle-r
         width: 50%

@@ -20,5 +20,6 @@ export default{
 </script>
 
 <style scoped lang="stylus">
-
+#app
+  background white
 </style>

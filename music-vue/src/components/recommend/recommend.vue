@@ -118,6 +118,7 @@ export default {
     width: 100%
     height: 100%
     overflow: hidden
+    background white
     .discList-wrapper
       .title
         margin: 20px
@@ -140,7 +141,7 @@ export default {
           .desc
             flex: 1
             padding: 6px 0
-            font-size: 12px
+            font-size: 14px
             line-height: 20px
             color: $color-theme
             overflow: hidden
@@ -151,14 +152,13 @@ export default {
             .dissname
               margin-bottom: 8px
             .info
+              font-size: 12px
               color: $color-text-l
               display flex
               .listennum
                 margin-right 10px
                 display: flex
                 align-items: center
-                .iconpause1
-                  font-size: 12px
   .loading-container
     width: 100%
     position: absolute

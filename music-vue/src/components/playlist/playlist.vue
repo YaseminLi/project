@@ -3,9 +3,9 @@
   <div class="playlist" v-show="playlistShow" @click.stop="close">
     
     <div class="container" @click.stop>
-      <div class="head border-1px" >
+      <div class="head border-1px" @click.stop="modeChange" ref="mode">
         <i :class="modeIcon"></i>
-        <span class="mode" @click.stop="modeChange">{{modeContent}}</span>
+        <span class="mode" >{{modeContent}}</span>
         <i class="iconfont iconclear" @click.stop="clear"></i>
       </div>
       <scroll class="list" :data="sequenceList" ref="list">
@@ -82,9 +82,11 @@ export default {
     close() {
       this.playlistShow = false;
     },
-    modeChange() {
-      this.$emit("modeChange");
-    },
+    // modeChange() {
+    //   console.log(1);
+      
+    //   this.$emit("modeChange");
+    // },
     clear() {
       this.$refs.confirm.show();
     },

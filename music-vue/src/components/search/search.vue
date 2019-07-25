@@ -99,6 +99,7 @@ export default {
   width: 100%
   top: 44px
   bottom: 0
+  background white
   .search-wrapper
     position: fixed
     width: 100%

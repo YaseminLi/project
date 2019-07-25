@@ -240,6 +240,7 @@ export default {
         font-size: 12px
         color: $color-text-l
         padding-top: 20px
+        margin-bottom 10px
         .num
           margin-left: 5px
 </style>

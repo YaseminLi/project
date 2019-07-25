@@ -158,6 +158,7 @@ export default {
 .listview
   height 100%
   overflow hidden
+  background white
   .title
     width: 100%
     box-sizing: border-box
