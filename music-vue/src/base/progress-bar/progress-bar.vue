@@ -18,9 +18,11 @@ export default {
     percent: Number
   },
   created() {
+    //不需要getter\setter方法，就用created
     this.touch = {};
   },
   watch: {
+    //播放进度变化时，进度条长度变化
     percent(newP) {
       if (newP >= 0 && !this.touch.initialed) {
         this.setProgressOffset(newP);
@@ -50,6 +52,7 @@ export default {
       this.touch.initialed = false;
       this.$emit("progressBarChange", this.touch.percent);
     },
+    //点击进度条任意位置，歌曲播放到相应的进度
     progressClick(e) {
       let width = e.pageX - this.$refs.progressBar.getBoundingClientRect().left;
       this._offset(width);
@@ -57,10 +60,12 @@ export default {
         this.$refs.progress.clientWidth / this.$refs.barInner.clientWidth;
       this.$emit("progressBarChange", this.touch.percent);
     },
+    //计算变化宽度及进度条变化
     setProgressOffset(percent) {
       let width = this.$refs.progressBar.clientWidth * percent;
       this._offset(width);
     },
+    //进度条的宽度及按钮的位置改变
     _offset(width) {
       this.$refs.progress.style.width = width + "px";
       this.$refs.btn.style.left = width + "px";

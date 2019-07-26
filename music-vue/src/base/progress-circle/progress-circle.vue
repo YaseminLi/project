@@ -1,5 +1,6 @@
 <template>
   <div class="progress-circle">
+    <!-- 中间插入的小图标 -->
     <slot></slot>
     <svg
       :width="radius"
@@ -35,9 +36,11 @@ export default {
     }
   },
   computed: {
+    //每个线段长，一段长100PI的实线，一段长100PI的虚线，这样循环
     dasharray() {
       return Math.PI * 100;
     },
+    //偏移量(减去)，逆时针方向，从圆形右半边中点开始逆时针
     dashoffset() {
       return (1 - this.percent) * this.dasharray;
     }

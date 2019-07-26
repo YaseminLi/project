@@ -143,7 +143,7 @@ export default {
       return this.playingState ? "iconfont iconplay" : "iconfont iconpause";
     },
     rotate() {
-      return this.playingState ? "play" : "";
+      return this.playingState ? "play" : "pause";
     },
     disableCls() {
       return this.songReady ? "" : "disable";
@@ -224,7 +224,7 @@ export default {
     togglePlaying() {
       this.setPlayingState(!this.playingState);
       if (this.currentLyric) {
-        this.currentLyric.togglePlay();
+        this.currentLyric.togglePlay();//歌词播放/暂停的状态切换
       }
     },
     prev() {
@@ -272,7 +272,7 @@ export default {
     loop() {
       this.$refs.audio.currentTime = 0;
       this.$refs.audio.play();
-      this.currentLyric.seek(0);
+      this.currentLyric.seek(0);//歌词重置
     },
     ready() {
       this.songReady = true;
@@ -310,7 +310,7 @@ export default {
         this.currentLyric = new Lyric(lyric, this.handleLyric);
         //歌曲是播放状态时，歌词滚动
         if (this.playingState) {
-          this.currentLyric.play();
+          this.currentLyric.play();//歌词播放
         }
       });
     },
@@ -422,7 +422,7 @@ export default {
         return;
       }
       if (this.currentLyric) {
-        this.currentLyric.stop();
+        this.currentLyric.stop();//歌词暂停
       }
       this.$nextTick(() => {
         this.$refs.audio.play();
@@ -504,7 +504,10 @@ export default {
           width: 80%
           height: 80%
           border: 10px solid $color-theme-d
-          animation: rotate 30s linear infinite
+          &.play
+            animation: rotate 30s linear infinite
+          &.pause
+            animation-play-state: paused
           img
             width: 100%
             height: 100%

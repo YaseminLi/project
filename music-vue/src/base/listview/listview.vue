@@ -96,6 +96,7 @@ export default {
       this._scrollTo(anchorIndex);
     },
     scroll(pos) {
+      //实时滚动的位置
       this.scrollY = pos.y;
     },
     selectItem(item){
@@ -137,12 +138,15 @@ export default {
         }
       }
     },
+    //diff为每个title顶部距scroll上方的距离
     diff(newVal){
+       //title重叠的高度
         let fixedTop=(newVal>0&&newVal<TITLE_HEIGHT)?newVal-TITLE_HEIGHT:'0';
         if(this.fixedTop==fixedTop){
           return
         }
         this.fixedTop=fixedTop;
+        //title向上偏移
         this.$refs.fixedTitle.style.transform=`translate3d(0,${fixedTop}px,0)`;
      }
   },

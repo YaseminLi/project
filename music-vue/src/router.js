@@ -1,13 +1,5 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-// import Rank from './components/rank/rank.vue'
-// import Recommend from './components/recommend/recommend.vue'
-// import Search from './components/search/search.vue'
-// import Singer from './components/singer/singer.vue'
-// import singerDetail from './components/singer-detail/singer-detail.vue'
-// import disc from "./components/disc/disc.vue"
-// import topList from "./components/top-list/top-list.vue"
-// import user from "./components/user/user.vue"
 Vue.use(Router)
 const Rank=()=>import("./components/rank/rank.vue")
 const Recommend=()=>import('./components/recommend/recommend.vue')

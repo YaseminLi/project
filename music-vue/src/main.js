@@ -5,7 +5,7 @@ import store from './store/index'
 import 'common/stylus/index.styl'
 import VueLazyload from 'vue-lazyload'
 import FastClick from 'fastclick'
-// eslint-disable-next-line
+//eslint-disable-next-line
 // import vConsole from "vconsole"
 
 // console.log("vconsole test")

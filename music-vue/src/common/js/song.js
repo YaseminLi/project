@@ -20,6 +20,7 @@ export class Song {
         return new Promise((resolve,reject)=>{
             getLyric(this.mid).then(res => {
                 if (res.code==ERR_OK) {
+                    //转译歌词
                     this.lyric=Base64.decode(res.lyric)
                     resolve(this.lyric);
                 }else{
