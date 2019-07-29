@@ -27,14 +27,15 @@ export default {};
   .tab
     display :flex
     height: 44px
-    line-height: 44px
     font-size: $font-size-medium
     .tab-item
       flex:1
       text-align:center
+      margin auto 0
       .tab-link
         padding-bottom:5px
         color:$color-text-l
+        border-bottom :2px solid white
       &.router-link-active
         .tab-link
           color:$color-theme-d
