@@ -11,7 +11,7 @@
         </div>
         <div class="description">{{seller.description}}/{{seller.deliveryTime}}分钟必达</div>
         <div v-if="seller.supports" class="supports">
-          <span class="icon" :class="classMap[seller.supports[0].type]"></span>
+          <Support :type="seller.supports[0].type" :size="1"/>
           <span class="text">{{seller.supports[0].description}}</span>
         </div>
       </div>
@@ -28,53 +28,41 @@
     <div class="background">
       <img :src="seller.avatar">
     </div>
-    <transition name="fade">
-      <div class="detail" v-show="detailShow">
-        <!-- <v-detail
-          :name="seller.name"
-          :score="seller.score"
-          :supports="seller.supports"
-          :bulletin="seller.bulletin"
-          :classMap="classMap"
-        /> -->
-        <div class="detail-close" @click="showDetail">
-          <i class="icon-close"></i>
-        </div>
-      </div>
-    </transition>
   </div>
 </template>
 
 <script>
-// import detail from "../detail/detail.vue";
+import Support from "base/support/support"
 export default {
-  data() {
-    return {
-      classMap: ["decrease", "discount", "guarantee", "invoice", "special"],
-      detailShow: false
-    };
-  },
   props: {
     seller: { type: Object }
   },
   methods: {
     showDetail() {
-      this.detailShow = !this.detailShow;
+      this.detailCom=this.detailCom||this.$createDetail({
+        $props:{
+          seller:"seller"
+        }
+      })
+      this.detailCom.show()
     }
   },
   components: {
-    // "v-detail": detail
+    Support
   }
 };
 </script>
 
 <style lang='stylus' >
-@import "common/stylus/variable"
+@import "~common/stylus/variable"
+@import "~common/stylus/mixin"
 .header
   width: 100%
   height: 134px
   position: relative
-  background: $color-background-ss
+  background:$color-background-ssss
+  overflow hidden
+  color $color-white
   .content-wrapper
     padding: 24px 12px 18px 24px
     display: flex
@@ -95,19 +83,19 @@ export default {
           display: inline-block
           width: 30px
           height: 18px
-          bg-img('brand')
+          bg-image('brand')
           background-size: 30px 18px
           background-repeat: no-repeat
         .name
-          font-size: 16px
+          font-size: $fontsize-large
           line-height: 18px
           font-weight: bold
           margin-left: 6px
     .description
-      font-size: 12px
+      font-size: $fontsize-small 
       margin: 8px 0 10px 0
-    .support
-      font-size: 10px
+    .supports
+      font-size: $fontsize-small-s
       line-height: 12px
       display: flex
       align-items: center
@@ -126,22 +114,22 @@ export default {
       bottom: 14px
       display: flex
       align-items: center
-      font-size: 10px
+      font-size:$fontsize-small-s
       line-height: 12px
       span
         margin-right: 2px
         width: 20px
   .bulletin-wrapper
-    font-size: 10px
+    font-size: $fontsize-small-s
     line-height: 28px
     padding: 0 12px
-    background-color: $color-background-sssssss
+    background-color: $color-background-sssss 
     display: flex
     align-items: center
     .bulletin-title
       width: 22px
       height: 12px
-      bg-img('bulletin')
+      bg-image('bulletin')
       background-size: 22px 12px
       background-repeat: no-repeat
       margin-right: 4px
@@ -154,7 +142,6 @@ export default {
       line-height: 28px
   .background
     width: 100%
-    height: 100%
     position: absolute
     left: 0
     top: 0
@@ -163,27 +150,4 @@ export default {
     img
       width: 100%
       height: 100%
-  .fade-enter-active, .fade-leave-active
-    transition: opacity 1s
-  .fade-enter, .fade-leave-to
-    opacity: 0
-  .detail
-    width: 100%
-    height: 100%
-    background: $color-background-s
-    position: fixed
-    z-index: 100
-    top: 0
-    left: 0
-    overflow: auto
-    backdrop-filter: blur(10px)
-    .detail-close
-      position: relative
-      width: 32px
-      height: 32px
-      margin: -64px auto 0 auto
-      clear: both
-      .icon-close
-        font-size: 32px
-        color: $color-grey-ssssss
 </style>

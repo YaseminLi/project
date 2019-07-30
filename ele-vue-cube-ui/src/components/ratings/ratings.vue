@@ -57,7 +57,7 @@
 
 <script>
 import Bscroll from "better-scroll";
-import star from "components/star/star";
+import star from "base/star/star";
 import split from "components/split/split";
 import ratingSelect from "components/ratingSelect/ratingSelect";
 import { timeStamp } from "common/js/util.js";

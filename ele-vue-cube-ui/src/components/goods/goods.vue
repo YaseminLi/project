@@ -67,7 +67,7 @@ import BScroll from "better-scroll";
 import shopcart from "components/shopcart/shopcart.vue";
 import food from "components/food/food.vue";
 import cartcontrol from "components/cartcontrol/cartcontrol.vue";
-import support from "../support/support.vue";
+import support from "base/support/support";
 export default {
   data() {
     return {

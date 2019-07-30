@@ -1,105 +1,146 @@
 <template>
-  <div class="detail-wrapper clearfix">
-    <div class="detail-container">
-      <div class="wrapper-title">
-        <div class="name">{{name}}</div>
-        <v-star :score="score" :size="48"/>
+  <transition name="fade">
+    <div class="detail" v-show="showState">
+      <div class="detail-wrapper clearfix">
+        <div class="detail-container">
+          <div class="wrapper-title">
+            <div class="name">{{seller.name}}</div>
+            <Star :score="seller.score" :size="48" />
+          </div>
+          <div v-if="seller.supports" class="supports">
+            <div class="title">
+              <div class="line"></div>
+              <span class="text">优惠信息</span>
+              <div class="line"></div>
+            </div>
+            <div class="content">
+              <div v-for="(support,index) in seller.supports" :key="index" class="item">
+                <Support :size="2" :type="support.type" />
+                <span class="text">{{support.description}}</span>
+              </div>
+            </div>
+          </div>
+          <div v-if="seller.bulletin" class="bulletin">
+            <div class="title">
+              <div class="line"></div>
+              <span class="text">商家公告</span>
+              <div class="line"></div>
+            </div>
+            <div class="content">{{seller.bulletin}}</div>
+          </div>
+        </div>
       </div>
-      <div v-if="supports" class="supports">
-        <div class="title">
-          <div class="line"></div>
-          <span class="text">优惠信息</span>
-          <div class="line"></div>
-        </div>
-        <div class="content">
-          <v-support
-            v-for="(support,index) in supports"
-            :key="index"
-            :size="2"
-            :text="support.description"
-            :type="support.type"
-          />
-        </div>
-      </div>
-      <div v-if="bulletin" class="bulletin">
-        <div class="title">
-          <div class="line"></div>
-          <span class="text">商家公告</span>
-          <div class="line"></div>
-        </div>
-        <div class="content">{{bulletin}}</div>
+      <div class="detail-close" @click="show">
+        <i class="icon-close"></i>
       </div>
     </div>
-  </div>
+  </transition>
 </template>
 
 <script>
-import star from "../star/star";
-import support from "../support/support.vue";
+import Star from "base/star/star";
+import Support from "base/support/support";
 export default {
+  name: "detail",
+  data() {
+    return {
+      showState: false
+    };
+  },
   props: {
-    name: String,
-    score: Number,
-    supports: Array,
-    bulletin: String,
+    seller: {
+      type: Object,
+      default() {
+        return {};
+      }
+    }
+  },
+  methods: {
+    show() {
+      this.showState = !this.showState;
+    }
   },
   components: {
-    "v-star": star,
-    "v-support": support
+    Star,
+    Support
   }
 };
 </script>
 
-<style lang='stylus' >
-@import '../../common/stylus/mixin.styl';
-@import '../../common/stylus/variable.styl';
-.detail-wrapper
-  min-height: 100%
-  .detail-container
-    padding: 64px 36px 64px 36px
-    display: flex
-    flex-direction: column
-    .wrapper-title
+<style lang='stylus' scoped>
+@import '~common/stylus/mixin.styl'
+@import '~common/stylus/variable.styl'
+.fade-enter-active, .fade-leave-active
+  transition: opacity 1s
+.fade-enter, .fade-leave-to
+  opacity: 0
+.detail
+  width: 100%
+  height: 100%
+  background: $color-background-s
+  position: fixed
+  z-index: 100
+  top: 0
+  left: 0
+  overflow: auto
+  backdrop-filter: blur(10px)
+  color: $color-white
+  .detail-close
+    position: relative
+    width: 32px
+    height: 32px
+    margin: -64px auto 0 auto
+    clear: both
+    .icon-close
+      font-size: $fontsize-large-xxxx
+      color: $color-grey-ssssss
+  .detail-wrapper
+    min-height: 100%
+    .detail-container
+      padding: 64px 36px 64px 36px
       display: flex
       flex-direction: column
-      align-items: center
-      .name
-        font-size: 16px
-        font-weight: 700
-        margin-bottom: 16px
-    .title
-      display: flex
-      width: 100%
-      align-items: center
-      margin: 28px auto 24px auto
-      .text
-        font-size: 14px
-        font-weight: 700
-        margin: 0 12px
-      .line
-        flex: 1
-        height: 1px
-        background: $color-grey-ss
-    .supports
-      .content
-        padding: 0 12px
-        .support
-          padding-bottom: 12px
-          display: flex
-          align-items: center
-          &:last-child
-            padding-bottom: 0
-          .icon
-            height: 16px
-            width: 16px
-            margin-right: 6px
-            background-size: 16px 16px
-            background-repeat: no-repeat
-          .text
-            font-size: 12px
-    .bulletin
-      .content
-        padding: 0 12px 0 12px
-        font-size: 12px
-        line-height: 24px
+      .wrapper-title
+        display: flex
+        flex-direction: column
+        align-items: center
+        .name
+          font-size: $fontsize-large
+          font-weight: 700
+          margin-bottom: 16px
+      .title
+        display: flex
+        width: 100%
+        align-items: center
+        margin: 28px auto 24px auto
+        .text
+          font-size: $fontsize-medium
+          font-weight: 700
+          margin: 0 12px
+        .line
+          flex: 1
+          height: 1px
+          background: $color-grey-sssssss
+      .supports
+        .content
+          padding: 0 12px
+          .item
+            padding-bottom: 12px
+            display: flex
+            align-items: center
+            &:last-child
+              padding-bottom: 0
+            .icon
+              height: 16px
+              width: 16px
+              margin-right: 6px
+              background-size: 16px 16px
+              background-repeat: no-repeat
+            .text
+              font-size: $fontsize-small
+      .bulletin
+        .content
+          padding: 0 12px 0 12px
+          font-size: $fontsize-small
+          line-height: 24px
 </style>

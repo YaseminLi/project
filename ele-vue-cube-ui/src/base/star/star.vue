@@ -15,6 +15,7 @@ export default {
       return "star-" + this.size;
     },
     starArray: function() {
+      //将分数整理为0-off 0.5-half 1-on 三种
       const score = Math.floor(this.score * 2) / 2;
       const CLS_ON = "on";
       const CLS_HALF = "half";
@@ -37,7 +38,7 @@ export default {
 </script>
 
 <style lang="stylus" >
-@import '../../common/stylus/mixin.styl'
+@import '~common/stylus/mixin.styl'
 .stars
     display: flex
     align-items: center
@@ -53,11 +54,11 @@ export default {
             &:last-child
                 margin-right: 0
             &.on
-                bg-img('star24_on')
+                bg-image('star24_on')
             &.half
-                bg-img('star24_half')
+                bg-image('star24_half')
             &.off
-                bg-img('star24_off')
+                bg-image('star24_off')
     &.star-36
         .star
             width: 15px
@@ -67,11 +68,11 @@ export default {
             &:last-child
                 margin-right: 0
             &.on
-                bg-img('star36_on')
+                bg-image('star36_on')
             &.half
-                bg-img('star36_half')
+                bg-image('star36_half')
             &.off
-                bg-img('star36_off')
+                bg-image('star36_off')
     &.star-48
         .star
             width: 20px
@@ -81,9 +82,9 @@ export default {
             &:last-child
                 margin-right: 0
             &.on
-                bg-img('star48_on')
+                bg-image('star48_on')
             &.half
-                bg-img('star48_half')
+                bg-image('star48_half')
             &.off
-                bg-img('star48_off')
+                bg-image('star48_off')
 </style>

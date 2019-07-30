@@ -78,8 +78,8 @@
 
 <script>
 import Bscroll from "better-scroll";
-import star from "components/star/star";
-import support from "../support/support.vue";
+import star from "base/star/star";
+import support from "base/support/support";
 import split from "components/split/split";
 import {saveToLocal,loadFromStore} from 'common/js/store.js';
 export default {
