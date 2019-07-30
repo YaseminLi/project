@@ -20,7 +20,7 @@
         ref="slide"
       >
         <cube-slide-item v-for="(tab,index) in tabs" :key="index">
-            <component :is="tab.components" :data="tab.data"></component>
+            <component :is="tab.components" :seller="tab.data.seller" ref="component"></component>
         </cube-slide-item>
       </cube-slide>
     </div>
@@ -61,9 +61,15 @@ export default {
       }
     }
   },
+  mounted(){
+    this.onChange(this.index)
+  },
   methods: {
     onChange(index) {
       this.index = index;
+      const component=this.$refs.component[index]
+      //切换tab时，同时获取该组件需要的数据
+      component.fetch&&component.fetch()
     },
     onScroll(pos) {
       let tabWidth = this.$refs.tabBar.$el.clientWidth;

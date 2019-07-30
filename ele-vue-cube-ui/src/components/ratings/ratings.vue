@@ -8,34 +8,40 @@
           <div class="rankRate">高于周边商家{{seller.rankRate}}%</div>
         </div>
         <div class="overview-right">
-          <div class="item">服务态度
-            <v-star :size="36" :score="seller.serviceScore"/>
+          <div class="item">
+            服务态度
+            <v-star :size="36" :score="seller.serviceScore" />
             <span class="score">{{seller.serviceScore}}</span>
           </div>
-          <div class="item">商品评分<v-star :size="36" :score="seller.foodScore"/><span class="score">{{seller.foodScore}}</span>
+          <div class="item">
+            商品评分
+            <v-star :size="36" :score="seller.foodScore" />
+            <span class="score">{{seller.foodScore}}</span>
           </div>
-          <div class="item">送达时间
+          <div class="item">
+            送达时间
             <span class="text">{{seller.deliveryTime}}分钟</span>
           </div>
         </div>
       </div>
-      <v-split/>
+      <v-split />
       <div class="ratings-content">
-        <v-ratingSelect
-          :ratings="ratings"
-          @contentOnly="toggleContent"
-          @selectType="select"
-        />
+        <v-ratingSelect :ratings="ratings" @contentOnly="toggleContent" @selectType="select" />
         <div class="rating-list">
-          <div v-show="needShow(item.rateType,item.text)" class="item border-1px" v-for="(item,index) in ratings" :key="index">
-            <img class="avatar" :src="item.avatar">
+          <div
+            v-show="needShow(item.rateType,item.text)"
+            class="item border-1px"
+            v-for="(item,index) in ratings"
+            :key="index"
+          >
+            <img class="avatar" :src="item.avatar" />
             <div class="content">
               <div class="username-time">
                 <span class="username">{{item.username}}</span>
                 <span class="time">{{rateTime(item.rateTime)}}</span>
               </div>
               <div class="score">
-                <v-star :size="24" :score="item.score"/>
+                <v-star :size="24" :score="item.score" />
                 <span class="deliveryTime" v-show="item.deliveryTime">{{item.deliveryTime}}分钟送达</span>
               </div>
               <div class="text">{{item.text}}</div>
@@ -61,6 +67,7 @@ import star from "base/star/star";
 import split from "components/split/split";
 import ratingSelect from "components/ratingSelect/ratingSelect";
 import { timeStamp } from "common/js/util.js";
+import { getRatings } from "api/index";
 export default {
   data() {
     return {
@@ -79,21 +86,24 @@ export default {
     seller: Object
   },
   created() {
-    this.$http.get("/api/ratings").then(response => {
-      this.ratings = response.body;
-      this.$nextTick(() => {
-        if (!this.scroll) {
-          this.scroll = new Bscroll(this.$refs.ratings, { click: true });
-        } else {
-          this.scroll.refresh();
-        }
-      });
-    }),
-      () => {
-        console.log("无法获取评价数据");
-      };
+    this._getRatings();
   },
   methods: {
+    _getRatings() {
+      getRatings().then(res => {
+        this.ratings = res;
+        this.$nextTick(() => {
+          if (!this.scroll) {
+            this.scroll = new Bscroll(this.$refs.ratings, { click: true });
+          } else {
+            this.scroll.refresh();
+          }
+        });
+      }),
+        () => {
+          console.log("无法获取评价数据");
+        };
+    },
     rateTime: function(a) {
       return timeStamp(a);
     },
@@ -112,7 +122,7 @@ export default {
       } else {
         return false;
       }
-    },
+    }
   },
   components: {
     "v-star": star,
@@ -123,14 +133,14 @@ export default {
 </script>
 
 <style lang='stylus' >
-@import '../../common/stylus/mixin.styl';
-@import '../../common/stylus/variable.styl';
+@import '../../common/stylus/mixin.styl'
+@import '../../common/stylus/variable.styl'
 .ratings-wrapper
   width: 100%
   position: absolute
   top: 174px
   left: 0
-  bottom 0
+  bottom: 0
   overflow: hidden
   .overview
     background: white
@@ -144,40 +154,40 @@ export default {
       align-items: center
       border-right-1px($color-row-line)
       @media screen and (max-width: 360px)
-        flex 0 0 120px
+        flex: 0 0 120px
       .score
         color: $color-yellow
         font-size: 24px
         line-height: 28px
-        margin-bottom 6px
+        margin-bottom: 6px
       .text
         font-size: 12px
         color: $color-grey-ssss
         line-height: 12px
-        margin-bottom 8px
+        margin-bottom: 8px
       .rankRate
         font-size: 10px
         color: $color-grey
-        margin-bottom 6px
+        margin-bottom: 6px
     .overview-right
       flex: 1
       padding: 18px 24px
       box-sizing: border-box
       @media screen and (max-width: 360px)
-        padding 18px 4px
+        padding: 18px 4px
       .item
         font-size: 12px
         line-height: 18px
         color: $color-grey-ssss
         display: flex
-        align-items center
+        align-items: center
         margin-bottom: 8px
         height: 18px
         &:last-child
           margin: 0
         .stars
           margin: 0 12px
-          height 18px
+          height: 18px
         .score
           color: $color-yellow
         .text
@@ -231,9 +241,9 @@ export default {
           .recommend
             display: flex
             align-items: center
-            flex-wrap wrap
+            flex-wrap: wrap
             .thumpType
-              margin-bottom 6px
+              margin-bottom: 6px
               font-size: 12px
               margin-right: 8px
               &.icon-thumb_up
@@ -241,7 +251,7 @@ export default {
               &.icon-thumb_down
                 color: $color-grey
             .recommend-item
-              margin-bottom 6px
+              margin-bottom: 6px
               height: 16px
               box-sizing: border-box
               margin-right: 8px
