@@ -10,7 +10,7 @@
       <i class="icon-add_circle cart-icon"></i>
     </div>
     <div class="ball-container">
-      <transition
+      <transition 
         name="drop"
         v-for="(ball,index) in balls"
         :key="index"
@@ -85,7 +85,7 @@ export default {
     transition: all 0.8s linear
   .count
     width: 12px
-    font-size: 10px
+    font-size: $fontsize-small-s
     line-height: 24px
     color: $color-grey
     text-align: center
@@ -93,7 +93,7 @@ export default {
     display: inline-block
     width: 24px
     height: 24px
-    font-size: 24px
+    font-size: $fontsize-large-xxx
     color: $color-blue
     margin: 0
     padding: 6px

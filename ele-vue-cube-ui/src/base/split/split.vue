@@ -15,11 +15,11 @@
 </script>
 
 <style lang='stylus' >
-@import '../../common/stylus/variable.styl';
+@import '~common/stylus/variable.styl';
 .split
     width 100%
     height 16px
-    background $color-background-ssss
+    background :$color-background-sssssss
     border-top:1px solid $color-row-line
     border-bottom:1px solid $color-row-line
  

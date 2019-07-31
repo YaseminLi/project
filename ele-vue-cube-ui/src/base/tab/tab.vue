@@ -65,11 +65,14 @@ export default {
     this.onChange(this.index)
   },
   methods: {
-    onChange(index) {
-      this.index = index;
-      const component=this.$refs.component[index]
+    onChange(current) {
+      this.index = current;
+      const component=this.$refs.component[current]
       //切换tab时，同时获取该组件需要的数据
-      component.fetch&&component.fetch()
+      if(component&&component.fetch){
+        component.fetch()
+      }
+      
     },
     onScroll(pos) {
       let tabWidth = this.$refs.tabBar.$el.clientWidth;

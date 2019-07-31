@@ -1,84 +1,77 @@
 <template>
   <div class="goods">
-    <cube-scroll-nav :side="true" :data="goods" :options="scrollOptions" v-if="goods.length">
-      <template slot="bar" slot-scope="props">
-        <cube-scroll-nav-bar direction="vertical" :txts="barTxts" :labels="props.labels" :current="props.current">
-          <template slot-scope="props">
-            <div class="text">
-              <Support
-                v-if="props.txt.type>=1"
-                :size="3"
-                :type="props.txt.type"
-                
-              />
-              <span>{{props.txt.name}}</span>
-              <!-- <span class="num" v-if="props.txt.count">
-                <bubble :num="props.txt.count"></bubble>
-              </span>-->
+    <div class="scroll-nav-wrapper">
+      <cube-scroll-nav :side="true" :data="goods" :options="scrollOptions" v-if="goods.length">
+        <template slot="bar" slot-scope="props">
+          <cube-scroll-nav-bar
+            direction="vertical"
+            :txts="barTxts"
+            :labels="props.labels"
+            :current="props.current"
+          >
+            <template slot-scope="props">
+              <div class="text">
+                <Support v-if="props.txt.type>=1" :size="3" :type="props.txt.type" />
+                <span>{{props.txt.name}}</span>
+              </div>
+            </template>
+          </cube-scroll-nav-bar>
+        </template>
+        <cube-scroll-nav-panel
+          v-for="item in goods"
+          :key="item.name"
+          :label="item.name"
+          :title="item.name"
+        >
+          <div v-for="(food,index) in item.foods" :key="index" class="food-item border-bottom-1px">
+            <img class="icon" :src="food.icon" />
+            <div class="content">
+              <div class="food-name">{{food.name}}</div>
+              <div v-show="food.description" class="description">{{food.description}}</div>
+              <div class="extra">
+                <span class="sellCount">月售{{food.sellCount}}份</span>
+                <span class="rating">好评率{{food.rating}}%</span>
+              </div>
+              <div class="price">
+                <span class="mark">¥</span>
+                <span class="nowPrice">{{food.price}}</span>
+                <span v-show="food.oldPrice" class="oldPrice">¥{{food.oldPrice}}</span>
+              </div>
             </div>
-          </template>
-        </cube-scroll-nav-bar>
-      </template>
-      <cube-scroll-nav-panel
-        v-for="item in goods"
-        :key="item.name"
-        :label="item.name"
-        :title="item.name"
-      >
-        <div v-for="(food,index) in item.foods" :key="index" class="food-item border-bottom-1px">
-          <img class="icon" :src="food.icon" />
-          <div class="content">
-            <div class="food-name">{{food.name}}</div>
-            <div v-show="food.description" class="description">{{food.description}}</div>
-            <div class="extra">
-              <span class="sellCount">月售{{food.sellCount}}份</span>
-              <span class="rating">好评率{{food.rating}}%</span>
-            </div>
-            <div class="price">
-              <span class="mark">¥</span>
-              <span class="nowPrice">{{food.price}}</span>
-              <span v-show="food.oldPrice" class="oldPrice">¥{{food.oldPrice}}</span>
-            </div>
+            <Cartcontrol
+              class="cartcontrol"
+              :food="food"
+              @decrease="decrease"
+              @add="add"
+              @ballDrop="ballDrop"
+            />
           </div>
-        </div>
-      </cube-scroll-nav-panel>
-    </cube-scroll-nav>
-
-    <!-- <v-cartcontrol
-      class="cartcontrol"
-      :food="food"
-      @decrease="decrease"
-      @add="add"
-      @ballDrop="ballDrop"
-    />
-
-    <v-shopcart
-      :deliveryPrice="seller.deliveryPrice"
-      :minPrice="seller.minPrice"
-      :selectedFoods="selectedFoods"
-      ref="shopcart"
-      @clear="clear"
-      @add="add"
-      @decrease="decrease"
-    />
-    <v-food ref="food" :food="choosedFood" @add="add" @decrease="decrease" />--> 
+        </cube-scroll-nav-panel>
+      </cube-scroll-nav>
+      <!-- <v-food ref="food" :food="choosedFood" @add="add" @decrease="decrease" /> -->
+    </div>
+    <Shopcart
+        :deliveryPrice="seller.deliveryPrice"
+        :minPrice="seller.minPrice"
+        :selectedFoods="selectedFoods"
+        ref="shopcart"
+        @clear="clear"
+        @add="add"
+        @decrease="decrease"
+      />
   </div>
 </template>
 
 <script>
-// import BScroll from "better-scroll";
-// import shopcart from "components/shopcart/shopcart.vue";
+import Shopcart from "components/shopcart/shopcart";
 // import food from "components/food/food.vue";
-// import cartcontrol from "components/cartcontrol/cartcontrol.vue";
+import Cartcontrol from "base/cartcontrol/cartcontrol";
 import Support from "base/support/support";
 import { getGoods } from "api/index";
 export default {
   data() {
     return {
       goods: [],
-      classMap: ["decrease", "discount", "guarantee", "invoice", "special"],
-      listHeight: [0],
-      scrollY: 0,
       choosedFood: {},
       scrollOptions: {
         click: false
@@ -87,12 +80,6 @@ export default {
   },
   props: {
     seller: Object
-  },
-  components: {
-    // "v-shopcart": shopcart,
-    // "v-cartcontrol": cartcontrol,
-    // "v-food": food,
-    Support
   },
   computed: {
     // eslint-disable-next-line
@@ -124,7 +111,6 @@ export default {
       });
       return ret;
     },
-
     selectedFoods() {
       let foods = [];
       for (let i = 0; i < this.goods.length; i++) {
@@ -152,22 +138,6 @@ export default {
           console.log("无法获取商品数据");
         }
       );
-    },
-    onChange(label) {
-      console.log(label);
-    },
-    onSticky(current) {
-      console.log(current);
-    },
-    selectMenu: function(index, event) {
-      if (!event._constructed) {
-        return;
-      }
-      let foodList = this.$refs.foodsWrapper.getElementsByClassName(
-        "food-list-hook"
-      );
-      let el = foodList[index];
-      this.foodsScroll.scrollToElement(el, 300);
     },
     decrease: function(food) {
       this.goods.forEach(items =>
@@ -207,8 +177,8 @@ export default {
       this.$refs.food.showFood();
       this.choosedFood = food;
     },
-    _drop: function() {
-      // this.$refs.shopcart.drop(target);
+    _drop: function(target) {
+      this.$refs.shopcart.drop(target);
     }
     // _initScroll: function() {
     //   this.menuScroll = new BScroll(this.$refs.menuWrapper, { click: true });
@@ -229,6 +199,12 @@ export default {
     //     this.listHeight.push((height += foodList[i].clientHeight));
     //   }
     // }
+  },
+  components: {
+    Cartcontrol,
+    // "v-food": food,
+    Support,
+    Shopcart
   }
 };
 </script>
@@ -237,11 +213,14 @@ export default {
 @import '~common/stylus/mixin.styl'
 @import '~common/stylus/variable.styl'
 .goods
-  position: absolute
-  top: 0
-  left: 0
-  bottom: 50px
-  width: 100%
+  height: 100%
+  position: relative
+  .scroll-nav-wrapper
+    position: absolute
+    width: 100%
+    top: 0
+    left: 0
+    bottom: 50px
   .cube-scroll-nav-bar
     width: 80px
     white-space: normal
@@ -260,7 +239,7 @@ export default {
       font-weight: 700
       margin-top: -1px
     .text
-      flex 1
+      flex: 1
       display: table-cell
       vertical-align: middle
       .icon
@@ -273,57 +252,59 @@ export default {
   .cube-scroll-nav-panel-title
     height: 26px
     padding-left: 14px
-    font-size: 12px
+    font-size: $fontsize-small
     line-height: 26px
     color: $color-grey
     background: $color-background-sssssss
     border-left: 2px solid $color-col-line
-    margin 0px
+    margin: 0px
   .food-item
     display: flex
+    flex-direction: row
     margin: 0 18px
     padding: 18px 0
     position: relative
     &:last-child
       border-none()
     .icon
+      flex: 0 0 57px
       height: 57px
       width: 57px
       border-radius: 2px
       margin-right: 10px
     .content
       flex: 1
+      overflow: hidden
       .food-name
         margin-top: 2px
-        font-size: 14px
+        font-size: $fontsize-medium
         color: $color-grey-ssss
       .description
         margin-top: 8px
-        font-size: 10px
+        font-size: $fontsize-small-s
         line-height: 12px
         color: $color-grey
       .extra
         margin-top: 8px
-        font-size: 10px
+        font-size: $fontsize-small-s
         color: $color-grey
         .rating
           margin-left: 12px
       .price
-        // margin-top: 4px
         line-height: 24px
         .mark
-          font-size: 10px
+          font-size: $fontsize-small-s
           font-weight: normal
           color: red
           margin-top: 1px
           margin-right: 1px
         .nowPrice
-          font-size: 14px
+          font-size: $fontsize-medium
           font-weight: 700
           color: $color-red
         .oldPrice
           margin-left: 8px
-          font-size: 10px
+          font-size: $fontsize-small-s
           color: $color-grey
           font-weight: 700
           text-decoration: line-through

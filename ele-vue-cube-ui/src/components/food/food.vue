@@ -176,12 +176,12 @@ export default {
       background: white
       position: relative
       .name
-        font-size: 14px
+        $fontsize-medium
         font-weight: 700
         color: $color-grey-ssss
       .detail
         margin-top: 8px
-        font-size: 10px
+        font-size:$fontsize-small-s
         color: $color-grey
         .rating
           margin-left: 12px
@@ -190,18 +190,18 @@ export default {
         line-height: 24px
         display: flex
         .mark
-          font-size: 10px
+          font-size:$fontsize-small-s
           font-weight: normal
           color: $color-red
           margin-top: 1px
           margin-right: 1px
         .now
-          font-size: 14px
+          $fontsize-medium
           font-weight: 700
           color: $color-red
         .old
           margin-left: 8px
-          font-size: 10px
+          font-size:$fontsize-small-s
           color: $color-grey
           font-weight: 700
           text-decoration: line-through
@@ -211,7 +211,7 @@ export default {
         bottom: 18px
         .add-cart
           margin-bottom: 6px
-          font-size: 10px
+          font-size:$fontsize-small-s
           color: white
           line-height: 12px
           border-radius: 12px
@@ -225,20 +225,20 @@ export default {
     background: white
     padding: 18px
     .title
-      font-size: 14px
+      $fontsize-medium
       color: $color-grey-ssss
     .content
       margin-top: 6px
       padding: 0 8px
       margin-right: 8px
-      font-size: 12px
+      font-size: $fontsize-small
       color: $color-grey-s
       line-height: 24px
   .ratings
     background: white
     padding-top: 18px
     .title
-      font-size: 14px
+      $fontsize-medium
       color: $color-grey-ssss
       padding: 0 18px
     .ratings-list
@@ -248,7 +248,7 @@ export default {
         margin: 0 18px
         border-1px($color-row-line)
         .time-user
-          font-size: 10px
+          font-size:$fontsize-small-s
           line-height: 12px
           color: $color-grey
           margin-bottom: 6px
@@ -263,12 +263,12 @@ export default {
               margin-left: 6px
         .content
           display: flex
-          font-size: 12px
+          font-size: $fontsize-small
           align-items: center
           .type
             color: $color-grey
             line-height: 24px
-            font-size: 12px
+            font-size: $fontsize-small
             &.icon-thumb_up
               color: $color-blue
           .text
@@ -277,6 +277,6 @@ export default {
             margin-left: 4px
     .no-rating
       padding: 16px
-      font-size: 12px
+      font-size: $fontsize-small
       color: $color-grey
 </style>

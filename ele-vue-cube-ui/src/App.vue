@@ -8,8 +8,8 @@
 import Header from "components/header/header";
 import Tab from "base/tab/tab";
 import Goods from "components/goods/goods";
-// import Ratings from "components/ratings/ratings";
-// import Seller from "components/seller/seller";
+import Ratings from "components/ratings/ratings";
+import Seller from "components/seller/seller";
 import { getSeller } from "api/index.js";
 export default {
   data() {
@@ -32,14 +32,14 @@ export default {
         },
         {
           label: "评论",
-          components: "",
+          components: Ratings,
           data: {
             seller: this.seller
           }
         },
         {
           label: "商家",
-          components: "",
+          components: Seller,
           data: {
             seller: this.seller
           }

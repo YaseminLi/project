@@ -1,6 +1,6 @@
 <template>
   <div class="rating-select">
-    <div class="rateType border-1px">
+    <div class="rateType border-bottom-1px">
       <span class="positive" :class="{'active':selectType=='2'}" @click="select(2)">
         {{desc.all}}
         <span class="ratings-num">{{ratings?ratings.length:'0'}}</span>
@@ -14,7 +14,7 @@
         <span class="ratings-num">{{negatives?negatives.length:'0'}}</span>
       </span>
     </div>
-    <div class="switch" @click="toggleContent" >
+    <div class="switch" @click.stop="toggleContent" >
       <i class="icon-check_circle" :class="{'on':onlyContent}"></i>
       <span class="selectedRatings">只看有内容的评价</span>
     </div>
@@ -57,8 +57,18 @@ export default {
     }
   },
   methods: {
-    toggleContent: function() {
+    toggleContent: function(event) {
+       //阻止浏览器派发的点击事件
+       console.log(event);
+       
+      if (!event._constructed) {
+        return;
+      }
+      console.log("a");
+      
       this.onlyContent=!this.onlyContent;
+      console.log(this.onlyContent);
+      
       this.$emit('contentOnly',this.onlyContent);
     },
     select:function(type){
@@ -71,18 +81,17 @@ export default {
 </script>
 
 <style lang='stylus' >
-@import '../../common/stylus/mixin.styl'
-@import '../../common/stylus/variable.styl'
+@import '~common/stylus/mixin.styl'
+@import '~common/stylus/variable.styl'
 .rating-select
     padding 18px 18px 0 18px
     border-bottom 1px solid $color-row-line
     .rateType
         padding-bottom: 18px
-        border-1px($color-row-line)
         display: flex
         .positive,.negative
             padding: 8px 12px
-            font-size: 12px
+            font-size: $fontsize-small
             border-radius: 2px
             margin-right: 8px
             .ratings-num
@@ -95,7 +104,7 @@ export default {
                 background: $color-blue
         .negative
                 color: $color-grey-s
-                background: $color-grey-sssssss
+                background: $color-background-sssss
                 &.active
                     color: white
                     background: $color-grey-s
@@ -109,7 +118,7 @@ export default {
             &.on
                 color $color-green
         .selectedRatings
-            font-size: 12px
+            font-size: $fontsize-small
             line-height: 24px
 
 </style>

@@ -1,113 +1,97 @@
 <template>
-  <div class="seller" ref="seller">
-    <div>
-      <div class="desc">
-        <div class="desc-header border-1px">
-          <div class="title">{{seller.name}}</div>
-          <div class="score">
-            <v-star :size="36" :score="seller.score"/>
-            <span class="num">({{seller.ratingCount}})</span>
-            <span class="sellCount">月售{{seller.sellCount}}单</span>
-          </div>
-          <div :class="{'active':collect}" class="collect-container" @click="sellerCollect">
-            <i class="icon-favorite"></i>
-            <span class="text">{{collectDesc}}</span>
-          </div>
+  <cube-scroll class="seller">
+    <div class="desc">
+      <div class="desc-header border-bottom-1px">
+        <div class="title">{{seller.name}}</div>
+        <div class="score">
+          <Star :size="36" :score="seller.score" />
+          <span class="num">({{seller.ratingCount}})</span>
+          <span class="sellCount">月售{{seller.sellCount}}单</span>
         </div>
-        <div class="delivery">
-          <div class="item border-right-1px">
-            <div class="title">起送价</div>
-            <div class="content">
-              <span class="num">{{seller.minPrice}}</span>元
-            </div>
-          </div>
-          <div class="item border-right-1px">
-            <div class="title">商家配送</div>
-            <div class="content">
-              <span class="num">{{seller.deliveryPrice}}</span>元
-            </div>
-          </div>
-          <div class="item border-right-1px">
-            <div class="title">平均配送时间</div>
-            <div class="content">
-              <span class="num">{{seller.deliveryTime}}</span>元
-            </div>
-          </div>
+        <div :class="{'active':collect}" class="collect-container" @click="sellerCollect">
+          <i class="icon-favorite"></i>
+          <span class="text">{{collectDesc}}</span>
         </div>
       </div>
-      <v-split />
-      <div class="bulletin-supports">
-        <div class="bulletin border-1px">
-          <div class="title">公告与活动</div>
-          <div class="content">{{seller.bulletin}}</div>
-        </div>
-        <div class="supports">
-          <v-support
-            class="border-1px"
-            v-for="(item,index) in seller.supports"
-            :key="index"
-            :size="4"
-            :text="item.description"
-            :type="item.type"
-          />
-        </div>
-      </div>
-      <v-split />
-      <div class="pics">
-        <div class="title">商家实景</div>
-        <div class="pics-container" ref="pics">
-          <div ref="picsInner" class="picsInner">
-            <img class="pics-item" v-for="(item,index) in seller.pics" :src="item" :key="index">
+      <div class="delivery">
+        <div class="item border-right-1px">
+          <div class="title">起送价</div>
+          <div class="content">
+            <span class="num">{{seller.minPrice}}</span>元
           </div>
         </div>
-      </div>
-      <v-split />
-      <div class="infos">
-        <div class="title border-1px">商家信息</div>
-        <div class="infos-container">
-          <div
-            class="infos-item border-1px"
-            v-for="(item,index) in seller.infos"
-            :key="index"
-          >{{item}}</div>
+        <div class="item border-right-1px">
+          <div class="title">商家配送</div>
+          <div class="content">
+            <span class="num">{{seller.deliveryPrice}}</span>元
+          </div>
+        </div>
+        <div class="item border-right-1px">
+          <div class="title">平均配送时间</div>
+          <div class="content">
+            <span class="num">{{seller.deliveryTime}}</span>元
+          </div>
         </div>
       </div>
     </div>
-  </div>
+    <Split />
+    <div class="bulletin-supports">
+      <div class="bulletin border-bottom-1px">
+        <div class="title">公告与活动</div>
+        <div class="content">{{seller.bulletin}}</div>
+      </div>
+      <div class="supports">
+        <div class="border-bottom-1px support" v-for="(item,index) in seller.supports" :key="index">
+          <Support :size="4" :type="item.type" />
+          <span class="text">{{item.description}}</span>
+        </div>
+      </div>
+    </div>
+    <Split />
+    <div class="pics">
+      <div class="title">商家实景</div>
+      <cube-scroll class="pics-container" :data="seller.pics" direction="horizontal">
+        <div  class="picsInner">
+          <img class="pics-item" v-for="(item,index) in seller.pics" :src="item" :key="index" />
+        </div>
+      </cube-scroll>
+    </div>
+    <Split />
+    <div class="infos">
+      <div class="title border-bottom-1px">商家信息</div>
+      <div class="infos-container">
+        <div
+          class="infos-item border-bottom-1px"
+          v-for="(item,index) in seller.infos"
+          :key="index"
+        >{{item}}</div>
+      </div>
+    </div>
+  </cube-scroll>
 </template>
 
 <script>
-import Bscroll from "better-scroll";
-import star from "base/star/star";
-import support from "base/support/support";
-import split from "components/split/split";
-import {saveToLocal,loadFromStore} from 'common/js/store.js';
+import Star from "base/star/star";
+import Support from "base/support/support";
+import Split from "base/split/split";
+import { saveToLocal, loadFromStore } from "common/js/store.js";
 export default {
   props: {
     seller: Object
   },
   data() {
     return {
-      collect: (()=>{
-        return loadFromStore(this.seller.id,'collect',false);
+      collect: (() => {
+        return loadFromStore(this.seller.id, "collect", false);
       })()
     };
   },
-  created() {
-    this.$nextTick(() => {
-      let width = 0;
-      if (this.seller.pics) {
-        width = 126 * this.seller.pics.length - 6;
-        this.$refs.picsInner.style.width = width + "px";
-      }
-      this.sellerScroll = new Bscroll(this.$refs.seller, { click: true });
-      this.picsScroll = new Bscroll(this.$refs.pics, { scrollX: true,evnetPassthrough:'vertical' });
-    });
-  },
   methods: {
     sellerCollect: function() {
-        this.collect = !this.collect;
-      saveToLocal(this.seller.id,'collect',this.collect);
+      console.log("a");
+      
+      this.collect = !this.collect;
+      saveToLocal(this.seller.id, "collect", this.collect);
     }
   },
   computed: {
@@ -120,43 +104,38 @@ export default {
     }
   },
   components: {
-    "v-star": star,
-    "v-support": support,
-    'v-split':split
+    Star,
+    Support,
+    Split
   }
 };
 </script>
 
 <style lang='stylus'>
-@import '../../common/stylus/mixin.styl'
-@import '../../common/stylus/variable.styl'
+@import '~common/stylus/mixin.styl'
+@import '~common/stylus/variable.styl'
 .seller
+  height: 100%
+  position: relative
   color: $color-grey-ssss
-  width: 100%
-  position: absolute
-  top: 174px
-  left: 0
-  bottom: 0
-  overflow: hidden
   .title
-    font-size: 14px
+    font-size $fontsize-medium
   .desc
     padding: 0 18px
-    background white
+    background: white
     .desc-header
       position: relative
       padding: 18px 0
-      border-1px($color-row-line)
       .score
         height: 18 px
         padding-top: 8px
         display: flex
         align-items: center
-        font-size: 10px
+        font-size: $fontsize-small-s
         color: $color-grey-s
         line-height: 18px
         .stars
-          line-height 18px
+          line-height: 18px
         .num
           margin: 0 12px 0 8px
       .collect-container
@@ -173,7 +152,7 @@ export default {
           .icon-favorite
             color: $color-red
         .text
-          font-size: 10px
+          font-size: $fontsize-small-s
           color: $color-grey-s
           margin-top: 4px
     .delivery
@@ -187,28 +166,30 @@ export default {
           border-none()
         .title
           margin-bottom: 4px
-          font-size: 10px
+          font-size: $fontsize-small-s
           color: $color-grey
         .content
-          font-size: 10px
+          font-size: $fontsize-small-s
           .num
             font-size: 24px
             line-height: 24px
   .bulletin-supports
     padding: 0 18px
-    background white
+    background: white
     .bulletin
       padding: 18px 0 16px 0
-      border-1px($color-row-line)
+      white-space: normal
       .content
         padding: 8px 12px 0 12px
-        font-size: 12px
+        font-size: $fontsize-small
         line-height: 24px
         color: $color-red
+        word-break break-all
     .supports
       .support
         padding: 16px 12px
-        border-1px($color-row-line)
+        display: flex
+        align-items: center
         &:last-child
           border-none()
         .icon
@@ -217,19 +198,19 @@ export default {
           margin-right: 6px
           background-size: 16px 16px
         .text
-          font-size: 12px
+          font-size: $fontsize-small
           line-height: 16px
           color: $color-grey-ssss
   .pics
-    background white
+    background: white
     padding: 18px
     .pics-container
-      width 100%
+      width: 100%
       margin-top: 12px
       display: flex
       height: 90px
       overflow: hidden
-      white-space nowrap
+      white-space: nowrap
       .picsInner
         height: 90px
         .pics-item
@@ -239,16 +220,14 @@ export default {
           &:last-child
             margin: 0
   .infos
-    background white
+    background: white
     padding: 18px 18px 0 18px
     .title
       padding-bottom: 12px
-      border-1px($color-row-line)
     .infos-container
       .infos-item
         padding: 16px 12px
-        border-1px($color-row-line)
-        font-size: 12px
+        font-size: $fontsize-small
         line-height: 16px
         &:last-child
           border-none()

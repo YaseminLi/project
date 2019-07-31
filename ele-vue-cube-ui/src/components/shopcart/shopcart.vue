@@ -8,15 +8,16 @@
           <span class="clear" @click="clear">清空</span>
         </div>
         <div class="foods" ref="foodsScroll">
-          <div class="wrapper">
+          <cube-scroll :data="selectedFoods"
+          >
             <div class="item border-1px " v-for="(item,index) in selectedFoods" :key="index">
               <span class="name">{{item.name}}</span>
               <span class="extra">
                 <span class="price">¥ {{item.price*item.count}}</span>
-                <v-cartcontrol :food="item" @decrease="decrease" @add="add"/>
+                <Cartcontrol :food="item" @decrease="decrease" @add="add"/>
               </span>
             </div>
-          </div>
+          </cube-scroll>
         </div>
       </div>
     </transition>
@@ -37,12 +38,20 @@
 </template>
 
 <script>
-import cartcontrol from "components/cartcontrol/cartcontrol.vue";
-import BScroll from "better-scroll";
+import Cartcontrol from "base/cartcontrol/cartcontrol.vue";
+const BALL_LEN=10
+function createBalls(){
+  let ret=[]
+  for(let i=0;i<BALL_LEN;i++){
+    ret.push({show:false})
+  }
+  return ret
+}
 export default {
   data() {
     return {
-      fold: true
+      fold: true,
+       balls: createBalls()
     };
   },
   props: {
@@ -62,14 +71,14 @@ export default {
     }
   },
   components: {
-    "v-cartcontrol": cartcontrol
+   Cartcontrol
   },
   methods: {
-    // drop(el) {
-    //   //   console.log(el);
-    //   //   //在视口中的位置信息
-    //   //   console.log(el.getBoundingClientRect());
-    // },
+    drop(el) {
+        console.log(el);
+        //在视口中的位置信息
+        console.log(el.getBoundingClientRect());
+    },
     clear: function() {
       this.$emit("clear");
     },
@@ -133,35 +142,35 @@ export default {
         return false;
       }
       let show = !this.fold;
-      if (show) {
-        this.$nextTick(() => {
-            if(!this.scroll){
-              // eslint-disable-next-line
-          this.scroll = new BScroll(this.$refs.foodsScroll, { click: true });
-        }else{
-            this.scroll.refresh();
-        }});
-      }
+      // if (show) {
+      //   this.$nextTick(() => {
+      //       if(!this.scroll){
+      //         // eslint-disable-next-line
+      //     this.scroll = new BScroll(this.$refs.foodsScroll, { click: true });
+      //   }else{
+      //       this.scroll.refresh();
+      //   }});
+      // }
       return show;
     }
   }
 };
 </script>
 <style lang='stylus'>
-@import '../../common/stylus/mixin.styl';
-  @import '../../common/stylus/variable.styl';
+@import '~common/stylus/mixin.styl';
+  @import '~common/stylus/variable.styl';
 .shopcart
   z-index: 50
-  position: fixed
+  position: absolute
   left: 0
-  bottom: 0
+  bottom:0
   width: 100%
   height 50px
   .content
     height: 50px
     display: flex
     width: 100%
-    color: $color-grey-sss
+    color: $color-grey-ssssss
     background: #141d27
     .content-left
       display: flex
@@ -173,7 +182,7 @@ export default {
         height: 44px
         margin: 0 12px
         border: 6px solid  #141d27
-        background:$color-grey-ss
+        background:$color-grey-ssss
         border-radius:50%
         position: relative
         top: -8px
@@ -183,7 +192,7 @@ export default {
             color: white
         .icon-shopping_cart
           font-size: 24px
-          color: $color-grey-sss
+          color: $color-grey-ssssss
           width: 24px
           height: 24px
           margin: 10px
@@ -200,17 +209,17 @@ export default {
           top: -6px
           right: -6px
           box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.4)
-      .price
+      .price 
         margin: 14px 12px 12px 0
         padding-right: 12px
-        font-size: 16px
+        font-size: $fontsize-large
         font-weight: 700
         line-height: 24px
-        border-right-1px($color-grey-sss)
+        border-right-1px($color-grey-ssssss)
         &.haveSeleced
           color: white
       .desc
-        font-size: 10px
+        font-size: $fontsize-small-s
         line-height: 24px
         margin-top: 14px
     .content-right
@@ -219,7 +228,7 @@ export default {
       height: 50px
       width: 105px
       padding: 14px 8px 12px 8px
-      font-size: 12px
+      font-size: $fontsize-small
       line-height: 24px
       font-weight: 700
       text-align: center
@@ -227,7 +236,7 @@ export default {
         background: $color-green
         color: white
       &.not-enough
-        background: $color-grey-sssss
+        background: $color-grey-ssss
   .selectedFoods
     position: absolute
     bottom: 50px
@@ -241,20 +250,20 @@ export default {
       transition: all 5s
     .head
       height: 40px
-      background: $color-background-ssss
+      background: $color-background-sssssss
       width: 100%
       display: flex
       justify-content: space-between
       border-bottom: 1px solid $color-row-line
       .cart
-        font-size: 14px
+        font-size: $fontsize-medium
         line-height: 40px
-        color: $color-grey-ssss
+        color: $$color-grey-sss
         margin-left: 18px
       .clear
-        font-size: 12px
+        font-size: $fontsize-small
         line-height: 40px
-        color: $color-grey-ssss
+        color: $color-grey-sss
         margin-right: 18px
     .foods
       background: white
@@ -269,24 +278,24 @@ export default {
         display: flex
         justify-content: space-between
         .name
-          font-size: 14px
-          color: $color-grey-ssss
+          font-size: $fontsize-medium
+          color: $color-grey-sss
           line-height: 24px
           font-weight: 500
         .extra
           display: flex
           .price
             margin: 0 12px 0 18px
-            font-size: 14px
+            font-size: $fontsize-medium
             font-weight: 700
             color: $color-red
             line-height: 24px
 .filter
   z-index: 40
   position: fixed
+  top 0
   left: 0
   bottom: 0
   width: 100%
-  height 100%
   background: $color-background-sssss
 </style>
