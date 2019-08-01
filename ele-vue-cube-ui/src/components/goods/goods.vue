@@ -86,19 +86,6 @@ export default {
     seller: Object
   },
   computed: {
-    // eslint-disable-next-line
-    // currentIndex() {
-    //   for (let i = 0; i < this.listHeight.length; i++) {
-    //     if (
-    //       !this.listHeight[i + 1] ||
-    //       (this.scrollY >= this.listHeight[i] &&
-    //         this.scrollY < this.listHeight[i + 1])
-    //     ) {
-    //       return i;
-    //     }
-    //   }
-    //   return 0;
-    // },
     barTxts() {
       let ret = [];
       this.goods.forEach(good => {
@@ -130,18 +117,18 @@ export default {
   },
   methods: {
     fetch() {
-      getGoods().then(
+      if(!this.fetched){
+        this.fetched=true
+        getGoods().then(
         res => {
           this.goods = res;
-          // this.$nextTick(() => {
-          //   this._initScroll();
-          //   this._calculateHeight();
-          // });
         },
         () => {
           console.log("无法获取商品数据");
         }
       );
+      }
+      
     },
     decrease: function(food) {
       this.goods.forEach(items =>
@@ -184,25 +171,6 @@ export default {
     _drop: function(target) {
       this.$refs.shopcart.drop(target);
     }
-    // _initScroll: function() {
-    //   this.menuScroll = new BScroll(this.$refs.menuWrapper, { click: true });
-    //   this.foodsScroll = new BScroll(this.$refs.foodsWrapper, {
-    //     click: true,
-    //     probeType: 3
-    //   });
-    //   this.foodsScroll.on("scroll", pos => {
-    //     this.scrollY = Math.abs(Math.round(pos.y));
-    //   });
-    // },
-    // _calculateHeight: function() {
-    //   let foodList = this.$refs.foodsWrapper.getElementsByClassName(
-    //     "food-list-hook"
-    //   );
-    //   let height = 0;
-    //   for (let i = 0; i < foodList.length; i++) {
-    //     this.listHeight.push((height += foodList[i].clientHeight));
-    //   }
-    // }
   },
   components: {
     Cartcontrol,

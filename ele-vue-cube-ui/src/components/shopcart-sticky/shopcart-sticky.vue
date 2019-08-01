@@ -49,7 +49,6 @@ export default {
         this.$refs.shopcart.drop(el)
     }
   },
-
   components: {
     Shopcart
   }
