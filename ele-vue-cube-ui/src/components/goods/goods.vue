@@ -2,17 +2,20 @@
   <div class="goods">
     <div class="scroll-nav-wrapper">
       <cube-scroll-nav :side="true" :data="goods" :options="scrollOptions" v-if="goods.length">
-        <template slot="bar" slot-scope="props">
+        <template  v-slot:bar="props">
           <cube-scroll-nav-bar
             direction="vertical"
             :txts="barTxts"
             :labels="props.labels"
             :current="props.current"
           >
-            <template slot-scope="props">
+            <template v-slot="props">
               <div class="text">
                 <Support v-if="props.txt.type>=1" :size="3" :type="props.txt.type" />
                 <span>{{props.txt.name}}</span>
+                <span v-if="props.txt.count>0" class="bubble">
+                  <Bubble :number="props.txt.count"/>
+                </span>
               </div>
             </template>
           </cube-scroll-nav-bar>
@@ -67,6 +70,7 @@ import Shopcart from "components/shopcart/shopcart";
 // import food from "components/food/food.vue";
 import Cartcontrol from "base/cartcontrol/cartcontrol";
 import Support from "base/support/support";
+import Bubble from "base/bubble/bubble";
 import { getGoods } from "api/index";
 export default {
   data() {
@@ -204,7 +208,8 @@ export default {
     Cartcontrol,
     // "v-food": food,
     Support,
-    Shopcart
+    Shopcart,
+    Bubble
   }
 };
 </script>
@@ -242,6 +247,7 @@ export default {
       flex: 1
       display: table-cell
       vertical-align: middle
+      position relative
       .icon
         margin-right: 2px
         width: 12px
@@ -249,6 +255,10 @@ export default {
         background-size: 12px
         display: inline-block
         vertical-align: top
+      .bubble
+        position absolute
+        right -4px
+        top -5px
   .cube-scroll-nav-panel-title
     height: 26px
     padding-left: 14px

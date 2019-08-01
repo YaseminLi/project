@@ -9,17 +9,6 @@
     <div class="add" @click.stop="addCart">
       <i class="icon-add_circle cart-icon"></i>
     </div>
-    <div class="ball-container">
-      <transition 
-        name="drop"
-        v-for="(ball,index) in balls"
-        :key="index"
-        v-show="ball.show"
-        class="ball"
-      >
-        <div class="inner"></div>
-      </transition>
-    </div>
   </div>
 </template>
 <script>
@@ -31,27 +20,6 @@ export default {
         return { count: 0 };
       }
     }
-  },
-  data() {
-    return {
-      balls: [
-        {
-          show: false
-        },
-        {
-          show: false
-        },
-        {
-          show: false
-        },
-        {
-          show: false
-        },
-        {
-          show: false
-        }
-      ]
-    };
   },
   methods: {
     decreaseCart(event) {
@@ -66,14 +34,14 @@ export default {
         return;
       }
       this.$emit("add", this.food);
-      this.$emit('ballDrop',event.target);
+      this.$emit("ballDrop", event.target);
     }
   }
 };
 </script>
 
 <style lang='stylus' >
-@import '../../common/stylus/variable.styl';
+@import '../../common/stylus/variable.styl'
 .cartcontrol
   display: flex
   flex-direction: row
@@ -97,15 +65,4 @@ export default {
     color: $color-blue
     margin: 0
     padding: 6px
-  .ball-container
-    .ball
-      position: fixed
-      bottom: 22px
-      left: 32px
-      z-index: 200
-      .inner
-        width: 16px
-        height: 16px
-        border-radius: 50%
-        background: $color-blue
 </style>
