@@ -1,6 +1,6 @@
 <template>
   <transition name="fade">
-    <div class="detail" v-show="showState">
+    <div class="detail" v-show="visible">
       <div class="detail-wrapper clearfix">
         <div class="detail-container">
           <div class="wrapper-title">
@@ -30,7 +30,7 @@
           </div>
         </div>
       </div>
-      <div class="detail-close" @click="show">
+      <div class="detail-close" @click="hide">
         <i class="icon-close"></i>
       </div>
     </div>
@@ -40,24 +40,16 @@
 <script>
 import Star from "base/star/star";
 import Support from "base/support/support";
+import {popupMixin} from"common/js/mixin.js"
 export default {
   name: "detail",
-  data() {
-    return {
-      showState: false
-    };
-  },
+  mixins:[popupMixin],
   props: {
     seller: {
       type: Object,
       default() {
         return {};
       }
-    }
-  },
-  methods: {
-    show() {
-      this.showState = !this.showState;
     }
   },
   components: {

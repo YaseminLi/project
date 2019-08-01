@@ -13,13 +13,10 @@
 
 <script>
 import Shopcart from "components/shopcart/shopcart";
+import {popupMixin} from"common/js/mixin.js"
 export default {
   name: "shopcart-sticky",
-  data() {
-    return {
-      visible: false
-    };
-  },
+  mixins:[popupMixin],
   props: {
     deliveryPrice: {
       type: Number,
@@ -47,12 +44,6 @@ export default {
     }
   },
   methods: {
-    show() {
-      this.visible = true;
-    },
-    hide() {
-      this.visible = false;
-    },
     //不能在shopcart中监听list的drop事件，小球会被list覆盖住
     drop(el){
         this.$refs.shopcart.drop(el)

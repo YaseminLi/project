@@ -179,6 +179,7 @@ export default {
         title:"支付",
         content:`需要支付${this.totalPrice}元`
       }).show()
+      //不再派发事件
       el.stopPropagation() 
     },
     clear: function() {

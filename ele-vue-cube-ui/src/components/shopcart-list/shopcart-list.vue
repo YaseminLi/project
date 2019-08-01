@@ -36,13 +36,10 @@
 
 <script>
 import Cartcontrol from "base/cartcontrol/cartcontrol";
+import { popupMixin } from "common/js/mixin.js";
 export default {
   name: "shopcart-list",
-  data() {
-    return {
-      visible: false
-    };
-  },
+  mixins: [popupMixin],
   props: {
     selectedFoods: {
       type: Array,
@@ -51,16 +48,15 @@ export default {
       }
     }
   },
-  methods: {
-    show() {
-      this.visible = true;
+  created() {
+      //$on监听事件
+    this.$on("show", () => {
       this.$nextTick(() => {
         this.$refs.foodsScroll.refresh();
       });
-    },
-    hide() {
-      this.visible = false;
-    },
+    });
+  },
+  methods: {
     clear: function() {
       this.dialog =
         this.dialog ||
@@ -78,8 +74,7 @@ export default {
           onConfirm: () => {
             this.$emit("clear");
           }
-        });
-        this.dialog.show()
+        }).show();
     },
     decrease: function(food) {
       this.$emit("decrease", food);
