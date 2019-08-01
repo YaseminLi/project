@@ -1,26 +1,7 @@
 <template>
   <div>
     <div class="shopcart">
-      <transition name="fold">
-        <div class="selectedFoods" v-show="isShowCart">
-          <div class="head">
-            <span class="cart">购物车</span>
-            <span class="clear" @click="clear">清空</span>
-          </div>
-          <div class="foods" ref="foodsScroll">
-            <cube-scroll :data="selectedFoods">
-              <div class="item border-1px" v-for="(item,index) in selectedFoods" :key="index">
-                <span class="name">{{item.name}}</span>
-                <span class="extra">
-                  <span class="price">¥ {{item.price*item.count}}</span>
-                  <Cartcontrol :food="item" @decrease="decrease" @add="add" />
-                </span>
-              </div>
-            </cube-scroll>
-          </div>
-        </div>
-      </transition>
-      <div class="content" @click="showCart">
+      <div class="content" @click="toggleList">
         <div class="content-left">
           <div class="logo-wrapper" :class="{'haveSeleced':totalCount>0}">
             <div class="icon-shopping_cart"></div>
@@ -29,7 +10,7 @@
           <div class="price border-right-1px" :class="{'haveSeleced':totalCount>0}">¥ {{totalPrice}}</div>
           <div class="desc">另需配送费 ¥ {{deliveryPrice}}元</div>
         </div>
-        <div class="content-right" :class="payClass" @click.stop="pay">{{payDesc}}</div>
+        <div class="content-right" :class="payClass" @click="pay">{{payDesc}}</div>
       </div>
       <div class="ball-container">
         <div v-for="(ball,index) in balls" :key="index">
@@ -41,12 +22,10 @@
         </div>
       </div>
     </div>
-    <div class="filter" v-show="isShowCart" @click="showCart"></div>
   </div>
 </template>
 
 <script>
-import Cartcontrol from "base/cartcontrol/cartcontrol.vue";
 const BALL_LEN = 10;
 function createBalls() {
   let ret = [];
@@ -58,8 +37,8 @@ function createBalls() {
 export default {
   data() {
     return {
-      fold: true,
-      balls: createBalls()
+      balls: createBalls(),
+      listFold: this.fold
     };
   },
   props: {
@@ -76,6 +55,14 @@ export default {
       default() {
         return [];
       }
+    },
+    fold: {
+      type: Boolean,
+      default: true
+    },
+    sticky: {
+      type: Boolean,
+      default: false
     }
   },
   created() {
@@ -103,6 +90,7 @@ export default {
       const rect = ball.el.getBoundingClientRect();
       const x = rect.left - 22;
       const y = -(window.innerHeight - rect.top - 48);
+      //可以不要display
       el.style.display = "";
       el.style.transform = el.style.webkitTransform = `translate3d(0,${y}px,0)`;
       const inner = el.getElementsByClassName("inner")[0];
@@ -110,7 +98,7 @@ export default {
     },
     droping(el, done) {
       //重绘
-      this._reflow=document.body.offsetHeight
+      this._reflow = document.body.offsetHeight;
       el.style.transform = el.style.webkitTransform = `translate3D(0,0,0)`;
       const inner = el.getElementsByClassName("inner")[0];
       inner.style.transform = inner.style.webkitTransform = `translate3D(0,0,0)`;
@@ -118,10 +106,80 @@ export default {
     },
     afterDrop(el) {
       const ball = this.dropBalls.shift();
+      //是可以更改balls中小球属性的
       if (ball) {
         ball.show = false;
+        //display要加，不加的话靠show来控制显示会延迟
         el.style.display = "none";
       }
+    },
+    toggleList() {
+      if (this.listFold) {
+        if (!this.totalCount) {
+          return;
+        }
+        this.listFold = false;
+        this._showShopcartList();
+        this._showShopcartSticky();
+      } else {
+        this.listFold = true;
+        this._hideShopcartList();
+      }
+    },
+    _showShopcartList: function() {
+      this.cartComp =
+        this.cartComp ||
+        this.$createShopcartList({
+          $props: {
+            selectedFoods: "selectedFoods"
+          },
+          $events: {
+            clear: this.clear,
+            decrease: this.decrease,
+            add: this.add,
+            hide: () => {
+              this.listFold = true;
+            },
+            leave: this._hideShopCartSticky,
+            ballDrop: el => {
+              this.stickyComp.drop(el);
+            }
+          }
+        });
+      this.cartComp.show();
+    },
+    _hideShopcartList() {
+      //$parent父组件
+      const list = this.sticky ? this.$parent.list : this.cartComp;
+      list.hide && list.hide();
+    },
+    _showShopcartSticky: function() {
+      this.stickyComp =
+        this.stickyComp ||
+        this.$createShopcartSticky({
+          $props: {
+            selectedFoods: "selectedFoods",
+            deliveryPrice: "deliveryPrice",
+            minPrice: "minPrice",
+            fold: "listFold",
+            list: this.cartComp
+          }
+        });
+      this.stickyComp.show();
+    },
+    _hideShopCartSticky() {
+      this.stickyComp.hide();
+    },
+    pay: function(el) {
+      if (this.minPrice > this.totalPrice) {
+        return;
+      }
+      this.$createDialog({
+        type:"alert",
+        title:"支付",
+        content:`需要支付${this.totalPrice}元`
+      }).show()
+      el.stopPropagation() 
     },
     clear: function() {
       this.$emit("clear");
@@ -131,18 +189,6 @@ export default {
     },
     add: function(food) {
       this.$emit("add", food);
-    },
-    showCart: function() {
-      if (!this.totalCount) {
-        return;
-      }
-      this.fold = !this.fold;
-    },
-    pay: function() {
-      if (this.minPrice > this.totalPrice) {
-        return;
-      }
-      window.alert(`需要支付${this.totalPrice}元`);
     }
   },
   computed: {
@@ -158,6 +204,9 @@ export default {
       this.selectedFoods.forEach(food => {
         totalCount += food.count;
       });
+      // if(totalCount==0){
+      //   this.cartComp.hide()
+      // }
       return totalCount;
     },
     payDesc() {
@@ -179,28 +228,18 @@ export default {
       } else {
         return "not-enough";
       }
-    },
-    isShowCart() {
-      if (!this.totalCount) {
-        // eslint-disable-next-line
-        this.fold = true;
-        return false;
-      }
-      let show = !this.fold;
-      // if (show) {
-      //   this.$nextTick(() => {
-      //       if(!this.scroll){
-      //         // eslint-disable-next-line
-      //     this.scroll = new BScroll(this.$refs.foodsScroll, { click: true });
-      //   }else{
-      //       this.scroll.refresh();
-      //   }});
-      // }
-      return show;
     }
   },
-  components: {
-    Cartcontrol
+  watch: {
+    fold(newF) {
+      this.listFold = newF;
+    },
+    totalCount(newC) {
+      if (!this.listFold && !newC) {
+        this._hideShopCartSticky();
+        this._hideShopcartList();
+      }
+    }
   }
 };
 </script>
@@ -290,72 +329,12 @@ export default {
       position: fixed
       bottom: 22px
       left: 32px
-      z-index: 200
-      transition: all .4s cubic-bezier(0.49, -0.29, 0.75, 0.41)
+      z-index: 500
+      transition: all 0.4s cubic-bezier(0.49, -0.29, 0.75, 0.41)
       .inner
         width: 16px
         height: 16px
         border-radius: 50%
         background: $color-blue
-        transition: all .4s linear
-  .selectedFoods
-    position: absolute
-    bottom: 50px
-    left: 0
-    width: 100%
-    &.fold-enter, .fold-leave-active
-      // transform: translate3d(0, -100%, 0)
-      transform: translate3d(0, 0, 0)
-    &.fold-enter-active, .fold-leave-active
-      transition: all 5s
-    .head
-      height: 40px
-      background: $color-background-sssssss
-      width: 100%
-      display: flex
-      justify-content: space-between
-      border-bottom: 1px solid $color-row-line
-      .cart
-        font-size: $fontsize-medium
-        line-height: 40px
-        color: $$color-grey-sss
-        margin-left: 18px
-      .clear
-        font-size: $fontsize-small
-        line-height: 40px
-        color: $color-grey-sss
-        margin-right: 18px
-    .foods
-      background: white
-      width: 100%
-      max-height: 215px
-      overflow: hidden
-      .item
-        height: 24px
-        margin: 0 18px
-        padding: 12px 0
-        border-1px($color-row-line)
-        display: flex
-        justify-content: space-between
-        .name
-          font-size: $fontsize-medium
-          color: $color-grey-sss
-          line-height: 24px
-          font-weight: 500
-        .extra
-          display: flex
-          .price
-            margin: 0 12px 0 18px
-            font-size: $fontsize-medium
-            font-weight: 700
-            color: $color-red
-            line-height: 24px
-.filter
-  z-index: 40
-  position: fixed
-  top: 0
-  left: 0
-  bottom: 0
-  width: 100%
-  background: $color-background-sssss
+        transition: all 0.4s linear
 </style>

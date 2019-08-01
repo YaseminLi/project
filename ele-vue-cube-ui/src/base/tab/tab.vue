@@ -101,4 +101,5 @@ export default {
   .slide-wrapper
     flex: 1
     overflow: hidden
+
 </style>
