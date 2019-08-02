@@ -240,6 +240,7 @@ export default {
     },
     totalCount(newC) {
       if (!this.listFold && !newC) {
+        //shopcartList在消失时，已经有动画钩子在动画结束时来隐藏sticky
         this._hideShopcartList();
       }
     }

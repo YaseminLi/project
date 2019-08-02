@@ -81,8 +81,9 @@
 import Cartcontrol from "base/cartcontrol/cartcontrol";
 import RatingSelect from "components/ratingSelect/ratingSelect";
 import Split from "base/split/split";
-import { timeStamp } from "common/js/util.js";
+// import { timeStamp } from "common/js/util.js";
 import { popupMixin } from "common/js/mixin.js";
+import moment from "moment"
 
 export default {
   name: "food",
@@ -127,7 +128,7 @@ export default {
       this.selectType = type;
     },
     rateTime: function(a) {
-      return timeStamp(a);
+      return moment(a).format("YYYY-MM-DD HH:mm")
     },
     add: function() {
       this.$emit("add", this.food);
