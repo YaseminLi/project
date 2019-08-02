@@ -15,20 +15,17 @@
       </span>
     </div>
     <div class="switch" @click.stop="toggleContent" >
-      <i class="icon-check_circle" :class="{'on':onlyContent}"></i>
+      <i class="icon-check_circle" :class="{'on':contentOnly}"></i>
       <span class="selectedRatings">只看有内容的评价</span>
     </div>
   </div>
 </template>
 
 <script>
+const ALL=2
+const POSITIVE=0
+const NEGATIVE=1
 export default {
-  data() {
-    return {
-        onlyContent:false,
-        selectType:2
-    };
-  },
   props: {
     ratings: Array,
     desc:{
@@ -40,43 +37,42 @@ export default {
                 negative:'不满意'
             };
         }
-    }
+    },
+    contentOnly:{
+      type:Boolean,
+      default:false
+    },
+    selectType:{
+      type:Number,
+      default:ALL
+    },
   },
   computed: {
     positives() {
       if(!this.ratings){
         return;
       }
-      return this.ratings.filter(item=>(item.rateType==0));
+      return this.ratings.filter(item=>(item.rateType==POSITIVE));
     },
     negatives() {
       if(!this.ratings){
         return;
       }
-     return this.ratings.filter(item=>(item.rateType==1));
+     return this.ratings.filter(item=>(item.rateType==NEGATIVE));
     }
   },
   methods: {
     toggleContent: function(event) {
        //阻止浏览器派发的点击事件
-       console.log(event);
-       
       if (!event._constructed) {
         return;
       }
-      console.log("a");
-      
-      this.onlyContent=!this.onlyContent;
-      console.log(this.onlyContent);
-      
-      this.$emit('contentOnly',this.onlyContent);
+      this.$emit('toggleContent',!this.contentOnly);
     },
     select:function(type){
-        this.selectType=type;
         this.$emit('selectType',type);
     },
   },
-  components: {}
 };
 </script>
 

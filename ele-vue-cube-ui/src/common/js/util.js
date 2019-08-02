@@ -1,4 +1,4 @@
-
+//日期转化，用momnet库代替
 export function timeStamp(time) {
     let a=new Date(time);
     let b=a.toLocaleString();

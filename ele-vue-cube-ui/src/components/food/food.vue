@@ -46,13 +46,14 @@
             <RatingSelect
               :ratings="food.ratings"
               :desc="desc"
-              @contentOnly="toggleContent"
+              @toggleContent="toggleContent"
               @selectType="select"
+              :selectType="selectType"
+              :contentOnly="contentOnly"
             />
             <div class="ratings-list" v-show="food.ratings && food.ratings.length">
               <div
-                v-show="needShow(rating.rateType,rating.text)"
-                v-for="(rating,index) in food.ratings"
+                v-for="(rating,index) in computedRatings"
                 :key="index"
                 class="rating-item border-bottom-1px"
               >
@@ -69,7 +70,7 @@
                 </div>
               </div>
             </div>
-            <div class="no-rating" v-show="!food.ratings || !food.ratings.length">暂无评价</div>
+            <div class="no-rating" v-show="!computedRatings.length">暂无评价</div>
           </div>
         </div>
       </cube-scroll>
@@ -79,12 +80,12 @@
 
 <script>
 import Cartcontrol from "base/cartcontrol/cartcontrol";
-import RatingSelect from "components/ratingSelect/ratingSelect";
+import RatingSelect from "components/rating-select/rating-select";
 import Split from "base/split/split";
-// import { timeStamp } from "common/js/util.js";
 import { popupMixin } from "common/js/mixin.js";
-import moment from "moment"
+import moment from "moment";
 
+const ALL = 2;
 export default {
   name: "food",
   mixins: [popupMixin],
@@ -100,7 +101,7 @@ export default {
         negative: "吐槽"
       },
       contentOnly: false,
-      selectType: 2
+      selectType: ALL
     };
   },
   created() {
@@ -110,25 +111,31 @@ export default {
       });
     });
   },
+  computed: {
+    computedRatings() {
+      let ratings = this.food.ratings;
+      let ret = [];
+      ratings.forEach(item => {
+        if (this.contentOnly && !item.text) {
+          return;
+        }
+        if(this.selectType==2||this.selectType==item.rateType){
+          ret.push(item)
+        }
+      });
+      return ret;
+    }
+  },
   methods: {
-    needShow: function(type, text) {
-      if (this.contentOnly && !text) {
-        return false;
-      }
-      if (this.selectType == type || this.selectType == 2) {
-        return true;
-      } else {
-        return false;
-      }
-    },
     toggleContent: function(boolean) {
+      console.log(boolean);
       this.contentOnly = boolean;
     },
     select: function(type) {
       this.selectType = type;
     },
     rateTime: function(a) {
-      return moment(a).format("YYYY-MM-DD HH:mm")
+      return moment(a).format("YYYY-MM-DD HH:mm");
     },
     add: function() {
       this.$emit("add", this.food);

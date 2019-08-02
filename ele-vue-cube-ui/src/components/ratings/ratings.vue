@@ -65,7 +65,7 @@
 // import Bscroll from "better-scroll";
 import Star from "base/star/star";
 import Split from "base/split/split";
-import RatingSelect from "components/ratingSelect/ratingSelect";
+import RatingSelect from "components/rating-select/rating-select";
 import { timeStamp } from "common/js/util.js";
 import { getRatings } from "api/index";
 export default {
