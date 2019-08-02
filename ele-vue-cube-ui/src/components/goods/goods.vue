@@ -145,7 +145,6 @@ export default {
     },
     add: function(food) {
       console.log("add2");
-      
       this.goods.forEach(items =>
         items.foods.forEach(item => {
           if (item === food) {
@@ -202,6 +201,11 @@ export default {
             deliveryPrice: this.seller.deliveryPrice,
             minPrice: this.seller.minPrice,
             fold: true
+          },
+          $events:{
+            add:this.add,
+            decrease:this.decrease,
+            clear:this.clear
           }
         });
       this.stickyComp.show();

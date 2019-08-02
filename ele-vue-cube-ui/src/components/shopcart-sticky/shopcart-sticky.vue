@@ -7,6 +7,8 @@
       :fold="fold"
       :sticky="true"
       @add="add"
+      @decrease="decrease"
+      @clear="clear"
       ref="shopcart"
     />
   </div>
@@ -49,8 +51,14 @@ export default {
     drop(el){
         this.$refs.shopcart.drop(el)
     },
-    add(food){
-      this.$emit("add",food)
+    clear: function() {
+      this.$emit("clear");
+    },
+    decrease: function(food) {
+      this.$emit("decrease", food);
+    },
+    add: function(food) {
+      this.$emit("add", food);
     }
   },
   components: {

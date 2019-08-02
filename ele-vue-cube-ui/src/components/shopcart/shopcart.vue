@@ -192,7 +192,6 @@ export default {
       this.$emit("decrease", food);
     },
     add: function(food) {
-      console.log(food);
       this.$emit("add", food);
     }
   },
@@ -241,7 +240,6 @@ export default {
     },
     totalCount(newC) {
       if (!this.listFold && !newC) {
-        this._hideShopCartSticky();
         this._hideShopcartList();
       }
     }
