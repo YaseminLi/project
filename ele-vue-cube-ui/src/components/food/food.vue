@@ -1,83 +1,97 @@
 <template>
-  <transition name="move">
-    <div class="food" v-show="foodShow" ref="food">
-      <div>
-        <div class="description">
-          <div class="image-head">
-            <img class="image" :src="food.image">
-            <i class="icon-arrow_lift" @click="showFood"></i>
+  <transition name="move" appear @after-leave="afterLeave">
+    <div class="food" v-if="visible">
+      <cube-scroll ref="scroll">
+        <div>
+          <div class="description">
+            <div class="image-head">
+              <img class="image" :src="food.image" />
+              <i class="icon-arrow_lift" @click="hide"></i>
+            </div>
+            <div class="food-description">
+              <div class="name">{{food.name}}</div>
+              <div class="detail">
+                <span class="sell-count">月售{{food.sellCount}}份</span>
+                <span class="rating">好评率{{food.rating}}%</span>
+              </div>
+              <div class="price">
+                <span class="mark">¥</span>
+                <span class="now">{{food.price}}</span>
+                <span class="old" v-if="food.oldPrice">¥{{food.oldPrice}}</span>
+              </div>
+              <div class="cartcontrol-wrapper">
+                <div
+                  class="add-cart"
+                  v-show="!food.count||food.count===0"
+                  @click.stop="addFirst"
+                >加入购物车</div>
+                <Cartcontrol
+                  v-show="food.count"
+                  :food="food"
+                  @decrease="decrease"
+                  @add="add"
+                  @ballDrop="ballDrop"
+                />
+              </div>
+            </div>
           </div>
-          <div class="food-description">
-            <div class="name">{{food.name}}</div>
-            <div class="detail">
-              <span class="sell-count">月售{{food.sellCount}}份</span>
-              <span class="rating">好评率{{food.rating}}%</span>
-            </div>
-            <div class="price">
-              <span class="mark">¥</span>
-              <span class="now">{{food.price}}</span>
-              <span class="old" v-if="food.oldPrice">¥{{food.oldPrice}}</span>
-            </div>
-            <div class="cartcontrol-wrapper">
-              <div class="add-cart" v-show="!food.count||food.count===0" @click="addFirst">加入购物车</div>
-              <v-cartcontrol v-show="food.count" :food="food" @decrease="decrease" @add="add"/>
-            </div>
+          <Split />
+          <div class="info" v-show="food.info">
+            <div class="title">商品介绍</div>
+            <div class="content">{{food.info}}</div>
           </div>
-        </div>
-        <v-split/>
-        <div class="info" v-show="food.info">
-          <div class="title">商品介绍</div>
-          <div class="content">{{food.info}}</div>
-        </div>
-        <v-split v-show="food.info"/>
-        <div class="ratings">
-          <div class="title">商品评价</div>
-          <v-ratingSelect
-            :ratings="food.ratings"
-            :desc="desc"
-            @contentOnly="toggleContent"
-            @selectType="select"
-          />
-          <div class="ratings-list" v-show="food.ratings && food.ratings.length">
-            <div
-              v-show="needShow(rating.rateType,rating.text)"
-              v-for="(rating,index) in food.ratings"
-              :key="index"
-              class="rating-item border-1px"
-            >
-              <div class="time-user">
-                <span class="time">{{rateTime(rating.rateTime)}}</span>
-                <div class="user">
-                  <span class="username">{{rating.username}}</span>
-                  <img class="avatar" :src="rating.avatar">
+          <Split v-show="food.info" />
+          <div class="ratings">
+            <div class="title">商品评价</div>
+            <RatingSelect
+              :ratings="food.ratings"
+              :desc="desc"
+              @contentOnly="toggleContent"
+              @selectType="select"
+            />
+            <div class="ratings-list" v-show="food.ratings && food.ratings.length">
+              <div
+                v-show="needShow(rating.rateType,rating.text)"
+                v-for="(rating,index) in food.ratings"
+                :key="index"
+                class="rating-item border-bottom-1px"
+              >
+                <div class="time-user">
+                  <span class="time">{{rateTime(rating.rateTime)}}</span>
+                  <div class="user">
+                    <span class="username">{{rating.username}}</span>
+                    <img class="avatar" :src="rating.avatar" />
+                  </div>
+                </div>
+                <div class="content">
+                  <i class="type" :class="ratingTypeMap[rating.rateType]"></i>
+                  <span class="text">{{rating.text}}</span>
                 </div>
               </div>
-              <div class="content">
-                <i class="type" :class="ratingTypeMap[rating.rateType]"></i>
-                <span class="text">{{rating.text}}</span>
-              </div>
             </div>
+            <div class="no-rating" v-show="!food.ratings || !food.ratings.length">暂无评价</div>
           </div>
-          <div class="no-rating" v-show="!food.ratings || !food.ratings.length">暂无评价</div>
         </div>
-      </div>
+      </cube-scroll>
     </div>
   </transition>
 </template>
 
 <script>
-import BScroll from "better-scroll";
-import cartcontrol from "components/cartcontrol/cartcontrol";
-import ratingSelect from "components/ratingSelect/ratingSelect";
-import split from "components/split/split";
+import Cartcontrol from "base/cartcontrol/cartcontrol";
+import RatingSelect from "components/ratingSelect/ratingSelect";
+import Split from "base/split/split";
 import { timeStamp } from "common/js/util.js";
+import { popupMixin } from "common/js/mixin.js";
+
 export default {
+  name: "food",
+  mixins: [popupMixin],
   props: {
     food: Object
   },
   data() {
     return {
-      foodShow: false,
       ratingTypeMap: ["icon-thumb_up", "icon-thumb_down"],
       desc: {
         all: "全部",
@@ -88,18 +102,14 @@ export default {
       selectType: 2
     };
   },
-  methods: {
-    showFood: function() {
-      this.foodShow = !this.foodShow;
-
+  created() {
+    this.$on("show", () => {
       this.$nextTick(() => {
-        if (!this.scroll) {
-          this.scroll = new BScroll(this.$refs.food, { click: true });
-        } else {
-          this.scroll.refresh();
-        }
+        this.$refs.scroll.refresh();
       });
-    },
+    });
+  },
+  methods: {
     needShow: function(type, text) {
       if (this.contentOnly && !text) {
         return false;
@@ -122,33 +132,40 @@ export default {
     add: function() {
       this.$emit("add", this.food);
     },
-    addFirst: function() {
-      this.$emit("add", this.food);
-    },
     decrease: function() {
       this.$emit("decrease", this.food);
+    },
+    ballDrop(el) {
+      this.$emit("ballDrop", el);
+    },
+    addFirst(event) {
+      this.$emit("add", this.food);
+      this.$emit("ballDrop", event.target);
+    },
+    afterLeave() {
+      this.$emit("foodLeave");
     }
   },
   components: {
-    "v-cartcontrol": cartcontrol,
-    "v-ratingSelect": ratingSelect,
-    "v-split": split
+    Cartcontrol,
+    RatingSelect,
+    Split
   }
 };
 </script>
-<style lang="stylus">
-@import '../../common/stylus/mixin.styl'
-@import '../../common/stylus/variable.styl'
+<style lang="stylus" scoped>
+@import '~common/stylus/mixin.styl'
+@import '~common/stylus/variable.styl'
 .food
   position: fixed
-  top: 0
-  left: 0
   bottom: 50px
   width: 100%
+  left: 0
+  top: 0
   z-index: 30
-  &.move-enter, .move-leave-to
-    transform: translateX(100%)
-  &.move-enter-active, .move-leave-active
+  &.move-enter, &.move-leave-to
+    transform: translate3d(100%, 0, 0)
+  &.move-enter-active, &.move-leave-active
     transition: all 0.8s linear
   .description
     background: white
@@ -156,7 +173,7 @@ export default {
     .image-head
       width: 100%
       height: 0
-      padding-bottom: 100%
+      padding-bottom: 80%
       position: relative
       .image
         position: absolute
@@ -168,7 +185,7 @@ export default {
         font-size: 20px
         padding: 18px
         color: white
-        position: absolute
+        position: fixed
         top: 0px
         left: 0px
     .food-description
@@ -181,7 +198,7 @@ export default {
         color: $color-grey-ssss
       .detail
         margin-top: 8px
-        font-size:$fontsize-small-s
+        font-size: $fontsize-small-s
         color: $color-grey
         .rating
           margin-left: 12px
@@ -190,7 +207,7 @@ export default {
         line-height: 24px
         display: flex
         .mark
-          font-size:$fontsize-small-s
+          font-size: $fontsize-small-s
           font-weight: normal
           color: $color-red
           margin-top: 1px
@@ -201,7 +218,7 @@ export default {
           color: $color-red
         .old
           margin-left: 8px
-          font-size:$fontsize-small-s
+          font-size: $fontsize-small-s
           color: $color-grey
           font-weight: 700
           text-decoration: line-through
@@ -211,7 +228,7 @@ export default {
         bottom: 18px
         .add-cart
           margin-bottom: 6px
-          font-size:$fontsize-small-s
+          font-size: $fontsize-small-s
           color: white
           line-height: 12px
           border-radius: 12px
@@ -246,9 +263,8 @@ export default {
       .rating-item
         padding: 16px 0
         margin: 0 18px
-        border-1px($color-row-line)
         .time-user
-          font-size:$fontsize-small-s
+          font-size: $fontsize-small-s
           line-height: 12px
           color: $color-grey
           margin-bottom: 6px

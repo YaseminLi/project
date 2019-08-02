@@ -6,6 +6,7 @@
       :selectedFoods="selectedFoods"
       :fold="fold"
       :sticky="true"
+      @add="add"
       ref="shopcart"
     />
   </div>
@@ -47,6 +48,9 @@ export default {
     //不能在shopcart中监听list的drop事件，小球会被list覆盖住
     drop(el){
         this.$refs.shopcart.drop(el)
+    },
+    add(food){
+      this.$emit("add",food)
     }
   },
   components: {

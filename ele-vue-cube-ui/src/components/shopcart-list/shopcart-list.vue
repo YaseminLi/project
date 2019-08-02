@@ -23,7 +23,7 @@
                 <span class="name">{{item.name}}</span>
                 <span class="extra">
                   <span class="price">¥ {{item.price*item.count}}</span>
-                  <Cartcontrol :food="item" @decrease="decrease" @add="add" @ballDrop="ballDrop" />
+                  <Cartcontrol :food="item" @decrease="decrease" @add="add(item)" @ballDrop="ballDrop" />
                 </span>
               </div>
             </div>

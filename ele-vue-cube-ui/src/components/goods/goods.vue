@@ -2,19 +2,19 @@
   <div class="goods">
     <div class="scroll-nav-wrapper">
       <cube-scroll-nav :side="true" :data="goods" :options="scrollOptions" v-if="goods.length">
-        <template  v-slot:bar="props">
+        <template slot="bar" slot-scope="props">
           <cube-scroll-nav-bar
             direction="vertical"
             :txts="barTxts"
             :labels="props.labels"
             :current="props.current"
           >
-            <template v-slot="props">
+            <template slot-scope="props">
               <div class="text">
                 <Support v-if="props.txt.type>=1" :size="3" :type="props.txt.type" />
                 <span>{{props.txt.name}}</span>
                 <span v-if="props.txt.count>0" class="bubble">
-                  <Bubble :number="props.txt.count"/>
+                  <Bubble :number="props.txt.count" />
                 </span>
               </div>
             </template>
@@ -26,7 +26,12 @@
           :label="item.name"
           :title="item.name"
         >
-          <div v-for="(food,index) in item.foods" :key="index" class="food-item border-bottom-1px">
+          <div
+            v-for="(food,index) in item.foods"
+            :key="index"
+            class="food-item border-bottom-1px"
+            @click="showFoodDetail(food)"
+          >
             <img class="icon" :src="food.icon" />
             <div class="content">
               <div class="food-name">{{food.name}}</div>
@@ -51,23 +56,21 @@
           </div>
         </cube-scroll-nav-panel>
       </cube-scroll-nav>
-      <!-- <v-food ref="food" :food="choosedFood" @add="add" @decrease="decrease" /> -->
     </div>
     <Shopcart
-        :deliveryPrice="seller.deliveryPrice"
-        :minPrice="seller.minPrice"
-        :selectedFoods="selectedFoods"
-        ref="shopcart"
-        @clear="clear"
-        @add="add"
-        @decrease="decrease"
-      />
+      :deliveryPrice="seller.deliveryPrice"
+      :minPrice="seller.minPrice"
+      :selectedFoods="selectedFoods"
+      ref="shopcart"
+      @clear="clear"
+      @add="add"
+      @decrease="decrease"
+    />
   </div>
 </template>
 
 <script>
 import Shopcart from "components/shopcart/shopcart";
-// import food from "components/food/food.vue";
 import Cartcontrol from "base/cartcontrol/cartcontrol";
 import Support from "base/support/support";
 import Bubble from "base/bubble/bubble";
@@ -117,18 +120,17 @@ export default {
   },
   methods: {
     fetch() {
-      if(!this.fetched){
-        this.fetched=true
+      if (!this.fetched) {
+        this.fetched = true;
         getGoods().then(
-        res => {
-          this.goods = res;
-        },
-        () => {
-          console.log("无法获取商品数据");
-        }
-      );
+          res => {
+            this.goods = res;
+          },
+          () => {
+            console.log("无法获取商品数据");
+          }
+        );
       }
-      
     },
     decrease: function(food) {
       this.goods.forEach(items =>
@@ -142,6 +144,8 @@ export default {
       );
     },
     add: function(food) {
+      console.log("add2");
+      
       this.goods.forEach(items =>
         items.foods.forEach(item => {
           if (item === food) {
@@ -164,9 +168,46 @@ export default {
         })
       );
     },
-    showFood: function(food) {
-      this.$refs.food.showFood();
+    showFoodDetail: function(food) {
       this.choosedFood = food;
+      this._showFood();
+      this._showShopcartSticky();
+    },
+    _showFood() {
+      this.foodComp =
+        this.foodComp ||
+        this.$createFood({
+          $props: {
+            food: "choosedFood"
+          },
+          $events: {
+            add: food => {
+              this.add(food);
+            },
+            decrease: this.decrease,
+            foodLeave: this._hideShopCartSticky,
+            ballDrop: el => {
+              this.stickyComp.drop(el);
+            }
+          }
+        });
+      this.foodComp.show();
+    },
+    _showShopcartSticky: function() {
+      this.stickyComp =
+        this.stickyComp ||
+        this.$createShopcartSticky({
+          $props: {
+            selectedFoods: "selectedFoods",
+            deliveryPrice: this.seller.deliveryPrice,
+            minPrice: this.seller.minPrice,
+            fold: true
+          }
+        });
+      this.stickyComp.show();
+    },
+    _hideShopCartSticky() {
+      this.stickyComp.hide();
     },
     _drop: function(target) {
       this.$refs.shopcart.drop(target);
@@ -174,7 +215,6 @@ export default {
   },
   components: {
     Cartcontrol,
-    // "v-food": food,
     Support,
     Shopcart,
     Bubble
@@ -215,7 +255,7 @@ export default {
       flex: 1
       display: table-cell
       vertical-align: middle
-      position relative
+      position: relative
       .icon
         margin-right: 2px
         width: 12px
@@ -224,9 +264,9 @@ export default {
         display: inline-block
         vertical-align: top
       .bubble
-        position absolute
-        right -4px
-        top -5px
+        position: absolute
+        right: -4px
+        top: -5px
   .cube-scroll-nav-panel-title
     height: 26px
     padding-left: 14px

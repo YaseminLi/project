@@ -7,9 +7,11 @@ export const popupMixin={
       methods: {
         show() {
           this.visible = true
+          this.$emit("show")
         },
         hide(){
           this.visible=false
+          this.$emit("hide")
         }
       },
 }

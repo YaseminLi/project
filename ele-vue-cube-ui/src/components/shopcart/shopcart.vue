@@ -163,6 +163,9 @@ export default {
             minPrice: "minPrice",
             fold: "listFold",
             list: this.cartComp
+          },
+          $events:{
+            add:this.add
           }
         });
       this.stickyComp.show();
@@ -189,6 +192,7 @@ export default {
       this.$emit("decrease", food);
     },
     add: function(food) {
+      console.log(food);
       this.$emit("add", food);
     }
   },
