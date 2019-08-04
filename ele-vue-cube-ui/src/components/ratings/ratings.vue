@@ -1,5 +1,5 @@
 <template>
-  <cube-scroll class="ratings-wrapper" >
+  <cube-scroll class="ratings-wrapper" :options="scrollOptions" :data="computedRatings">
     <div>
       <div class="overview">
         <div class="overview-left">
@@ -25,15 +25,16 @@
         </div>
       </div>
       <Split />
-      <div class="ratings-content">
-        <RatingSelect :ratings="ratings" @contentOnly="toggleContent" @selectType="select" />
+      <div class="ratings-content" v-if="ratings.length">
+        <RatingSelect
+          :ratings="ratings"
+          @toggleContent="toggleContent"
+          @selectType="select"
+          :selectType="selectType"
+          :contentOnly="contentOnly"
+        />
         <div class="rating-list">
-          <div
-            v-show="needShow(item.rateType,item.text)"
-            class="item border-bottom-1px"
-            v-for="(item,index) in ratings"
-            :key="index"
-          >
+          <div class="item border-bottom-1px" v-for="(item,index) in computedRatings" :key="index">
             <img class="avatar" :src="item.avatar" />
             <div class="content">
               <div class="username-time">
@@ -56,77 +57,47 @@
             </div>
           </div>
         </div>
+        <div class="no-rating" v-show="!computedRatings.length">暂无评价</div>
       </div>
     </div>
   </cube-scroll>
 </template>
 
 <script>
-// import Bscroll from "better-scroll";
 import Star from "base/star/star";
-import Split from "base/split/split";
-import RatingSelect from "components/rating-select/rating-select";
-import { timeStamp } from "common/js/util.js";
 import { getRatings } from "api/index";
+import { ratingsMixin } from "common/js/mixin.js";
 export default {
+  mixins: [ratingsMixin],
   data() {
     return {
       ratings: [],
-      ratingTypeMap: ["icon-thumb_up", "icon-thumb_down"],
-      contentOnly: false,
-      selectType: 2
+      scrollOptions: {
+        //cube-ui默认click为true，这里不需要点击多次
+        click: false,
+        //避免纵向横向的滚动冲突
+        directionLockThreshold: 0
+      }
     };
   },
   props: {
     seller: Object
   },
   methods: {
-   fetch() {
-      getRatings().then(res => {
-        this.ratings = res;
-        // this.$nextTick(() => {
-        //   if (!this.scroll) {
-        //     this.scroll = new Bscroll(this.$refs.ratings, { click: true });
-        //   } else {
-        //     this.scroll.refresh();
-        // //   }
-        // });
-      }),
-        () => {
-          console.log("无法获取评价数据");
-        };
-    },
-    rateTime: function(a) {
-      return timeStamp(a);
-    },
-    toggleContent: function(boolean) {
-      this.contentOnly = boolean;
-      if(boolean){
-        this._ratingsContentOnly()
-      }
-      
-    },
-    _ratingsContentOnly() {
-     this.ratings.filter(item => item.text !== "");
-    },
-    select: function(type) {
-      this.selectType = type;
-    },
-    needShow: function(type, text) {
-      if (this.contentOnly && !text) {
-        return false;
-      }
-      if (this.selectType == type || this.selectType == 2) {
-        return true;
-      } else {
-        return false;
+    fetch() {
+      if (!this.fetched) {
+        this.fetched = true;
+        getRatings().then(res => {
+          this.ratings = res;
+        }),
+          () => {
+            console.log("无法获取评价数据");
+          };
       }
     }
   },
   components: {
-    Star,
-    Split,
-    RatingSelect
+    Star
   }
 };
 </script>
@@ -136,7 +107,7 @@ export default {
 @import '~common/stylus/variable.styl'
 .ratings-wrapper
   position: relative
-  height 100%
+  height: 100%
   .overview
     background: white
     display: flex
@@ -161,7 +132,7 @@ export default {
         line-height: 12px
         margin-bottom: 8px
       .rankRate
-        font-size:$fontsize-small-s
+        font-size: $fontsize-small-s
         color: $color-grey
         margin-bottom: 6px
     .overview-right
@@ -191,17 +162,22 @@ export default {
   .ratings-content
     background: white
     border-bottom: none
+    .no-rating
+      padding: 16px
+      font-size: $fontsize-small
+      color: $color-grey
     .rating-list
       margin: 0 18px
       .item
         padding: 18px 0
         display: flex
+        white-space: normal
         &:last-child
           border-none()
         .avatar
-          flex 0 0 28px
-          width 28px
-          height 28px
+          flex: 0 0 28px
+          width: 28px
+          height: 28px
           border-radius: 50%
           margin-right: 12px
         .content
@@ -231,9 +207,9 @@ export default {
           .recommend
             display: flex
             align-items: center
-            flex-wrap wrap
+            flex-wrap: wrap
             .thumpType
-              margin-bottom 6px
+              margin-bottom: 6px
               font-size: 12px
               margin-right: 8px
               &.icon-thumb_up
@@ -241,7 +217,7 @@ export default {
               &.icon-thumb_down
                 color: $color-grey
             .recommend-item
-              margin-bottom 6px
+              margin-bottom: 6px
               height: 16px
               box-sizing: border-box
               margin-right: 8px
@@ -251,7 +227,4 @@ export default {
               font-size: 9px
               color: $color-grey
               line-height: 16px
-              // overflow: hidden
-              // text-overflow: ellipsis
-              // white-space: nowrap
 </style>

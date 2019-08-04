@@ -1,5 +1,5 @@
 <template>
-  <cube-scroll class="seller">
+  <cube-scroll class="seller" :options="sellerScrollOptions">
     <div class="desc">
       <div class="desc-header border-bottom-1px">
         <div class="title">{{seller.name}}</div>
@@ -50,7 +50,7 @@
     <Split />
     <div class="pics">
       <div class="title">商家实景</div>
-      <cube-scroll class="pics-container" :data="seller.pics" direction="horizontal">
+      <cube-scroll class="pics-container" :data="seller.pics" direction="horizontal" :options="picsScrollOptions">
         <div  class="picsInner">
           <img class="pics-item" v-for="(item,index) in seller.pics" :src="item" :key="index" />
         </div>
@@ -83,13 +83,21 @@ export default {
     return {
       collect: (() => {
         return loadFromStore(this.seller.id, "collect", false);
-      })()
+      })(),
+      sellerScrollOptions: {
+        click: false,
+        directionLockThreshold:0
+      },
+      //开启横向滚动，禁止当前区域cube-slide切换用stopPropagation
+      picsScrollOptions: {
+        scrollX:true,
+        stopPropagation:true,
+        directionLockThreshold:0
+      },
     };
   },
   methods: {
     sellerCollect: function() {
-      console.log("a");
-      
       this.collect = !this.collect;
       saveToLocal(this.seller.id, "collect", this.collect);
     }

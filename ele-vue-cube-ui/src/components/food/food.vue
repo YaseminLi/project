@@ -44,14 +44,14 @@
           <div class="ratings">
             <div class="title">商品评价</div>
             <RatingSelect
-              :ratings="food.ratings"
+              :ratings="ratings"
               :desc="desc"
               @toggleContent="toggleContent"
               @selectType="select"
               :selectType="selectType"
               :contentOnly="contentOnly"
-            />
-            <div class="ratings-list" v-show="food.ratings && food.ratings.length">
+            /> 
+            <div class="ratings-list" v-show="ratings && ratings.length">
               <div
                 v-for="(rating,index) in computedRatings"
                 :key="index"
@@ -80,28 +80,22 @@
 
 <script>
 import Cartcontrol from "base/cartcontrol/cartcontrol";
-import RatingSelect from "components/rating-select/rating-select";
-import Split from "base/split/split";
-import { popupMixin } from "common/js/mixin.js";
-import moment from "moment";
+import { popupMixin ,ratingsMixin} from "common/js/mixin.js";
 
-const ALL = 2;
 export default {
   name: "food",
-  mixins: [popupMixin],
+  mixins: [popupMixin,ratingsMixin],
   props: {
     food: Object
   },
   data() {
     return {
-      ratingTypeMap: ["icon-thumb_up", "icon-thumb_down"],
       desc: {
         all: "全部",
         positive: "推荐",
         negative: "吐槽"
       },
-      contentOnly: false,
-      selectType: ALL
+      ratings:this.food.ratings
     };
   },
   created() {
@@ -111,32 +105,7 @@ export default {
       });
     });
   },
-  computed: {
-    computedRatings() {
-      let ratings = this.food.ratings;
-      let ret = [];
-      ratings.forEach(item => {
-        if (this.contentOnly && !item.text) {
-          return;
-        }
-        if(this.selectType==2||this.selectType==item.rateType){
-          ret.push(item)
-        }
-      });
-      return ret;
-    }
-  },
   methods: {
-    toggleContent: function(boolean) {
-      console.log(boolean);
-      this.contentOnly = boolean;
-    },
-    select: function(type) {
-      this.selectType = type;
-    },
-    rateTime: function(a) {
-      return moment(a).format("YYYY-MM-DD HH:mm");
-    },
     add: function() {
       this.$emit("add", this.food);
     },
@@ -155,9 +124,7 @@ export default {
     }
   },
   components: {
-    Cartcontrol,
-    RatingSelect,
-    Split
+    Cartcontrol
   }
 };
 </script>

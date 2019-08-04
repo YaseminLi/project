@@ -81,7 +81,8 @@ export default {
       goods: [],
       choosedFood: {},
       scrollOptions: {
-        click: false
+        click: false,
+        directionLockThreshold:0
       }
     };
   },
@@ -144,7 +145,6 @@ export default {
       );
     },
     add: function(food) {
-      console.log("add2");
       this.goods.forEach(items =>
         items.foods.forEach(item => {
           if (item === food) {
