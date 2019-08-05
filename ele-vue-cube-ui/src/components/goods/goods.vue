@@ -123,7 +123,7 @@ export default {
     fetch() {
       if (!this.fetched) {
         this.fetched = true;
-        getGoods().then(
+        getGoods({id:this.seller.id}).then(
           res => {
             this.goods = res;
           },

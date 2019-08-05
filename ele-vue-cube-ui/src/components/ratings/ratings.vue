@@ -87,7 +87,7 @@ export default {
     fetch() {
       if (!this.fetched) {
         this.fetched = true;
-        getRatings().then(res => {
+        getRatings({id:this.seller.id}).then(res => {
           this.ratings = res;
         }),
           () => {
