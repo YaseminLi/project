@@ -8,7 +8,7 @@
           <span class="num">({{seller.ratingCount}})</span>
           <span class="sellCount">月售{{seller.sellCount}}单</span>
         </div>
-        <div :class="{'active':collect}" class="collect-container" @click="sellerCollect">
+        <div :class="{'active':collect}" class="collect-container" @click="toggleFavorite">
           <i class="icon-favorite"></i>
           <span class="text">{{collectDesc}}</span>
         </div>
@@ -97,7 +97,7 @@ export default {
     };
   },
   methods: {
-    sellerCollect: function() {
+    toggleFavorite: function() {
       this.collect = !this.collect;
       saveToLocal(this.seller.id, "collect", this.collect);
     }
