@@ -1,16 +1,13 @@
-var Grid = /** @class */ (function () {
-    function Grid(scale) {
-        this.scale = scale;
+var deck = {
+    suits: ['one', 'two', 'three', 'four'],
+    cards: Array(52),
+    createCard: function () {
+        var _this = this;
+        return function () {
+            var number = 0;
+            return _this.suits[number];
+        };
     }
-    Grid.prototype.calculateDistanceFromOrigin = function (point) {
-        var xDist = point.x - Grid.origin.x;
-        var yDist = point.y - Grid.origin.y;
-        return Math.sqrt(xDist * xDist + yDist * yDist) * this.scale;
-    };
-    Grid.origin = { x: 0, y: 0 };
-    return Grid;
-}());
-var grid1 = new Grid(1.0);
-var grid2 = new Grid(5.0);
-console.log(grid1.calculateDistanceFromOrigin({ x: 3, y: 4 }));
-console.log(grid2.calculateDistanceFromOrigin({ x: 3, y: 4 }));
+};
+var card = deck.createCard();
+card();
