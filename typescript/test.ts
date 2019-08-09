@@ -1,13 +1,12 @@
-let deck = {
-    suits: ['one', 'two', 'three', 'four'],
-    cards: Array(52),
-    createCard: function () {
-        return () =>{
-            let number=0
-            return this.suits[number];
 
-        }
-    }
-}
-let card=deck.createCard()
-card();
+class GenericNumber<T> {
+    static age:T=2
+    zeroValue: T
+    add: (x: T, y: T) => T
+  }
+  
+  let myGenericNumber = new GenericNumber<number>()
+  myGenericNumber.zeroValue = 0
+  myGenericNumber.add = function(x, y) {
+    return x + y 
+  }
